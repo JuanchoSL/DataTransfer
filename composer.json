@@ -1,0 +1,50 @@
+{
+    "name": "juanchosl/dataextractor",
+    "description": "A small, lightweight utility to read values and properties from distinct sources using the same methodology",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/JuanchoSL/DataExtractor",
+    "minimum-stability": "stable",
+    "keywords": [
+        "json",
+        "array",
+        "object",
+        "entity",
+        "values"
+    ],
+    "authors": [
+        {
+            "name": "Juan Sánchez Lecegui",
+            "email": "JuanchoSL@hotmail.com",
+            "homepage": "https://github.com/JuanchoSL/"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "http://github.com/juanchosl/exceptions"
+        }
+    ],
+    "require": {
+        "php": "^7.1 || ^8.0",
+        "juanchosl/exceptions": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "9.5.25",
+        "phpstan/phpstan": "1.9.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "JuanchoSL\\DataExtractor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JuanchoSL\\DataExtractor\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "tests": "vendor/bin/phpunit --configuration phpunit.xml tests",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon --xdebug"
+    }
+}
