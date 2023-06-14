@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17bf8d5909f082d160bb7681f7d7f914",
+    "content-hash": "9b254bc956d1cb6f9dabfd32f4170c7d",
     "packages": [
         {
             "name": "juanchosl/exceptions",

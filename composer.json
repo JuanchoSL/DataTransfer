@@ -1,9 +1,9 @@
 {
-    "name": "juanchosl/dataextractor",
+    "name": "juanchosl/datatransfer",
     "description": "A small, lightweight utility to read values and properties from distinct sources using the same methodology",
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/JuanchoSL/DataExtractor",
+    "homepage": "https://github.com/JuanchoSL/DataTransfer",
     "minimum-stability": "stable",
     "keywords": [
         "json",
@@ -35,12 +35,12 @@
     },
     "autoload": {
         "psr-4": {
-            "JuanchoSL\\DataExtractor\\": "src/"
+            "JuanchoSL\\DataTransfer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "JuanchoSL\\DataExtractor\\Tests\\": "tests/"
+            "JuanchoSL\\DataTransfer\\Tests\\": "tests/"
         }
     },
     "scripts": {
