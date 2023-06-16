@@ -11,8 +11,6 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 class JsonArrayDataTransfer extends ArrayDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
 
-    //private ArrayExtractor $data;
-
     public function __construct(string $json)
     {
         $body = json_decode($json, true);
@@ -20,7 +18,6 @@ class JsonArrayDataTransfer extends ArrayDataTransfer implements DataTransferInt
             throw new ExpectationFailedException(json_last_error_msg());
         }
         parent::__construct($body);
-        //$this->data = new ArrayExtractor($body);
     }
 
 }

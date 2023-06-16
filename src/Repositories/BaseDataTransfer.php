@@ -6,7 +6,6 @@ use Iterator;
 
 abstract class BaseDataTransfer
 {
-    //protected Iterator $data;
 
     protected $data;
 
@@ -47,7 +46,6 @@ abstract class BaseDataTransfer
         } elseif (is_object($value)) {
             $value = new ObjectDataTransfer($value);
         } elseif (is_string($value)) {
-            //$value = filter_var($value, FILTER_SANITIZE_STRING);
             $value = htmlspecialchars($value);
         }
         return $value;

@@ -9,8 +9,6 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
 class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
-    //protected array $data;
-
     public function __construct(array $array)
     {
         $this->data = $array;

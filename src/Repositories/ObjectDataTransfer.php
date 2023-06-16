@@ -10,7 +10,6 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
 class ObjectDataTransfer extends BaseDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
-    //protected stdClass $data;
 
     public function __construct(stdClass $object)
     {

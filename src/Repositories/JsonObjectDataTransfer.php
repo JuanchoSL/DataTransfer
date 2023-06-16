@@ -11,8 +11,6 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 class JsonObjectDataTransfer extends ObjectDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
 
-    // private ObjectExtractor $data;
-
     public function __construct(string $json)
     {
         $body = json_decode($json, false);
