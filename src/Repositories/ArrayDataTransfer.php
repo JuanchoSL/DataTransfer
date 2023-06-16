@@ -1,30 +1,35 @@
 <?php
 
-namespace JuanchoSL\DataExtractor;
+namespace JuanchoSL\DataTransfer\Repositories;
 
 use Countable;
 use Iterator;
 use JsonSerializable;
-use JuanchoSL\DataExtractor\Contracts\ExtractorInterface;
+use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
-class ArrayExtractor implements ExtractorInterface, Iterator, Countable, JsonSerializable
+class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
-    private array $data;
-
     public function __construct(array $array)
     {
         $this->data = $array;
     }
 
+    public function unset($key): self
+    {
+        unset($this->data[$key]);
+        return $this;
+    }
+    
+    public function set($key, $value): self
+    {
+        $this->data[$key] = $this->dataConverter($value);
+        return $this;
+    }
+
     public function get(string $index, mixed $default = null): mixed
     {
         $return = $this->data[$index] ?? $default;
-        if (is_array($return)) {
-            $return = new ArrayExtractor($return);
-        } elseif (is_object($return)) {
-            $return = new ObjectExtractor($return);
-        }
-        return $return;
+        return $this->dataConverter($return);
     }
 
     public function count(): int
@@ -35,30 +40,6 @@ class ArrayExtractor implements ExtractorInterface, Iterator, Countable, JsonSer
     public function has(string $index): bool
     {
         return array_key_exists($index, $this->data);
-    }
-
-    public function current(): mixed
-    {
-        return $this->get($this->key());
-    }
-    public function key(): string|int|null
-    {
-        return key($this->data);
-    }
-
-    public function next(): void
-    {
-        next($this->data);
-    }
-
-    public function rewind(): void
-    {
-        reset($this->data);
-    }
-
-    public function valid(): bool
-    {
-        return !is_null($this->key());
     }
 
     /**
