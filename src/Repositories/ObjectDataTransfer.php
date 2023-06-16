@@ -6,9 +6,9 @@ use Countable;
 use Iterator;
 use JsonSerializable;
 use stdClass;
-use JuanchoSL\DataTransfer\Contracts\ExtractorInterface;
+use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
-class ObjectExtractor extends BaseExtractor implements ExtractorInterface, Iterator, Countable, JsonSerializable
+class ObjectDataTransfer extends BaseDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
     //protected stdClass $data;
 

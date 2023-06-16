@@ -2,11 +2,11 @@
 
 namespace JuanchoSL\DataTransfer\Tests;
 
-use JuanchoSL\DataTransfer\Contracts\ExtractorInterface;
-use JuanchoSL\DataTransfer\Repositories\ArrayExtractor;
-use JuanchoSL\DataTransfer\Repositories\JsonArrayExtractor;
-use JuanchoSL\DataTransfer\Repositories\JsonObjectExtractor;
-use JuanchoSL\DataTransfer\Repositories\ObjectExtractor;
+use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
+use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\JsonArrayDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\JsonObjectDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
 use PHPUnit\Framework\TestCase;
 
 class ReadDataTest extends TestCase
@@ -17,7 +17,7 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => 'value'
         ];
-        $obj = new ArrayExtractor($data);
+        $obj = new ArrayDataTransfer($data);
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertEquals('value', $obj->get('index'), 'Values are equals');
         $this->assertEquals('value', $obj->index, 'Values are equals');
@@ -34,7 +34,7 @@ class ReadDataTest extends TestCase
         $data = new \stdClass;
         $data->index = 'value';
         
-        $obj = new ObjectExtractor($data);
+        $obj = new ObjectDataTransfer($data);
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertEquals('value', $obj->get('index'), 'Values are equals');
         $this->assertEquals('value', $obj->index, 'Values are equals');
@@ -51,7 +51,7 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => 'value'
         ];
-        $obj = new JsonArrayExtractor(json_encode($data));
+        $obj = new JsonArrayDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertEquals('value', $obj->get('index'), 'Values are equals');
         $this->assertEquals('value', $obj->index, 'Values are equals');
@@ -68,7 +68,7 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => 'value'
         ];
-        $obj = new JsonObjectExtractor(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertEquals('value', $obj->get('index'), 'Values are equals');
         $this->assertEquals('value', $obj->index, 'Values are equals');
@@ -85,9 +85,9 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => ['subindex' => 'value']
         ];
-        $obj = new JsonArrayExtractor(json_encode($data));
+        $obj = new JsonArrayDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
-        $this->assertInstanceOf(ExtractorInterface::class, $obj->get('index'), 'Value is instance');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
         $this->assertTrue($obj->get('index')->has('subindex'), 'SubKey is setted');
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
@@ -98,9 +98,9 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => ['value_0', 'value_1']
         ];
-        $obj = new JsonArrayExtractor(json_encode($data));
+        $obj = new JsonArrayDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
-        $this->assertInstanceOf(ExtractorInterface::class, $obj->get('index'), 'Value is instance');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
         foreach ($obj->get('index') as $key => $value) {
             $this->assertEquals("value_{$key}", $value, 'Values are equals');
         }
@@ -112,7 +112,7 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => 'value'
         ];
-        $obj = new JsonObjectExtractor(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertEquals('value', $obj->get('index'), 'Values are equals');
         $this->assertEquals('value', $obj->index, 'Values are equals');
@@ -124,9 +124,9 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => ['subindex' => 'value']
         ];
-        $obj = new JsonObjectExtractor(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
-        $this->assertInstanceOf(ExtractorInterface::class, $obj->get('index'), 'Value is instance');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
         $this->assertTrue($obj->get('index')->has('subindex'), 'SubKey is setted');
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
@@ -137,9 +137,9 @@ class ReadDataTest extends TestCase
         $data = [
             'index' => ['value_0', 'value_1']
         ];
-        $obj = new JsonObjectExtractor(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
-        $this->assertInstanceOf(ExtractorInterface::class, $obj->get('index'), 'Value is instance');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
         foreach ($obj->get('index') as $key => $value) {
             $this->assertEquals("value_{$key}", $value, 'Values are equals');
         }

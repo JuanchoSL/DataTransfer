@@ -6,9 +6,9 @@ use JuanchoSL\Exceptions\ExpectationFailedException;
 use Countable;
 use Iterator;
 use JsonSerializable;
-use JuanchoSL\DataTransfer\Contracts\ExtractorInterface;
+use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
-class JsonObjectExtractor extends ObjectExtractor implements ExtractorInterface, Iterator, Countable, JsonSerializable
+class JsonObjectDataTransfer extends ObjectDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
 
     // private ObjectExtractor $data;

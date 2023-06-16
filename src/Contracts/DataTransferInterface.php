@@ -2,7 +2,7 @@
 
 namespace JuanchoSL\DataTransfer\Contracts;
 
-interface ExtractorInterface
+interface DataTransferInterface
 {
 
     public function unset(string $index): self;

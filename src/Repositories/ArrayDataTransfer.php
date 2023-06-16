@@ -5,9 +5,9 @@ namespace JuanchoSL\DataTransfer\Repositories;
 use Countable;
 use Iterator;
 use JsonSerializable;
-use JuanchoSL\DataTransfer\Contracts\ExtractorInterface;
+use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
-class ArrayExtractor extends BaseExtractor implements ExtractorInterface, Iterator, Countable, JsonSerializable
+class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
     //protected array $data;
 

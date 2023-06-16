@@ -4,7 +4,7 @@ namespace JuanchoSL\DataTransfer\Repositories;
 
 use Iterator;
 
-abstract class BaseExtractor
+abstract class BaseDataTransfer
 {
     //protected Iterator $data;
 
@@ -43,9 +43,9 @@ abstract class BaseExtractor
     protected function dataConverter($value): mixed
     {
         if (is_array($value)) {
-            $value = new ArrayExtractor($value);
+            $value = new ArrayDataTransfer($value);
         } elseif (is_object($value)) {
-            $value = new ObjectExtractor($value);
+            $value = new ObjectDataTransfer($value);
         } elseif (is_string($value)) {
             //$value = filter_var($value, FILTER_SANITIZE_STRING);
             $value = htmlspecialchars($value);
