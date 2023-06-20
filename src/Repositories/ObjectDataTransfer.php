@@ -14,14 +14,17 @@ class ObjectDataTransfer extends BaseDataTransfer implements DataTransferInterfa
     public function __construct(stdClass $object)
     {
         $this->data = $object;
+        foreach ($this->data as $key => $value) {
+            $this->set($key, $value);
+        }
     }
 
-    public function unset($key): self
+    public function unset(string $key): self
     {
         unset($this->data->{$key});
         return $this;
     }
-    public function set($key, $value): self
+    public function set(string $key, mixed $value): self
     {
         $this->data->{$key} = $this->dataConverter($value);
         return $this;
@@ -29,8 +32,7 @@ class ObjectDataTransfer extends BaseDataTransfer implements DataTransferInterfa
 
     public function get(string $index, mixed $default = null): mixed
     {
-        $return = $this->data->{$index} ?? $default;
-        return $this->dataConverter($return);
+        return $this->data->{$index} ?? $this->dataConverter($default);
     }
 
     public function count(): int
