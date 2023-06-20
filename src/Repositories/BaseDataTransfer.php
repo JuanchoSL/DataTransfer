@@ -2,9 +2,9 @@
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
-use Iterator;
+use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
-abstract class BaseDataTransfer
+abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
 {
 
     protected $data;
@@ -12,6 +12,11 @@ abstract class BaseDataTransfer
     public function __get($key)
     {
         return $this->get($key);
+    }
+
+    public function __set($key, $value)
+    {
+        return $this->set($key, $value);
     }
 
     public function current(): mixed
@@ -46,7 +51,11 @@ abstract class BaseDataTransfer
         } elseif (is_object($value)) {
             $value = new ObjectDataTransfer($value);
         } elseif (is_string($value)) {
-            $value = htmlspecialchars($value);
+            if (substr($value, 0, 1) == '{' && substr($value, -1) == '}') {
+                $value = new JsonArrayDataTransfer($value);
+            } else {
+                $value = htmlspecialchars($value);
+            }
         }
         return $value;
     }
