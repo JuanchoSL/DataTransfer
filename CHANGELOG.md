@@ -1,6 +1,17 @@
 # Change Log DataTransfer
 
 
+## [1.0.2] - 2023-07-19
+
+### Added
+
+- Factory in order to create the necessary instance automatically
+
+### Changed
+
+### Fixed
+
+
 ## [1.0.1] - 2023-06-20
 
 ### Added

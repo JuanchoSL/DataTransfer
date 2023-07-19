@@ -3,6 +3,7 @@
 namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
+use JuanchoSL\DataTransfer\DataTransferFactory;
 
 abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
 {
@@ -46,17 +47,6 @@ abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Co
 
     protected function dataConverter($value): mixed
     {
-        if (is_array($value)) {
-            $value = new ArrayDataTransfer($value);
-        } elseif (is_object($value)) {
-            $value = new ObjectDataTransfer($value);
-        } elseif (is_string($value)) {
-            if (substr($value, 0, 1) == '{' && substr($value, -1) == '}') {
-                $value = new JsonArrayDataTransfer($value);
-            } else {
-                $value = htmlspecialchars($value);
-            }
-        }
-        return $value;
+        return DataTransferFactory::create($value);
     }
 }
