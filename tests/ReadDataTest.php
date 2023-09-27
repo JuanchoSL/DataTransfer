@@ -24,16 +24,18 @@ class ReadDataTest extends TestCase
         $this->assertFalse($obj->has('new_value'), 'No has new value');
         $obj->set('new_value', 'other_value');
         $this->assertTrue($obj->has('new_value'), 'Has new value');
+        $this->assertTrue(isset($obj->new_value), 'Has new value');
         $this->assertEquals('other_value', $obj->new_value, 'Values are equals');
         $obj->unset('new_value');
         $this->assertFalse($obj->has('new_value'), 'No has new value');
+        $this->assertFalse(isset($obj->new_value), 'No has new value');
     }
-    
+
     public function testObjects()
     {
         $data = new \stdClass;
         $data->index = 'value';
-        
+
         $obj = new ObjectDataTransfer($data);
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertEquals('value', $obj->get('index'), 'Values are equals');
@@ -42,10 +44,10 @@ class ReadDataTest extends TestCase
         $obj->set('new_value', 'other_value');
         $this->assertTrue($obj->has('new_value'), 'Has new value');
         $this->assertEquals('other_value', $obj->new_value, 'Values are equals');
-        $obj->unset('new_value');
+        unset($obj->new_value);
         $this->assertFalse($obj->has('new_value'), 'No has new value');
     }
-    
+
     public function testJsonArrayOfStrings()
     {
         $data = [
@@ -62,7 +64,7 @@ class ReadDataTest extends TestCase
         $obj->unset('new_value');
         $this->assertFalse($obj->has('new_value'), 'No has new value');
     }
-    
+
     public function testJsonObjectOfStrings()
     {
         $data = [
@@ -79,7 +81,7 @@ class ReadDataTest extends TestCase
         $obj->unset('new_value');
         $this->assertFalse($obj->has('new_value'), 'No has new value');
     }
-    
+
     public function testJsonOfArray()
     {
         $data = [
@@ -140,6 +142,7 @@ class ReadDataTest extends TestCase
         $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
+        $this->assertEquals("value_0", $obj->get('index')->get(0), 'Values are equals');
         foreach ($obj->get('index') as $key => $value) {
             $this->assertEquals("value_{$key}", $value, 'Values are equals');
         }

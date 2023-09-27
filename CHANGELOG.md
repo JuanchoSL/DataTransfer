@@ -1,6 +1,20 @@
 # Change Log DataTransfer
 
 
+## [1.0.3] - 2023-09-27
+
+### Added
+
+### Changed
+
+- Reorder class structure
+
+### Fixed
+
+- Fix objects iterator
+
+
+
 ## [1.0.2] - 2023-07-19
 
 ### Added
