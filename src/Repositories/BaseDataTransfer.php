@@ -5,24 +5,45 @@ namespace JuanchoSL\DataTransfer\Repositories;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataTransferFactory;
 
+/**
+ * @implements \Iterator<int|string, DataTransferInterface>
+ */
 abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
 {
 
-    protected $data;
+    protected mixed $data;
+    public function __clone()
+    {
+        foreach ($this as $key => $val) {
+            if (is_object($val) || is_array($val)) {
+                $val = unserialize(serialize($val));
+            }
+            $this->set($key, $val);
+        }
+    }
 
-    public function __get($key)
+    public function __get(string $key): mixed
     {
         return $this->get($key);
     }
-
-    public function __set($key, $value)
+    public function __isset(string $key): bool
     {
-        return $this->set($key, $value);
+        return $this->has($key);
+    }
+    public function __unset(string $key): void
+    {
+        $this->unset($key);
+    }
+
+    public function __set(string $key, mixed $value): void
+    {
+        $this->set($key, $value);
     }
 
     public function current(): mixed
     {
-        return $this->get($this->key());
+        $key = $this->key();
+        return (is_null($key)) ? null : $this->get($key);
     }
 
     public function key(): string|int|null
@@ -45,7 +66,7 @@ abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Co
         return !is_null($this->key());
     }
 
-    protected function dataConverter($value): mixed
+    protected function dataConverter(mixed $value): mixed
     {
         return DataTransferFactory::create($value);
     }

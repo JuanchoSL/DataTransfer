@@ -7,41 +7,49 @@ use Iterator;
 use JsonSerializable;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
+/**
+ * @implements \Iterator<int|string, DataTransferInterface>
+ */
 class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
+
+    /**
+     * @param array<int|string, mixed> $array
+     */
     public function __construct(array $array)
     {
-        $this->data = $array;
-        foreach ($this->data as $key => $value) {
+        //$this->data = $array;
+        $this->data = [];
+        foreach ($array as $key => $value) {
             $this->set($key, $value);
         }
     }
 
-    public function unset(string $key): self
+    public function unset(string|int $key): self
     {
         unset($this->data[$key]);
         return $this;
     }
 
-    public function set(string $key, mixed $value): self
+    public function set(string|int $key, mixed $value): self
     {
-        $this->data[$key] = $this->dataConverter($value);
+        @$this->data[$key] = $this->dataConverter($value);
         return $this;
     }
 
-    public function get(string $index, mixed $default = null): mixed
+    public function get(string|int $index, mixed $default = null): mixed
     {
         return $this->data[$index] ?? $this->dataConverter($default);
     }
 
     public function count(): int
     {
-        return count(array_keys($this->data));
+        return count(array_keys((array) $this->data));
     }
 
-    public function has(string $index): bool
+    public function has(string|int $index): bool
     {
-        return array_key_exists($index, $this->data);
+        return array_key_exists($index, (array) $this->data);
     }
 
     /**

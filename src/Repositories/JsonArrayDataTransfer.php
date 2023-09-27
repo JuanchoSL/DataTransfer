@@ -8,6 +8,9 @@ use Iterator;
 use JsonSerializable;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
+/**
+ * @implements \Iterator<int|string, DataTransferInterface>
+ */
 class JsonArrayDataTransfer extends ArrayDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
 
