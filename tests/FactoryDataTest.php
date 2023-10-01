@@ -9,6 +9,24 @@ use PHPUnit\Framework\TestCase;
 class FactoryDataTest extends TestCase
 {
 
+    public function testEmptyArray()
+    {
+        $data = [];
+        $obj = DataTransferFactory::create($data);
+        $this->assertTrue($obj->empty(), 'Element is empty');
+        $obj->set('index', 'value');
+        $this->assertFalse($obj->empty(), 'Element is not empty');
+    }
+
+    public function testEmptyObject()
+    {
+        $data = new \stdClass;
+        $obj = DataTransferFactory::create($data);
+        $this->assertTrue($obj->empty(), 'Element is empty');
+        $obj->set('index', 'value');
+        $this->assertFalse($obj->empty(), 'Element is not empty');
+    }
+
     public function testArrayOfStrings()
     {
         $data = [];

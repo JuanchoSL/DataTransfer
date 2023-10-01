@@ -52,6 +52,11 @@ class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterfac
         return array_key_exists($index, (array) $this->data);
     }
 
+    public function empty(): bool
+    {
+        return $this->count() == 0;
+    }
+
     /**
      * Especifica los datos que deberían serializarse para JSON
      * Serializa el objeto a un valor que puede ser serializado de forma nativa por json_encode().
