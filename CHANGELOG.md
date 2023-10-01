@@ -1,9 +1,11 @@
 # Change Log DataTransfer
 
 
-## [1.0.3] - 2023-09-27
+## [1.0.3] - 2023-10-01
 
 ### Added
+
+- new empty method in order to check is data transfer do not have elements
 
 ### Changed
 

@@ -12,5 +12,7 @@ interface DataTransferInterface
     public function get(string|int $index, mixed $default = null): mixed;
 
     public function has(string|int $index): bool;
+    
+    public function empty(): bool;
 
 }
