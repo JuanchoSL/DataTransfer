@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JuanchoSL\DataTransfer\Repositories;
 
-use JuanchoSL\Exceptions\ExpectationFailedException;
 use Countable;
 use Iterator;
 use JsonSerializable;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
@@ -12,6 +14,7 @@ abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Co
 {
 
     protected mixed $data;
+
     public function __clone()
     {
         foreach ($this as $key => $val) {
@@ -26,10 +29,12 @@ abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Co
     {
         return $this->get($key);
     }
+
     public function __isset(string $key): bool
     {
         return $this->has($key);
     }
+
     public function __unset(string $key): void
     {
         $this->unset($key);

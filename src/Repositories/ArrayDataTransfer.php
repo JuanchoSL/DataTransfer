@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JuanchoSL\DataTransfer\Repositories;
 
 use Countable;
@@ -18,7 +20,6 @@ class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterfac
      */
     public function __construct(array $array)
     {
-        //$this->data = $array;
         $this->data = [];
         foreach ($array as $key => $value) {
             $this->set($key, $value);
@@ -54,7 +55,7 @@ class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterfac
 
     public function empty(): bool
     {
-        return $this->count() == 0;
+        return empty($this->data);
     }
 
     /**
@@ -66,4 +67,5 @@ class ArrayDataTransfer extends BaseDataTransfer implements DataTransferInterfac
     {
         return $this->data;
     }
+
 }

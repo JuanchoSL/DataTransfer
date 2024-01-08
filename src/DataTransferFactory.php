@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JuanchoSL\DataTransfer;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
@@ -21,8 +23,6 @@ class DataTransferFactory
                 (substr($value, 0, 1) == '[' && substr($value, -1) == ']')
             ) {
                 $value = new JsonArrayDataTransfer($value);
-            } else {
-                $value = htmlspecialchars($value);
             }
         } elseif (is_object($value)) {
             if (is_subclass_of($value, DataTransferInterface::class)) {
