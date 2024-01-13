@@ -8,26 +8,19 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataTransferFactory;
 
 /**
- * @implements \Iterator<int|string, DataTransferInterface>
+ * @implements \Iterator<int|string, mixed>
  */
-abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
+abstract class BaseDataTransfer extends BaseCollectionable implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
 {
-
-    protected mixed $data;
-
-    public function __clone()
-    {
-        foreach ($this as $key => $val) {
-            if (is_object($val) || is_array($val)) {
-                $val = unserialize(serialize($val));
-            }
-            $this->set($key, $val);
-        }
-    }
 
     public function __get(string $key): mixed
     {
         return $this->get($key);
+    }
+
+    public function __set(string $key, mixed $value): void
+    {
+        $this->set($key, $value);
     }
 
     public function __isset(string $key): bool
@@ -40,39 +33,41 @@ abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Co
         $this->unset($key);
     }
 
-    public function __set(string $key, mixed $value): void
+    public function __clone()
     {
-        $this->set($key, $value);
+        foreach ($this->data as $key => $val) {
+            if (is_object($val) || is_array($val)) {
+                $val = unserialize(serialize($val));
+            }
+            $this->set($key, $val);
+        }
     }
 
-    public function current(): mixed
+    public function get(string|int $index, mixed $default = null): mixed
     {
-        $key = $this->key();
-        return (is_null($key)) ? null : $this->get($key);
+        return $this->data[$index] ?? $this->dataConverter($default);
     }
 
-    public function key(): string|int|null
+    public function set(string|int $key, mixed $value): self
     {
-        return key($this->data);
+        @$this->data[$key] = $this->dataConverter($value);
+        return $this;
     }
 
-    public function next(): void
+    public function has(string|int $index): bool
     {
-        next($this->data);
+        return array_key_exists($index, (array) $this->data);
     }
 
-    public function rewind(): void
+    public function unset(string|int $key): self
     {
-        reset($this->data);
-    }
-
-    public function valid(): bool
-    {
-        return !is_null($this->key());
+        unset($this->data[$key]);
+        return $this;
     }
 
     protected function dataConverter(mixed $value): mixed
     {
         return DataTransferFactory::create($value);
     }
+
 }

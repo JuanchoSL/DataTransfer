@@ -1,11 +1,27 @@
 # Change Log DataTransfer
 
 
+## [1.0.4] - 
+
+### Added
+
+- strict types declaration
+- BaseCollectionable class
+
+### Changed
+
+- strings returned unalterated
+
+### Fixed
+
+- Quality code
+
+
 ## [1.0.3] - 2023-10-01
 
 ### Added
 
-- new empty method in order to check is data transfer do not have elements
+- new empty method in order to check if data transfer do not have elements
 
 ### Changed
 

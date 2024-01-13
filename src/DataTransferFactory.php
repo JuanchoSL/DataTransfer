@@ -11,7 +11,7 @@ use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
 
 class DataTransferFactory
 {
-    public static function create(mixed $value): DataTransferInterface|string|null
+    public static function create(mixed $value): DataTransferInterface|string
     {
         if (is_array($value)) {
             $value = new ArrayDataTransfer($value);
@@ -29,6 +29,8 @@ class DataTransferFactory
                 return $value;
             }
             $value = new ObjectDataTransfer($value);
+        } else {
+            $value = new ArrayDataTransfer([]);
         }
         return $value;
     }

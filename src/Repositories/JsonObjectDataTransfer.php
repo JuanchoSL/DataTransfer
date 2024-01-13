@@ -10,7 +10,7 @@ use JsonSerializable;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
 /**
- * @implements \Iterator<int|string, DataTransferInterface>
+ * @implements \Iterator<int|string, mixed>
  */
 class JsonObjectDataTransfer extends JsonArrayDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {

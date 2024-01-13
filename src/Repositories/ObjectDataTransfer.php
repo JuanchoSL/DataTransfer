@@ -10,13 +10,13 @@ use JsonSerializable;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
 /**
- * @implements \Iterator<int|string, DataTransferInterface>
+ * @implements \Iterator<int|string, mixed>
  */
 class ObjectDataTransfer extends JsonObjectDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
 {
 
     public function __construct(object $object)
     {
-        parent::__construct(json_encode($object));
+        parent::__construct(json_encode($object, JSON_THROW_ON_ERROR));
     }
 }
