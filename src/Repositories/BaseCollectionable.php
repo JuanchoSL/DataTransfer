@@ -13,7 +13,7 @@ abstract class BaseCollectionable implements \Iterator, \JsonSerializable, \Coun
     /**
      * @var array<int|string, mixed>
      */
-    protected array $data;
+    protected array $data = [];
 
 
     public function empty(): bool
