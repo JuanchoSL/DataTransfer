@@ -1,7 +1,7 @@
 # Change Log DataTransfer
 
 
-## [1.0.4] - 
+## [1.0.4] - 2024-01-18
 
 ### Added
 
