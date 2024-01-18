@@ -11,10 +11,12 @@ use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
 
 class DataTransferFactory
 {
-    public static function create(mixed $value): DataTransferInterface|string
+    public static function create(mixed $value): DataTransferInterface|string|null
     {
         if (is_array($value)) {
             $value = new ArrayDataTransfer($value);
+        } elseif (is_null($value)) {
+            $value = null;
         } elseif (is_string($value)) {
             //if (!is_null(json_decode($value))) {
             if (
