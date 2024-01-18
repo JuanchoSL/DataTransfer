@@ -1,38 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataTransferFactory;
 
 /**
- * @implements \Iterator<int|string, DataTransferInterface>
+ * @implements \Iterator<int|string, mixed>
  */
-abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
+abstract class BaseDataTransfer extends BaseCollectionable implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
 {
-
-    protected mixed $data;
-    public function __clone()
-    {
-        foreach ($this as $key => $val) {
-            if (is_object($val) || is_array($val)) {
-                $val = unserialize(serialize($val));
-            }
-            $this->set($key, $val);
-        }
-    }
 
     public function __get(string $key): mixed
     {
         return $this->get($key);
-    }
-    public function __isset(string $key): bool
-    {
-        return $this->has($key);
-    }
-    public function __unset(string $key): void
-    {
-        $this->unset($key);
     }
 
     public function __set(string $key, mixed $value): void
@@ -40,34 +23,51 @@ abstract class BaseDataTransfer implements DataTransferInterface, \Iterator, \Co
         $this->set($key, $value);
     }
 
-    public function current(): mixed
+    public function __isset(string $key): bool
     {
-        $key = $this->key();
-        return (is_null($key)) ? null : $this->get($key);
+        return $this->has($key);
     }
 
-    public function key(): string|int|null
+    public function __unset(string $key): void
     {
-        return key($this->data);
+        $this->unset($key);
     }
 
-    public function next(): void
+    public function __clone()
     {
-        next($this->data);
+        foreach ($this->data as $key => $val) {
+            if (is_object($val) || is_array($val)) {
+                $val = unserialize(serialize($val));
+            }
+            $this->set($key, $val);
+        }
     }
 
-    public function rewind(): void
+    public function get(string|int $index, mixed $default = null): mixed
     {
-        reset($this->data);
+        return $this->data[$index] ?? $this->dataConverter($default);
     }
 
-    public function valid(): bool
+    public function set(string|int $key, mixed $value): self
     {
-        return !is_null($this->key());
+        @$this->data[$key] = $this->dataConverter($value);
+        return $this;
+    }
+
+    public function has(string|int $index): bool
+    {
+        return array_key_exists($index, (array) $this->data);
+    }
+
+    public function unset(string|int $key): self
+    {
+        unset($this->data[$key]);
+        return $this;
     }
 
     protected function dataConverter(mixed $value): mixed
     {
         return DataTransferFactory::create($value);
     }
+
 }
