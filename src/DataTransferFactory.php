@@ -31,7 +31,7 @@ class DataTransferFactory
                 return $value;
             }
             $value = new ObjectDataTransfer($value);
-        } else {
+        } elseif(!is_scalar($value)) {
             $value = new ArrayDataTransfer([]);
         }
         return $value;
