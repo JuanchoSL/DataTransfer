@@ -17,15 +17,12 @@ class DataTransferFactory
             $value = new ArrayDataTransfer($value);
         } elseif (is_null($value)) {
             $value = null;
-        } elseif (is_string($value)) {
-            //if (!is_null(json_decode($value))) {
-            if (
-                (substr($value, 0, 1) == '{' && substr($value, -1) == '}')
-                ||
-                (substr($value, 0, 1) == '[' && substr($value, -1) == ']')
-            ) {
-                $value = new JsonArrayDataTransfer($value);
-            }
+        } elseif (is_string($value) && (
+            (substr($value, 0, 1) == '{' && substr($value, -1) == '}')
+            ||
+            (substr($value, 0, 1) == '[' && substr($value, -1) == ']')
+        )) {
+            $value = new JsonArrayDataTransfer($value);
         } elseif (is_object($value)) {
             if (is_subclass_of($value, DataTransferInterface::class)) {
                 return $value;
