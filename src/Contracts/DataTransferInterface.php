@@ -2,7 +2,7 @@
 
 namespace JuanchoSL\DataTransfer\Contracts;
 
-interface DataTransferInterface
+interface DataTransferInterface extends CollectionTransferInterface
 {
 
     public function unset(string|int $index): self;
@@ -13,6 +13,4 @@ interface DataTransferInterface
 
     public function has(string|int $index): bool;
     
-    public function empty(): bool;
-
 }

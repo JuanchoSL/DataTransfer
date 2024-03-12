@@ -4,15 +4,7 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
-use Countable;
-use Iterator;
-use JsonSerializable;
-use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
-
-/**
- * @implements \Iterator<int|string, mixed>
- */
-class JsonObjectDataTransfer extends JsonArrayDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
+class JsonObjectDataTransfer extends JsonArrayDataTransfer
 {
 
     public function __construct(string $json)

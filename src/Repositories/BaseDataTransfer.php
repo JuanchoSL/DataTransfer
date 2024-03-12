@@ -10,7 +10,7 @@ use JuanchoSL\DataTransfer\DataTransferFactory;
 /**
  * @implements \Iterator<int|string, mixed>
  */
-abstract class BaseDataTransfer extends BaseCollectionable implements DataTransferInterface, \Iterator, \Countable, \JsonSerializable
+abstract class BaseDataTransfer extends BaseCollectionable implements DataTransferInterface
 {
 
     public function __get(string $key): mixed
