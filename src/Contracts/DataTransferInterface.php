@@ -2,7 +2,7 @@
 
 namespace JuanchoSL\DataTransfer\Contracts;
 
-interface DataTransferInterface
+interface DataTransferInterface extends CollectionTransferInterface, \JsonSerializable
 {
 
     public function unset(string|int $index): self;
@@ -12,7 +12,5 @@ interface DataTransferInterface
     public function get(string|int $index, mixed $default = null): mixed;
 
     public function has(string|int $index): bool;
-    
-    public function empty(): bool;
 
 }

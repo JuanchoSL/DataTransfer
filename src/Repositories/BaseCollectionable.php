@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
+use JuanchoSL\DataTransfer\Contracts\CollectionTransferInterface;
+
 /**
  * @implements \Iterator<int|string, mixed>
  */
-abstract class BaseCollectionable implements \Iterator, \JsonSerializable, \Countable
+abstract class BaseCollectionable implements CollectionTransferInterface
 {
 
     /**
@@ -15,10 +17,25 @@ abstract class BaseCollectionable implements \Iterator, \JsonSerializable, \Coun
      */
     protected array $data = [];
 
+    public function append(mixed $value): void
+    {
+        array_push($this->data, $value);
+    }
+    
+    public function hasElements(): bool
+    {
+        return !$this->isEmpty();
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->data);
+    }
 
     public function empty(): bool
     {
-        return empty($this->data);
+        //trigger_error("Use isEmpty instead empty method", E_USER_DEPRECATED);
+        return $this->isEmpty();
     }
 
     //Iterator

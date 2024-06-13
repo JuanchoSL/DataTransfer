@@ -5,15 +5,8 @@ declare(strict_types=1);
 namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\Exceptions\ExpectationFailedException;
-use Countable;
-use Iterator;
-use JsonSerializable;
-use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
-/**
- * @implements \Iterator<int|string, mixed>
- */
-class JsonArrayDataTransfer extends ArrayDataTransfer implements DataTransferInterface, Iterator, Countable, JsonSerializable
+class JsonArrayDataTransfer extends ArrayDataTransfer
 {
 
     public function __construct(string $json)
