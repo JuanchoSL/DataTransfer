@@ -27,7 +27,7 @@ $dto = new JuanchoSL\DataTransfer\Repositories\{SOURCE_READER}($element)
 ### Using the provided Factory
 
 ```php
-$dto = JuanchoSL\DataTransfer\DataTransferFactory::create($element);
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::create($element);
 ```
 
 > The **$element** parameter can be:
