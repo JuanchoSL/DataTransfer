@@ -207,7 +207,7 @@ class DataTransferTest extends TestCase
         $csv = 'user,user_id,password,prioridad,id,descripcion
 "root","2",,"baja",,
 "root","1","contraseña","Alta","1","Descripción del texto"';
-        $obj = DataTransferFactory::create(new CsvDataTransfer(explode("\r", $csv)));
+        $obj = DataTransferFactory::create(new CsvDataTransfer(explode(PHP_EOL, $csv)));
         $this->assertCount(2, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
