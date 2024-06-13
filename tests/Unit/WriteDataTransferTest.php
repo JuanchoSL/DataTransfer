@@ -1,36 +1,21 @@
 <?php
 
-namespace JuanchoSL\DataTransfer\Tests;
+namespace JuanchoSL\DataTransfer\Tests\Unit;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
-use JuanchoSL\DataTransfer\DataTransferFactory;
+use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\JsonArrayDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\JsonObjectDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
 use PHPUnit\Framework\TestCase;
 
-class FactoryDataTest extends TestCase
+class WriteDataTransferTest extends TestCase
 {
-
-    public function testEmptyArray()
-    {
-        $data = [];
-        $obj = DataTransferFactory::create($data);
-        $this->assertTrue($obj->empty(), 'Element is empty');
-        $obj->set('index', 'value');
-        $this->assertFalse($obj->empty(), 'Element is not empty');
-    }
-
-    public function testEmptyObject()
-    {
-        $data = new \stdClass;
-        $obj = DataTransferFactory::create($data);
-        $this->assertTrue($obj->empty(), 'Element is empty');
-        $obj->set('index', 'value');
-        $this->assertFalse($obj->empty(), 'Element is not empty');
-    }
 
     public function testArrayOfStrings()
     {
         $data = [];
-        $obj = DataTransferFactory::create($data);
+        $obj = new ArrayDataTransfer($data);
         $this->assertFalse($obj->has('index'), 'Key is not setted');
         $this->assertFalse($obj->has('other_index'), 'No has new value');
         $obj->set('index', 'value');
@@ -41,11 +26,40 @@ class FactoryDataTest extends TestCase
         $this->assertEquals('other_value', $obj->other_index, 'Values are equals');
     }
 
+    public function testArrayOfStringsFailback()
+    {
+        $data = [];
+        $obj = new ArrayDataTransfer($data);
+        $this->assertFalse($obj->has('index'), 'Key is not setted');
+        $this->assertFalse($obj->has('other_index'), 'No has new value');
+        $this->assertNull($obj->get('index'), 'Key is not setted and return failback');
+        $this->assertNull($obj->get('other_index'), 'Key is not setted and return failback');
+        $obj->set('index', 'value');
+        $obj->other_index = 'other_value';
+        $this->assertTrue($obj->has('index'), 'Key is setted');
+        $this->assertTrue($obj->has('other_index'), 'Key is setted');
+        $this->assertEquals('value', $obj->get('index'), 'Values are equals');
+        $this->assertEquals('other_value', $obj->other_index, 'Values are equals');
+    }
+    public function testArrayOfStringsFailbackDefault()
+    {
+        $data = [];
+        $obj = new ArrayDataTransfer($data);
+        $this->assertFalse($obj->has('index'), 'Key is not setted');
+        $this->assertFalse($obj->has('other_index'), 'No has new value');
+        $this->assertIsString($obj->get('index', 'value'), 'Key is not setted and return failback');
+        $this->assertIsString($obj->get('other_index', 'other_value'), 'Key is not setted and return failback');
+        $this->assertTrue($obj->has('index'), 'Key is setted');
+        $this->assertTrue($obj->has('other_index'), 'Key is setted');
+        $this->assertEquals('value', $obj->get('index'), 'Values are equals');
+        $this->assertEquals('other_value', $obj->other_index, 'Values are equals');
+    }
+
     public function testObjects()
     {
         $data = new \stdClass;
 
-        $obj = DataTransferFactory::create($data);
+        $obj = new ObjectDataTransfer($data);
 
         $this->assertFalse($obj->has('index'), 'Key is not setted');
         $this->assertFalse($obj->has('other_index'), 'No has new value');
@@ -60,7 +74,7 @@ class FactoryDataTest extends TestCase
     public function testJsonArrayOfStrings()
     {
         $data = [];
-        $obj = DataTransferFactory::create(json_encode($data));
+        $obj = new JsonArrayDataTransfer(json_encode($data));
         $this->assertFalse($obj->has('index'), 'Key is not setted');
         $this->assertFalse($obj->has('other_index'), 'No has new value');
         $obj->set('index', 'value');
@@ -76,7 +90,7 @@ class FactoryDataTest extends TestCase
         $data = [
             'key' => 'value'
         ];
-        $obj = DataTransferFactory::create(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertFalse($obj->has('index'), 'Key is not setted');
         $this->assertFalse($obj->has('other_index'), 'No has new value');
         $obj->set('index', 'value');
@@ -92,7 +106,7 @@ class FactoryDataTest extends TestCase
         $data = [
             'key' => ['subindex' => 'value']
         ];
-        $obj = DataTransferFactory::create(json_encode($data));
+        $obj = new JsonArrayDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('key'), 'Key is setted');
         $this->assertFalse($obj->key->has('index'), 'Key is not setted');
         $this->assertFalse($obj->key->has('other_index'), 'No has new value');
@@ -109,7 +123,7 @@ class FactoryDataTest extends TestCase
         $data = [
             'key' => ['value_0', 'value_1']
         ];
-        $obj = DataTransferFactory::create(json_encode($data));
+        $obj = new JsonArrayDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('key'), 'Key is setted');
         $this->assertFalse($obj->key->has('index'), 'Key is not setted');
         $this->assertFalse($obj->key->has('other_index'), 'No has new value');
@@ -127,7 +141,7 @@ class FactoryDataTest extends TestCase
         $data = [
             'key' => '{"subkey":"value"}'
         ];
-        $obj = DataTransferFactory::create(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('key'), 'Key is setted');
         $this->assertEquals('value', $obj->get('key')->get('subkey'), 'Values are equals');
         $this->assertEquals('value', $obj->key->subkey, 'Values are equals');
@@ -138,7 +152,7 @@ class FactoryDataTest extends TestCase
         $data = [
             'index' => ['subindex' => 'value']
         ];
-        $obj = DataTransferFactory::create(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
         $this->assertTrue($obj->get('index')->has('subindex'), 'SubKey is setted');
@@ -151,7 +165,7 @@ class FactoryDataTest extends TestCase
         $data = [
             'index' => ['value_0', 'value_1']
         ];
-        $obj = DataTransferFactory::create(json_encode($data));
+        $obj = new JsonObjectDataTransfer(json_encode($data));
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
         foreach ($obj->get('index') as $key => $value) {
@@ -163,15 +177,49 @@ class FactoryDataTest extends TestCase
         $data = [
             'index' => ['value_0', 'value_1']
         ];
-        $obj1 = DataTransferFactory::create(json_encode($data));
-        $obj2 = DataTransferFactory::create(json_encode($data));
-        $obj = DataTransferFactory::create(['first' => $obj1, 'second' => $obj2]);
+        $obj1 = new JsonObjectDataTransfer(json_encode($data));
+        $obj2 = new JsonObjectDataTransfer(json_encode($data));
+        $obj = new ArrayDataTransfer(['first' => $obj1, 'second' => $obj2]);
         $this->assertTrue($obj->has('first'), 'Key is setted');
         $this->assertInstanceOf(DataTransferInterface::class, $obj->get('first'), 'Value is instance');
         $this->assertTrue($obj->get('first')->has("index"), 'Subkey is setted');
+        $this->assertEquals("value_0", $obj->first->index->get(0), 'Values are equals');
+        $this->assertEquals("value_0", $obj->get('first')->get('index')->get(0), 'Values are equals');
         foreach ($obj->get('first')->get("index") as $key => $value) {
             $this->assertEquals("value_{$key}", $value, 'Values are equals');
         }
     }
 
+    public function testClonation()
+    {
+        $data = [
+            'index' => ['value_0', 'value_1']
+        ];
+        $obj1 = new JsonObjectDataTransfer(json_encode($data));
+        $obj2 = clone $obj1;
+        $original = json_encode($obj1);
+        $clone = json_encode($obj2);
+        $this->assertEquals($original, $clone);
+        $obj1->index->set(0, 'value_2');
+        $original = json_encode($obj1);
+        $this->assertNotEquals($original, $clone);
+        $this->assertEquals('value_0', $obj2->index->get(0));
+        $this->assertEquals('value_2', $obj1->index->get(0));
+    }
+    public function testClonationObj()
+    {
+        $data = new \stdClass;
+        $data->index = ['value_0', 'value_1'];
+
+        $obj1 = new ObjectDataTransfer($data);
+        $obj2 = clone $obj1;
+        $original = json_encode($obj1);
+        $clone = json_encode($obj2);
+        $this->assertEquals($original, $clone);
+        $obj1->index->set(0, 'value_2');
+        $original = json_encode($obj1);
+        $this->assertNotEquals($original, $clone);
+        $this->assertEquals('value_0', $obj2->index->get(0));
+        $this->assertEquals('value_2', $obj1->index->get(0));
+    }
 }

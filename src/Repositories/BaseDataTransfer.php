@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
-use JuanchoSL\DataTransfer\DataTransferFactory;
+use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 
 /**
  * @implements \Iterator<int|string, mixed>
  */
 abstract class BaseDataTransfer extends BaseCollectionable implements DataTransferInterface
 {
+
+    public function append(mixed $value): void
+    {
+        array_push($this->data, $this->dataConverter($value));
+    }
 
     public function __get(string $key): mixed
     {
@@ -45,7 +50,12 @@ abstract class BaseDataTransfer extends BaseCollectionable implements DataTransf
 
     public function get(string|int $index, mixed $default = null): mixed
     {
-        return $this->data[$index] ?? $this->dataConverter($default);
+        if (!$this->has($index)) {
+            if (!is_null($default)) {
+                $this->set($index, $default);
+            }
+        }
+        return $this->data[$index] ?? null;
     }
 
     public function set(string|int $key, mixed $value): self

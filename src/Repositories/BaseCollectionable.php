@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
+
 use JuanchoSL\DataTransfer\Contracts\CollectionTransferInterface;
 
 /**
@@ -16,7 +17,11 @@ abstract class BaseCollectionable implements CollectionTransferInterface
      */
     protected array $data = [];
 
-
+    public function append(mixed $value): void
+    {
+        array_push($this->data, $value);
+    }
+    
     public function hasElements(): bool
     {
         return !$this->isEmpty();
@@ -29,7 +34,7 @@ abstract class BaseCollectionable implements CollectionTransferInterface
 
     public function empty(): bool
     {
-        trigger_error("Use isEmpty instead emptu method", E_USER_DEPRECATED);
+        //trigger_error("Use isEmpty instead empty method", E_USER_DEPRECATED);
         return $this->isEmpty();
     }
 

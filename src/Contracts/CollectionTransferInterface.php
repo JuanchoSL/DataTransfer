@@ -7,4 +7,7 @@ interface CollectionTransferInterface extends \Iterator, \Countable, \JsonSerial
 
     public function isEmpty(): bool;
     public function hasElements(): bool;
+
+    public function append(mixed $value): void;
+
 }
