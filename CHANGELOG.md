@@ -1,6 +1,30 @@
 # Change Log DataTransfer
 
 
+## [1.0.5] - 2024-06-14
+
+### Added
+
+- SimpleXMLElement compatibility using XmlObjectDataTransfer
+- CSV contents file compatibility using CsvDataTransfer
+- xml string and SimpleXMLElement from DataTransferFactory
+- Data converters, in order to transform DTO to:
+    - JSON string
+    - Array
+    - Object
+    - XML string
+    - XML Entity object
+    - CSV lines array
+- append method in order to push data to indexed DTO
+
+### Changed
+
+- Fatories namespace for DataTransferFactory
+- when get, if not exist, return converted default value or null
+
+### Fixed
+
+
 ## [1.0.4] - 2024-01-18
 
 ### Added
