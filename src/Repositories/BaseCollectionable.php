@@ -9,7 +9,7 @@ use JuanchoSL\DataTransfer\Contracts\CollectionTransferInterface;
 /**
  * @implements \Iterator<int|string, mixed>
  */
-abstract class BaseCollectionable implements CollectionTransferInterface
+abstract class BaseCollectionable implements CollectionTransferInterface, \ArrayAccess
 {
 
     /**
@@ -17,11 +17,11 @@ abstract class BaseCollectionable implements CollectionTransferInterface
      */
     protected array $data = [];
 
-    public function append(mixed $value): void
+    public function append(mixed $value): int
     {
-        array_push($this->data, $value);
+        return array_push($this->data, $value);
     }
-    
+
     public function hasElements(): bool
     {
         return !$this->isEmpty();
@@ -36,6 +36,27 @@ abstract class BaseCollectionable implements CollectionTransferInterface
     {
         //trigger_error("Use isEmpty instead empty method", E_USER_DEPRECATED);
         return $this->isEmpty();
+    }
+
+    //ArrayAccess
+    public function offsetSet($offset, $value): void
+    {
+        $this->data[$offset] = $value;
+    }
+
+    public function offsetExists($offset): bool
+    {
+        return array_key_exists($offset, $this->data);
+    }
+
+    public function offsetUnset($var): void
+    {
+        unset($this->data[$var]);
+    }
+
+    public function offsetGet($var): mixed
+    {
+        return isset($this->data[$var]) ? $this->data[$var] : null;
     }
 
     //Iterator
@@ -74,7 +95,7 @@ abstract class BaseCollectionable implements CollectionTransferInterface
     //Countable
     public function count(): int
     {
-        return count(array_keys((array) $this->data));
+        return count(array_keys($this->data));
     }
 
 }

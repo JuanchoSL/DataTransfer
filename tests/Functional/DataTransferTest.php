@@ -4,12 +4,7 @@ namespace JuanchoSL\DataTransfer\Tests\Functional;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
-use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\JsonArrayDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\JsonObjectDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\XmlObjectDataTransfer;
 use PHPUnit\Framework\TestCase;
 
 class DataTransferTest extends TestCase
@@ -64,6 +59,7 @@ class DataTransferTest extends TestCase
     {
         $data = ['value_0', 'value_1'];
         $obj = DataTransferFactory::create($data);
+        $this->assertCount(2, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj, 'Value is instance');
         foreach ($obj as $key => $value) {
             $this->assertEquals("value_{$key}", $value, 'Values are equals');

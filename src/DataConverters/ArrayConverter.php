@@ -9,6 +9,6 @@ class ArrayConverter extends AbstractConverter
 
     public function getData()
     {
-        return json_decode(json_encode($this->data), true);
+        return json_decode(JsonConverter::convert($this->data), true);
     }
 }

@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
-use JuanchoSL\Exceptions\ExpectationFailedException;
-
-class JsonArrayDataTransfer extends ArrayDataTransfer
+class JsonArrayDataTransfer extends JsonDataTransfer
 {
 
     public function __construct(string $json)
     {
-        $body = json_decode($json, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new ExpectationFailedException(json_last_error_msg());
-        }
-        parent::__construct((array) $body);
+        trigger_error("Sub classes JSON are deprecated, use JsonDataTransfer instead " . get_called_class(), E_USER_DEPRECATED);
+        parent::__construct($json);
     }
 
 }

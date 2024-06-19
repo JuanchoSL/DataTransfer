@@ -5,8 +5,7 @@ namespace JuanchoSL\DataTransfer\Tests\Unit;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\JsonArrayDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\JsonObjectDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlObjectDataTransfer;
 use PHPUnit\Framework\TestCase;
@@ -17,16 +16,19 @@ class DataTransferTest extends TestCase
     public function testFromJsonWithObject()
     {
         $data = '{"index": "value"}';
-        $obj = new JsonObjectDataTransfer($data);
+        $obj = new JsonDataTransfer($data);
         $this->assertCount(1, $obj);
+        $this->assertTrue(isset($obj['index']), 'Key is setted');
+        $this->assertTrue(isset($obj->index), 'Key is setted');
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertEquals('value', $obj->get('index'), 'Values are equals');
         $this->assertEquals('value', $obj->index, 'Values are equals');
+        $this->assertEquals('value', $obj['index'], 'Values are equals');
     }
     public function testFromJsonWithArrayPlain()
     {
         $data = ['value_0', 'value_1'];
-        $obj = new JsonArrayDataTransfer(json_encode($data));
+        $obj = new JsonDataTransfer(json_encode($data));
         $this->assertCount(2, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj, 'Value is instance');
         foreach ($obj as $key => $value) {
@@ -38,9 +40,11 @@ class DataTransferTest extends TestCase
         $data = [
             'index' => ['subindex' => 'value']
         ];
-        $obj = new JsonArrayDataTransfer(json_encode($data));
+        $obj = new JsonDataTransfer(json_encode($data));
         $this->assertCount(1, $obj);
         $this->assertTrue($obj->has('index'), 'Key is setted');
+        $this->assertTrue(isset($obj['index']), 'Key is setted');
+        $this->assertTrue(isset($obj->index), 'Key is setted');
         $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
         $this->assertTrue($obj->get('index')->has('subindex'), 'SubKey is setted');
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
@@ -51,7 +55,7 @@ class DataTransferTest extends TestCase
         $data = [
             'index' => ['value_0', 'value_1']
         ];
-        $obj = new JsonArrayDataTransfer(json_encode($data));
+        $obj = new JsonDataTransfer(json_encode($data));
         $this->assertCount(1, $obj);
         $this->assertTrue($obj->has('index'), 'Key is setted');
         $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
