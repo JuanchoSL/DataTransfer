@@ -1,6 +1,24 @@
 # Change Log DataTransfer
 
 
+## [1.0.6] - 2024-06-20
+
+### Added
+
+- UTF-8 string conversion from Factory for plain strings
+- ArrayAcces compatibility
+
+### Changed
+
+- removed redundant JSON subclases and use only JsonDataTransferClass
+- unset method called remove in order to aviod collision
+- append method return the int value for the assigned position
+
+### Fixed
+
+- Fix for non collection passed to CsvConverter
+
+
 ## [1.0.5] - 2024-06-14
 
 ### Added

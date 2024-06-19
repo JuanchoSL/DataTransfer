@@ -10,6 +10,9 @@ class CsvConverter extends AbstractConverter
     public function getData()
     {
         $data = ArrayConverter::convert($this->data);
+        if (!is_numeric(key($data))) {
+            $data = [$data];
+        }
         return $this->collection2csv($data);
     }
 
@@ -31,7 +34,7 @@ class CsvConverter extends AbstractConverter
     {
         $results = [];
         $title = [];
-        foreach ($array as $key => $value) {
+        foreach ($array as $value) {
             $data = [];
             $this->array2csv($value, $title, $data);
             $diff = array_diff_key($data, $title);
@@ -41,7 +44,7 @@ class CsvConverter extends AbstractConverter
             $results[] = $data;
         }
         $texts = [];
-        foreach ($results as $index => $result) {
+        foreach ($results as $result) {
             $text = '';
             foreach ($title as $key => $value) {
                 $text .= $result[$key] ?? '';

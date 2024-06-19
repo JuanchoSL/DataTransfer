@@ -13,9 +13,9 @@ use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 abstract class BaseDataTransfer extends BaseCollectionable implements DataTransferInterface
 {
 
-    public function append(mixed $value): void
+    public function append(mixed $value): int
     {
-        array_push($this->data, $this->dataConverter($value));
+        return parent::append($this->dataConverter($value));
     }
 
     public function __get(string $key): mixed
@@ -35,7 +35,7 @@ abstract class BaseDataTransfer extends BaseCollectionable implements DataTransf
 
     public function __unset(string $key): void
     {
-        $this->unset($key);
+        $this->remove($key);
     }
 
     public function __clone()
@@ -66,13 +66,12 @@ abstract class BaseDataTransfer extends BaseCollectionable implements DataTransf
 
     public function has(string|int $index): bool
     {
-        return array_key_exists($index, (array) $this->data);
+        return isset($this->data[$index]);
     }
 
-    public function unset(string|int $key): self
+    public function remove(string|int $key): void
     {
         unset($this->data[$key]);
-        return $this;
     }
 
     protected function dataConverter(mixed $value): mixed
