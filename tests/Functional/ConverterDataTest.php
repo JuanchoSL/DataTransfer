@@ -59,6 +59,7 @@ class ConverterDataTest extends TestCase
         $obj = DataTransferFactory::create(simplexml_load_string($xml));
         $this->assertXmlStringEqualsXmlString($xml, DataConverterFactory::asXml($obj));
     }
+    
     public function testToXml3()
     {
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
@@ -69,6 +70,18 @@ class ConverterDataTest extends TestCase
         $this->assertInstanceOf(\SimpleXMLElement::class, $convert);
         $this->assertEquals($xml_obj, $convert);
     }
+
+    public function testToXml4()
+    {
+        $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
+        $xml_obj = simplexml_load_string($xml);
+        $obj = DataTransferFactory::create($xml);
+        $convert = DataConverterFactory::asXmlObject($obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertInstanceOf(\SimpleXMLElement::class, $convert);
+        $this->assertEquals($xml_obj, $convert);
+    }
+
     public function testToCsv()
     {
         $csv = 'user,user_id,password,prioridad,id,descripcion
@@ -79,5 +92,28 @@ class ConverterDataTest extends TestCase
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         $converted = DataConverterFactory::asCsv($obj);
         $this->assertEquals($csv, $converted);
+    }
+
+    
+    public function testYaml()
+    {
+        $yaml = "event1:\n  name: My Event\n  date: 25.05.2001";
+        $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
+        $obj = DataTransferFactory::create($array);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = DataConverterFactory::asYaml($obj);
+        $this->assertEquals(str_replace("\r\n", "\n", $yaml), $converted);
+    }
+
+    public function testIni()
+    {
+        $yaml = "[event1]".PHP_EOL."name=My Event".PHP_EOL."date=25.05.2001";
+        $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
+        $obj = DataTransferFactory::create($array);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = DataConverterFactory::asIni($obj);
+        $this->assertEquals($yaml, $converted);
     }
 }

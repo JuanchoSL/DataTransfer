@@ -2,7 +2,7 @@
 
 namespace JuanchoSL\DataTransfer\Contracts;
 
-interface DataTransferInterface extends CollectionTransferInterface, \JsonSerializable
+interface DataTransferInterface extends CollectionTransferInterface
 {
     /**
      * Remove the selected key

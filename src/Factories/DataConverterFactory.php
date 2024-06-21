@@ -7,10 +7,12 @@ namespace JuanchoSL\DataTransfer\Factories;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
 use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
+use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
 use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
+use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
 
 class DataConverterFactory
 {
@@ -32,6 +34,16 @@ class DataConverterFactory
     public static function asCsv(DataTransferInterface $dto): string
     {
         return CsvConverter::convert($dto);
+    }
+
+    public static function asYaml(DataTransferInterface $dto): string
+    {
+        return YamlConverter::convert($dto);
+    }
+
+    public static function asIni(DataTransferInterface $dto): string
+    {
+        return IniConverter::convert($dto);
     }
 
     public static function asXmlObject(DataTransferInterface $dto): \SimpleXMLElement

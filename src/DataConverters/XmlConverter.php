@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
-class XmlConverter extends AbstractConverter
+class XmlConverter extends XmlObjectConverter
 {
 
     public function getData()
     {
-        return XmlObjectConverter::convert($this->data)->asXML();
+        return parent::getData()->asXML();
     }
 }
