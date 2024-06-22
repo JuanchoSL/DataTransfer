@@ -10,9 +10,15 @@ class ArrayDataTransfer extends BaseDataTransfer
     /**
      * @param array<int|string, mixed> $array
      */
-    public function __construct(array $array)
+    public function __construct(array|string $array)
     {
         $this->data = [];
+        if (is_string($array)) {
+            if (is_file($array) && file_exists($array)) {
+                $array = file_get_contents($array);
+            }
+            $array = unserialize($array);
+        }
         foreach ($array as $key => $value) {
             $this->set($key, $value);
         }

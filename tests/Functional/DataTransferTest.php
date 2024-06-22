@@ -5,6 +5,8 @@ namespace JuanchoSL\DataTransfer\Tests\Functional;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
 use PHPUnit\Framework\TestCase;
 
 class DataTransferTest extends TestCase
@@ -114,6 +116,31 @@ class DataTransferTest extends TestCase
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
     }
+
+    public function testFromArrayWithArrayIndexedSerialized()
+    {
+        $data = 'a:1:{s:5:"index";a:2:{i:0;s:7:"value_0";i:1;s:7:"value_1";}}';
+        $obj = DataTransferFactory::create($data);
+        $this->assertCount(1, $obj);
+        $this->assertTrue($obj->has('index'), 'Key is setted');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
+        foreach ($obj->get('index') as $key => $value) {
+            $this->assertEquals("value_{$key}", $value, 'Values are equals');
+        }
+    }
+
+    public function testFromArrayWithArrayAssociativeSerialized()
+    {
+        $data = 'a:1:{s:5:"index";a:1:{s:8:"subindex";s:5:"value";}}';
+        $obj = DataTransferFactory::create($data);
+        $this->assertCount(1, $obj);
+        $this->assertTrue($obj->has('index'), 'Key is setted');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
+        $this->assertTrue($obj->get('index')->has('subindex'), 'SubKey is setted');
+        $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
+        $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
+    }
+    
     public function testFromObjectWithPlain()
     {
         $data = new \stdClass;
@@ -226,6 +253,57 @@ class DataTransferTest extends TestCase
             $this->assertTrue($entity->has("user"));
             $this->assertEquals('root', $entity->get("user"));
             $this->assertEquals('root', $entity->user);
+        }
+    }
+    
+    public function testYaml()
+    {
+        $yaml = <<<YAML
+        event1:
+            name: My Event
+            date: !date 25.05.2001
+YAML;
+
+        $obj = DataTransferFactory::create(new YamlDataTransfer($yaml));
+        $this->assertCount(1, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $this->assertTrue($obj->has("event1"));
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("name"));
+            $this->assertTrue($entity->has("date"));
+            $this->assertEquals('My Event', $entity->get("name"));
+            $this->assertEquals('25.05.2001', $entity->date);
+        }
+    }
+
+    public function testIni()
+    {
+        $ini = "name=My Event\ndate=25.05.2001";
+
+        $obj = DataTransferFactory::create(new IniDataTransfer($ini));
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertTrue($obj->has("name"));
+        $this->assertEquals('My Event', $obj->get("name"));
+        $this->assertTrue($obj->has("date"));
+        $this->assertEquals('25.05.2001', $obj->date);
+    }
+
+    public function testIniSections()
+    {
+        $ini = "[event1]\nname=My Event\ndate=25.05.2001";
+
+        $obj = DataTransferFactory::create(new IniDataTransfer($ini));
+        $this->assertCount(1, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $this->assertTrue($obj->has("event1"));
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("name"));
+            $this->assertTrue($entity->has("date"));
+            $this->assertEquals('My Event', $entity->get("name"));
+            $this->assertEquals('25.05.2001', $entity->date);
         }
     }
 }
