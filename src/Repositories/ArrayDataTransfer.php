@@ -8,7 +8,7 @@ class ArrayDataTransfer extends BaseDataTransfer
 {
 
     /**
-     * @param array<int|string, mixed> $array
+     * @param string|array<int|string, mixed> $array
      */
     public function __construct(array|string $array)
     {
