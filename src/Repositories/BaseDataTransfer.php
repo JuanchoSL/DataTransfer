@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
-use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
+use JuanchoSL\DataTransfer\DataContainer;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 
 /**
  * @implements \Iterator<int|string, mixed>
  */
-abstract class BaseDataTransfer extends DataContainer implements DataTransferInterface
+abstract class BaseDataTransfer extends DataContainer
 {
 
     public function append(mixed $value): int
