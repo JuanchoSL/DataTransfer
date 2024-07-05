@@ -9,7 +9,7 @@ use JuanchoSL\DataTransfer\Contracts\CollectionTransferInterface;
 /**
  * @implements \Iterator<int|string, mixed>
  */
-abstract class BaseCollectionable implements CollectionTransferInterface, \ArrayAccess
+abstract class BaseCollectionable implements CollectionTransferInterface
 {
 
     /**

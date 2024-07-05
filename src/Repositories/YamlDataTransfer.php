@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
+
 use JuanchoSL\Exceptions\PreconditionRequiredException;
 
 class YamlDataTransfer extends ArrayDataTransfer

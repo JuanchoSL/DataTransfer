@@ -9,6 +9,5 @@ class ObjectConverter extends JsonConverter
     public function getData()
     {
         return json_decode(parent::getData(), false);
-
     }
 }

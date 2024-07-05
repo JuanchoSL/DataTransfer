@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
-
 use JuanchoSL\DataTransfer\Contracts\DataConverterInterface;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
