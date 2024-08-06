@@ -12,7 +12,11 @@
         "yaml",
         "ini",
         "csv",
+        "xml",
+        "SimpleXMLElement",
         "entity",
+        "data converter",
+        "file contents",
         "values"
     ],
     "authors": [

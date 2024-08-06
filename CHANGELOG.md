@@ -1,6 +1,32 @@
 # Change Log DataTransfer
 
 
+## [1.0.7] - 2024-08-06
+
+### Added
+
+- Yaml reader compatibility
+- Yaml converter compatibility
+- INI reader compatibility
+- INI converter compatibility
+- requirements into composer for JSON extension
+- suggestion into composer for YAML extension
+- ArrayIterator implementation
+- DataContainer in order to group data without modification with Object attribute access
+- Collection class in order to create iterable grouped data
+
+### Changed
+
+- JsonDataTransfer accept a filepath as string too in order to read his contents as json
+- ObjectDataTransfer accept a string too in order to read as a filepath or as a serialized object
+- ArrayDataTransfer accept a string too in order to read as a filepath or as a serialized array
+- XmlObjectDataTransfer is renamed to XmlDataTransfer and accept a filepath as string and a xml string too
+
+### Fixed
+
+- Use inheritance in order to reduce memory consumption
+
+
 ## [1.0.6] - 2024-06-20
 
 ### Added

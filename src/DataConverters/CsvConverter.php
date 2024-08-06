@@ -30,6 +30,7 @@ class CsvConverter extends AbstractConverter
             }
         }
     }
+    
     protected function collection2csv($array)
     {
         $results = [];

@@ -42,7 +42,6 @@ class XmlObjectConverter extends AbstractConverter
                         }
                         $this->array2XML($value, $name, $node);
                     } else {
-
                         $this->array2XML($value, $key, $xml);
                     }
                 }
