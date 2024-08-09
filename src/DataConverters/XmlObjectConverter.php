@@ -7,7 +7,7 @@ namespace JuanchoSL\DataTransfer\DataConverters;
 class XmlObjectConverter extends AbstractConverter
 {
 
-    public function getData()
+    public function getData(): mixed
     {
         $key = 'root';
         if ($this->data->count() == 1 && !empty($this->data->key()) && !is_numeric($this->data->key())) {
@@ -16,7 +16,7 @@ class XmlObjectConverter extends AbstractConverter
         return $this->array2XML($this->data, $key);
     }
 
-    protected function array2XML($data, $rootNodeName = 'root', $xml = NULL)
+    protected function array2XML(iterable $data, string $rootNodeName = 'root', \SimpleXMLElement $xml = NULL): \SimpleXMLElement
     {
         if ($xml == null) {
             $xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
@@ -46,10 +46,19 @@ class XmlObjectConverter extends AbstractConverter
                     }
                 }
             } elseif (!is_numeric($key)) {
-                $value = htmlspecialchars($value);
+                //$value = htmlspecialchars($value);
                 if ($key != 'value') {
                     $node = $xml->addChild($key);
-                    $node[0] = $value;
+                    if (strpos($value, '&lt;') !== false || strpos($value, '&amp;') !== false) {
+                        $value = html_entity_decode($value);
+                    }
+                    if (strpos($value, '<') !== false || strpos($value, '&') !== false) {
+                        $node = dom_import_simplexml($node);
+                        $no = $node->ownerDocument;
+                        $node->appendChild($no->createCDATASection($value));
+                    } else {
+                        $node[0] = $value;
+                    }
                 } else {
                     $xml[0] = $value;
                 }

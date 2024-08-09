@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JuanchoSL\DataTransfer\Repositories;
 
 use JsonSerializable;
+use JuanchoSL\Exceptions\UnprocessableEntityException;
 
 class ObjectDataTransfer extends JsonDataTransfer
 {
@@ -14,6 +15,9 @@ class ObjectDataTransfer extends JsonDataTransfer
         if (is_string($object)) {
             if (is_file($object) && file_exists($object)) {
                 $object = file_get_contents($object);
+            }
+            if (empty($object)) {
+                throw new UnprocessableEntityException("No contents has been received");
             }
             $object = unserialize($object);
         }

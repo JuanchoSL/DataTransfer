@@ -7,17 +7,17 @@ namespace JuanchoSL\DataTransfer\DataConverters;
 class IniConverter extends ArrayConverter
 {
 
-    public function getData()
+    public function getData(): mixed
     {
         $data = parent::getData();
         if (!is_numeric(key($data))) {
             $data = [$data];
         }
         $str = '';
-        return trim($this->collection2ini($data, $str),"\r\n");
+        return trim($this->collection2ini($str, $data), "\r\n");
     }
 
-    protected function collection2ini($array, &$str, $title = '')
+    protected function collection2ini(string &$str, array $array, string|int $title = ''): string
     {
         foreach ($array as $key => $value) {
             if (is_scalar($value)) {
@@ -36,7 +36,7 @@ class IniConverter extends ArrayConverter
                     }
                     unset($title);
                 }
-                $this->collection2ini($value, $str, $key);
+                $this->collection2ini($str, $value, $key);
             }
         }
         return $str;

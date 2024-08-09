@@ -7,6 +7,7 @@ namespace JuanchoSL\DataTransfer\Factories;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
 use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
+use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
 use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
@@ -34,6 +35,11 @@ class DataConverterFactory
     public static function asCsv(DataTransferInterface $dto): string
     {
         return CsvConverter::convert($dto);
+    }
+
+    public static function asExcelCsv(DataTransferInterface $dto): string
+    {
+        return ExcelCsvConverter::convert($dto);
     }
 
     public static function asYaml(DataTransferInterface $dto): string

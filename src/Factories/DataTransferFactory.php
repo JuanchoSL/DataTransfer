@@ -21,7 +21,7 @@ class DataTransferFactory
         } else {
             $format = (is_array($contents)) ? Format::ARRAY : Format::OBJECT;
         }
-        $class = Format::make($format);
+        $class = Format::read($format);
         return new $class($contents);
     }
     public static function byString(string $contents, Format $format = null): DataTransferInterface|string|int|float|bool|null
@@ -35,11 +35,11 @@ class DataTransferFactory
                 if (is_array($contents) || is_object($contents)) {
                     return static::byTrasversable($contents);
                 }
-                if (is_array($contents)) {
+                /*if (is_array($contents)) {
                     $format = Format::ARRAY;
                 } elseif (is_object($contents)) {
                     $format = Format::OBJECT;
-                }
+                }*/
             } elseif (static::isJsonString($contents)) {
                 $format = Format::JSON;
             } elseif (static::isXmlString($contents)) {
@@ -47,7 +47,7 @@ class DataTransferFactory
             }
         }
         if (!empty($format)) {
-            $class = Format::make($format);
+            $class = Format::read($format);
             return new $class($contents);
         } elseif (is_scalar($contents)) {
             return $contents;
@@ -86,7 +86,7 @@ class DataTransferFactory
         } else {
             return $value;
         }
-        
+
     }
 
     public static function isJsonString(string $value): bool
@@ -95,7 +95,7 @@ class DataTransferFactory
     }
     public static function isXmlString(string $value): bool
     {
-        return (substr($value, 0, 1) == '<' && substr($value, -1) == '>');
+        return (substr($value, 0, 1) == '<' && substr($value, -1) == '>' && substr($value, 0, 9) !== '<![CDATA[');
     }
     public static function isSerialized(string $value): bool
     {

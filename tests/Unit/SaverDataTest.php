@@ -3,137 +3,162 @@
 namespace JuanchoSL\DataTransfer\Tests\Unit;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
-use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
-use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
-use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
-use JuanchoSL\DataTransfer\DataConverters\IniConverter;
-use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
-use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
-use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
-use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
+use JuanchoSL\DataTransfer\Enums\Format;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use PHPUnit\Framework\TestCase;
-use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 
-class ConverterDataTest extends TestCase
+class SaverDataTest extends TestCase
 {
 
 
     public function testToJson()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::JSON->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $json = JsonConverter::convert($obj);
+        $json = $obj->saveAs($filename, Format::JSON);
+        $this->assertTrue($json);
+        $json = file_get_contents($filename);
         $this->assertIsString($json);
         $this->assertJsonStringEqualsJsonString(json_encode($arr), $json);
+        unlink($filename);
     }
-
+    
     public function testToArray()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::ARRAY ->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $json = ArrayConverter::convert($obj);
+        $json = $obj->saveAs($filename, Format::ARRAY );
+        $this->assertTrue($json);
+        $json = unserialize(file_get_contents($filename));
         $this->assertIsArray($json);
         $this->assertEquals($arr, $json);
+        unlink($filename);
     }
-
+    
     public function testToObject()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::OBJECT->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
-        $json = ObjectConverter::convert($obj);
+        $json = $obj->saveAs($filename, Format::OBJECT);
+        $this->assertTrue($json);
+        $json = unserialize(file_get_contents($filename));
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertInstanceOf(\stdClass::class, $json);
         $this->assertEquals(json_decode(json_encode($arr), false), $json);
+        unlink($filename);
     }
-
-    public function testToXml()
+    
+    public function testToYml()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::YML->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
-        $xml = XmlConverter::convert($obj);
-        $obj2 = new XmlDataTransfer(simplexml_load_string($xml));
-        $str = XmlConverter::convert($obj2->root);
-        $this->assertIsString($str);
-        $this->assertEqualsIgnoringCase($xml, $str);
+        $str = $obj->exportAs(Format::YAML );
+        $json = $obj->saveAs($filename, Format::YML);
+        $this->assertTrue($json);
+        $this->assertEquals($str, file_get_contents($filename));
+        unlink($filename);
     }
     public function testToXml2()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::XML->value;
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $obj = new XmlDataTransfer(simplexml_load_string($xml));
-        $this->assertXmlStringEqualsXmlString($xml, XmlConverter::convert($obj));
+        $json = $obj->saveAs($filename, Format::XML);
+        $this->assertTrue($json);
+        $this->assertXmlStringEqualsXmlString($xml, file_get_contents($filename));
+        unlink($filename);
     }
     public function testToXml3()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::XML->value;
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $xml_obj = simplexml_load_string($xml);
         $obj = new XmlDataTransfer($xml_obj);
-        $convert = XmlObjectConverter::convert($obj);
+        $json = $obj->saveAs($filename, Format::XML);
+        $this->assertTrue($json);
+        $convert = new \SimpleXMLElement(file_get_contents($filename));
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertInstanceOf(\SimpleXMLElement::class, $convert);
         $this->assertEquals($xml_obj, $convert);
+        unlink($filename);
     }
-
-    public function testToXml4()
-    {
-        $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
-        $xml_obj = simplexml_load_string($xml);
-        $obj = new XmlDataTransfer($xml);
-        $convert = XmlObjectConverter::convert($obj);
-        $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $this->assertInstanceOf(\SimpleXMLElement::class, $convert);
-        $this->assertEquals($xml_obj, $convert);
-    }
-
+    
     public function testToCsv()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::CSV->value;
         $csv = 'user,user_id,password,prioridad,id,descripcion
 "root","2",,"baja",,
 "root","1","contraseña","Alta","1","Descripción del texto"';
         $obj = new CsvDataTransfer(explode(PHP_EOL, $csv));
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = CsvConverter::convert($obj);
-        $this->assertEquals($csv, $converted);
+        $converted = $obj->saveAs($filename, Format::CSV);
+        $this->assertTrue($converted);
+        $this->assertEquals($csv, file_get_contents($filename));
+        unlink($filename);
     }
-
+    
     public function testToExcelCsv()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::EXCEL_CSV->value;
         $csv = 'user;user_id;password;prioridad;id;descripcion
 "root";"2";;"baja";;
 "root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
-        $obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
-        $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = ExcelCsvConverter::convert($obj);
-        $this->assertEquals($csv, $converted);
-    }
+$obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
+$this->assertInstanceOf(DataTransferInterface::class, $obj);
+$this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+$converted = $obj->saveAs($filename, Format::EXCEL_CSV);
+$this->assertTrue($converted);
+$this->assertEquals($csv, file_get_contents($filename));
+unlink($filename);
+}
 
     public function testYaml()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::YAML->value;
         $yaml = "event1:\n  name: My Event\n  date: 25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
         $obj = new ArrayDataTransfer($array);
         $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = YamlConverter::convert($obj);
-        $this->assertEquals(str_replace("\r\n", "\n", $yaml), $converted);
+        $converted = $obj->saveAs($filename, Format::YAML);
+        $this->assertTrue($converted);
+        $this->assertEquals(str_replace("\r\n", "\n", $yaml), file_get_contents($filename));
+        unlink($filename);
     }
-
+    
     public function testIni()
     {
+        $dir = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'tmp';
+        $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::INI->value;
         $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
         $obj = new ArrayDataTransfer($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = IniConverter::convert($obj);
-        $this->assertEquals($ini, $converted);
+        $converted = $obj->exportAs(Format::INI);
+        $json = $obj->saveAs($filename, Format::INI);
+        $this->assertTrue($json);
+        $this->assertEquals($ini, file_get_contents($filename));
+        unlink($filename);
     }
 }

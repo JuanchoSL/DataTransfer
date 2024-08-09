@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
-class CsvConverter extends AbstractConverter
+class CsvConverter extends ArrayConverter
 {
 
-    public function getData()
+    protected string $separator = ',';
+
+    public function getData(): mixed
     {
-        $data = ArrayConverter::convert($this->data);
+        //$data = ArrayConverter::convert($this->data);
+        $data = parent::getData();
         if (!is_numeric(key($data))) {
             $data = [$data];
         }
         return $this->collection2csv($data);
     }
 
-    protected function array2csv($array, &$title, &$data)
+    protected function array2csv(iterable $array, array &$title, array &$data): void
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
@@ -30,8 +33,8 @@ class CsvConverter extends AbstractConverter
             }
         }
     }
-    
-    protected function collection2csv($array)
+
+    protected function collection2csv(iterable $array)
     {
         $results = [];
         $title = [];
@@ -49,10 +52,10 @@ class CsvConverter extends AbstractConverter
             $text = '';
             foreach ($title as $key => $value) {
                 $text .= $result[$key] ?? '';
-                $text .= ',';
+                $text .= $this->separator;
             }
             $texts[] = substr($text, 0, -1);
         }
-        return implode(',', $title) . PHP_EOL . implode(PHP_EOL, $texts);
+        return implode($this->separator, $title) . PHP_EOL . implode(PHP_EOL, $texts);
     }
 }

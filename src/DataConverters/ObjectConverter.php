@@ -6,7 +6,7 @@ namespace JuanchoSL\DataTransfer\DataConverters;
 
 class ObjectConverter extends JsonConverter
 {
-    public function getData()
+    public function getData(): mixed
     {
         return json_decode(parent::getData(), false);
     }

@@ -7,7 +7,7 @@ namespace JuanchoSL\DataTransfer\DataConverters;
 class XmlConverter extends XmlObjectConverter
 {
 
-    public function getData()
+    public function getData(): mixed
     {
         return parent::getData()->asXML();
     }
