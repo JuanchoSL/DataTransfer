@@ -17,10 +17,10 @@ class SaverDataTest extends TestCase
     {
         defined('TMPDIR') or define('TMPDIR', sys_get_temp_dir());
     }
-    
+
     public function testToJson()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::JSON->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
@@ -35,7 +35,7 @@ class SaverDataTest extends TestCase
 
     public function testToArray()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::ARRAY ->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
@@ -50,7 +50,7 @@ class SaverDataTest extends TestCase
 
     public function testToObject()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::OBJECT->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
@@ -65,7 +65,7 @@ class SaverDataTest extends TestCase
 
     public function testToYml()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::YML->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
@@ -77,7 +77,7 @@ class SaverDataTest extends TestCase
     }
     public function testToXml2()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::XML->value;
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $obj = new XmlDataTransfer(simplexml_load_string($xml));
@@ -88,7 +88,7 @@ class SaverDataTest extends TestCase
     }
     public function testToXml3()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::XML->value;
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $xml_obj = simplexml_load_string($xml);
@@ -104,7 +104,7 @@ class SaverDataTest extends TestCase
 
     public function testToCsv()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::CSV->value;
         $csv = 'user,user_id,password,prioridad,id,descripcion
 "root","2",,"baja",,
@@ -120,7 +120,7 @@ class SaverDataTest extends TestCase
 
     public function testToExcelCsv()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::EXCEL_CSV->value;
         $csv = 'user;user_id;password;prioridad;id;descripcion
 "root";"2";;"baja";;
@@ -136,7 +136,7 @@ class SaverDataTest extends TestCase
 
     public function testYaml()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::YAML->value;
         $yaml = "event1:\n  name: My Event\n  date: 25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
@@ -152,7 +152,7 @@ class SaverDataTest extends TestCase
 
     public function testIni()
     {
-        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR;
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::INI->value;
         $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
