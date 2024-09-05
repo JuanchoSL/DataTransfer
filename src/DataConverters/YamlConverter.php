@@ -9,11 +9,11 @@ use JuanchoSL\Exceptions\PreconditionRequiredException;
 class YamlConverter extends ArrayConverter
 {
 
-    public function getData()
+    public function getData(): mixed
     {
         if (!function_exists('yaml_emit')) {
             throw new PreconditionRequiredException("YAML extension is not installed in order to process yaml data");
         }
-        return trim(yaml_emit(parent::getData()), "-\r\n.");
+        return trim(yaml_emit(parent::getData(), YAML_UTF8_ENCODING), "-\r\n.");
     }
 }

@@ -5,6 +5,7 @@ namespace JuanchoSL\DataTransfer\Tests\Functional;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
 use PHPUnit\Framework\TestCase;
@@ -231,6 +232,36 @@ class DataTransferTest extends TestCase
 "root","2",,"baja",,
 "root","1","contraseña","Alta","1","Descripción del texto"';
         $obj = DataTransferFactory::create(new CsvDataTransfer(explode(PHP_EOL, $csv)));
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromExcelCsvArray()
+    {
+        $csv = 'user;user_id;password;prioridad;id;descripcion
+        "root";"2";;"baja";;
+"root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
+        $obj = DataTransferFactory::create(new ExcelCsvDataTransfer($csv));
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromExcelCsvString()
+    {
+        $csv = 'user;user_id;password;prioridad;id;descripcion
+        "root";"2";;"baja";;
+"root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
+        $obj = DataTransferFactory::create(new ExcelCsvDataTransfer(explode(PHP_EOL, $csv)));
         $this->assertCount(2, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);

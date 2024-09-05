@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
+use JuanchoSL\Exceptions\UnprocessableEntityException;
+
 class XmlDataTransfer extends ArrayDataTransfer
 {
 
@@ -12,6 +14,9 @@ class XmlDataTransfer extends ArrayDataTransfer
         if (is_string($xml)) {
             if (is_file($xml) && file_exists($xml)) {
                 $xml = file_get_contents($xml);
+            }
+            if (empty($xml)) {
+                throw new UnprocessableEntityException("No contents has been received");
             }
             $xml = simplexml_load_string($xml);
         }

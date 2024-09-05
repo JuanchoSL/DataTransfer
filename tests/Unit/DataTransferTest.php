@@ -5,6 +5,7 @@ namespace JuanchoSL\DataTransfer\Tests\Unit;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
@@ -99,7 +100,7 @@ class DataTransferTest extends TestCase
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
     }
-    
+
     public function testFromArrayWithArrayIndexed()
     {
         $data = [
@@ -151,7 +152,7 @@ class DataTransferTest extends TestCase
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
     }
-    
+
     public function testFromObjectWithPlain()
     {
         $data = new \stdClass;
@@ -257,6 +258,36 @@ class DataTransferTest extends TestCase
                 "root","2",,"baja",,
                 "root","1","contraseña","Alta","1","Descripción del texto"';
         $obj = new CsvDataTransfer($csv);
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromExcelCsvString()
+    {
+        $csv = 'user;user_id;password;prioridad;id;descripcion
+        "root";"2";;"baja";;
+"root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
+        $obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromExcelCsvArray()
+    {
+        $csv = 'user;user_id;password;prioridad;id;descripcion
+        "root";"2";;"baja";;
+"root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
+        $obj = new ExcelCsvDataTransfer($csv);
         $this->assertCount(2, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);

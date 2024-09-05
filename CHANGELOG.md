@@ -1,7 +1,7 @@
 # Change Log DataTransfer
 
 
-## [1.0.7] - 2024-08-06
+## [1.0.7] - 2024-08-
 
 ### Added
 
@@ -9,6 +9,7 @@
 - Yaml converter compatibility
 - INI reader compatibility
 - INI converter compatibility
+- CSV for/from Excel with semicolon separator compatibility
 - requirements into composer for JSON extension
 - suggestion into composer for YAML extension
 - ArrayIterator implementation
@@ -25,6 +26,7 @@
 ### Fixed
 
 - Use inheritance in order to reduce memory consumption
+- Added CDATA for child nodes on XMLConverters
 
 
 ## [1.0.6] - 2024-06-20

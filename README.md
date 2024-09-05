@@ -2,7 +2,8 @@
 
 ## Description
 
-A small, lightweight utility to read values and properties from distinct sources using the same methodology
+A small, lightweight utility to read values and properties from distinct sources using the same methodology and convert it to a standard DTO.
+Include a second tool that can convert any of DTOs to any of the know formats, creating a simple format converter from format A to format B.
 
 ## Install
 
@@ -19,23 +20,40 @@ Load composer autoload and use it
 
 ### Using the provided Factory
 
-```php
-$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::create($element);
-```
-
 The **$element** parameter can be:
 - array indexed or associtive
-- object
+- object that implements JsonSerializable interface
 - string with serialized object or array
 - filepath containing a serialized object or array
 - json encoded object or array
-- json filepath with json extension containing a serialized object or array
+- json filepath with _json_ extension containing a json encoded object or array
 - SimpleXMLElement object
 - XML string or filepath with xml extension
-- CSV filepath with csv extension
-- INI filepath with ini extension
-- YAML filepath with yml or yaml extension (require __yaml__ extension) 
+- CSV filepath with csv extension (for CSV contents string, use the byString method and indicate the Format)
+- INI filepath with ini extension (for INI contents string, use the byString method and indicate the Format)
+- YAML filepath with yml or yaml extension (for YAML contents string, use the byString method and indicate the Format) (require __yaml__ php extension) 
 - primitive value
+
+#### Magic CREATE method
+Today is not possible detect a INI, YAML or CSV string, can use filepath with extension but nos this string types
+```php
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::create($element);
+```
+#### Using a filepath
+Open and convert the contents included into file, alternatively you can specify the Format if the extension is not knowed
+```php
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byFile($element, Format $original_format= null);
+```
+#### Using a string
+Detect and convert the contents included into string (json encoded, serialized object or array, xml), alternatively you can specify the Format if the type is YAML, CSV or INI
+```php
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byFile($element, Format $original_format= null);
+```
+#### Using a trasversable element
+Detect and convert the trasversable element (object or array)
+```php
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byTrasversable($element);
+```
 
 ### Using a specific repository
 
@@ -50,7 +68,7 @@ $dto = new JuanchoSL\DataTransfer\Repositories\{SOURCE_READER}($element)
 |   Type    | Compatibility                                     | Reader            |
 |-----------|---------------------------------------------------|-------------------|
 | Array     |filepath \| array \| string from array serialized  |ArrayDataTransfer  |
-| CSV       |filepath \| array of lines \| string               |CsvDataTransfer    |
+| CSV       |filepath \| array of lines \| string               |CsvDataTransfer(,) or ExcelCsvDataTransfer(;)    |
 | INI       |filepath \| string                                 |IniDataTransfer    |
 | JSON      |filepath \| string                                 |JsonDataTransfer   |
 | stdClass  |filepath \| object \| string from object serialized|ObjectDataTransfer |
@@ -94,6 +112,7 @@ You can convert any DataTransferObject to a standar format, as:
 * ini
 * yaml
 * csv
+* excel csv
 
 ### Using the provided Factory
 
@@ -106,12 +125,19 @@ $json = JuanchoSL\DataTransfer\Factories\DataConverterFactory::asJson($dto);
 Alternative you can use the distincts converters
 
 ```php
-$result = new JuanchoSL\DataTransfer\Converters\{SOURCE_CONVERTER}($dto)
+$converter = new JuanchoSL\DataTransfer\Converters\{SOURCE_CONVERTER}($dto);
+$result = $converter->getData();
+```
+
+```php
+$converter = new JuanchoSL\DataTransfer\Converters\{SOURCE_CONVERTER}();
+$converter->setData($dto);
+$result = $converter->getData();
 ```
 
 The available converters are:
 - ArrayConverter
-- CsvConverter
+- CsvConverter (,) or ExcelCsvConverter(;)
 - JsonConverter
 - ObjectConverter
 - XmlConverter

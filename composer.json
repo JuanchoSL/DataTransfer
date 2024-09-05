@@ -6,6 +6,8 @@
     "homepage": "https://github.com/JuanchoSL/DataTransfer",
     "minimum-stability": "stable",
     "keywords": [
+        "dto",
+        "data transfer objects",
         "json",
         "array",
         "object",

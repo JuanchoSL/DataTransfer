@@ -7,7 +7,7 @@ namespace JuanchoSL\DataTransfer\DataConverters;
 class ArrayConverter extends JsonConverter
 {
 
-    public function getData()
+    public function getData(): mixed
     {
         return json_decode(parent::getData(), true);
     }

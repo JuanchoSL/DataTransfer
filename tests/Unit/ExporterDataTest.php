@@ -1,24 +1,25 @@
 <?php
 
-namespace JuanchoSL\DataTransfer\Tests\Functional;
+namespace JuanchoSL\DataTransfer\Tests\Unit;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
-use JuanchoSL\DataTransfer\Factories\DataConverterFactory;
-use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
+use JuanchoSL\DataTransfer\Enums\Format;
+use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use PHPUnit\Framework\TestCase;
 
-class ConverterDataTest extends TestCase
+class ExporterDataTest extends TestCase
 {
 
 
     public function testToJson()
     {
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
-        $obj = DataTransferFactory::create($arr);
+        $obj = new ArrayDataTransfer($arr);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $json = DataConverterFactory::asJson($obj);
+        $json = $obj->exportAs(Format::JSON);
         $this->assertIsString($json);
         $this->assertJsonStringEqualsJsonString(json_encode($arr), $json);
     }
@@ -26,9 +27,9 @@ class ConverterDataTest extends TestCase
     public function testToArray()
     {
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
-        $obj = DataTransferFactory::create($arr);
+        $obj = new ArrayDataTransfer($arr);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $json = DataConverterFactory::asArray($obj);
+        $json = $obj->exportAs(Format::ARRAY);
         $this->assertIsArray($json);
         $this->assertEquals($arr, $json);
     }
@@ -36,37 +37,25 @@ class ConverterDataTest extends TestCase
     public function testToObject()
     {
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
-        $obj = DataTransferFactory::create($arr);
-
-        $json = DataConverterFactory::asObject($obj);
+        $obj = new ArrayDataTransfer($arr);
+        $json = $obj->exportAs(Format::OBJECT);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertInstanceOf(\stdClass::class, $json);
         $this->assertEquals(json_decode(json_encode($arr), false), $json);
     }
 
-    public function testToXml()
-    {
-        $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
-        $obj = DataTransferFactory::create($arr);
-        $xml = DataConverterFactory::asXml($obj);
-        $obj2 = DataTransferFactory::create(simplexml_load_string($xml));
-        $str = DataConverterFactory::asXml($obj2->root);
-        $this->assertIsString($str);
-        $this->assertEqualsIgnoringCase($xml, $str);
-    }
     public function testToXml2()
     {
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
-        $obj = DataTransferFactory::create(simplexml_load_string($xml));
-        $this->assertXmlStringEqualsXmlString($xml, DataConverterFactory::asXml($obj));
+        $obj = new XmlDataTransfer(simplexml_load_string($xml));
+        $this->assertXmlStringEqualsXmlString($xml, $obj->exportAs(Format::XML));
     }
-    
     public function testToXml3()
     {
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $xml_obj = simplexml_load_string($xml);
-        $obj = DataTransferFactory::create($xml_obj);
-        $convert = DataConverterFactory::asXmlObject($obj);
+        $obj = new XmlDataTransfer($xml_obj);
+        $convert = $obj->exportAs(Format::XML_OBJECT);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertInstanceOf(\SimpleXMLElement::class, $convert);
         $this->assertEquals($xml_obj, $convert);
@@ -76,8 +65,8 @@ class ConverterDataTest extends TestCase
     {
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $xml_obj = simplexml_load_string($xml);
-        $obj = DataTransferFactory::create($xml);
-        $convert = DataConverterFactory::asXmlObject($obj);
+        $obj = new XmlDataTransfer($xml);
+        $convert = $obj->exportAs(Format::XML_OBJECT);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertInstanceOf(\SimpleXMLElement::class, $convert);
         $this->assertEquals($xml_obj, $convert);
@@ -88,10 +77,10 @@ class ConverterDataTest extends TestCase
         $csv = 'user,user_id,password,prioridad,id,descripcion
 "root","2",,"baja",,
 "root","1","contraseña","Alta","1","Descripción del texto"';
-        $obj = DataTransferFactory::create(new CsvDataTransfer(explode(PHP_EOL, $csv)));
+        $obj = new CsvDataTransfer(explode(PHP_EOL, $csv));
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = DataConverterFactory::asCsv($obj);
+        $converted = $obj->exportAs(Format::CSV);
         $this->assertEquals($csv, $converted);
     }
 
@@ -100,32 +89,33 @@ class ConverterDataTest extends TestCase
         $csv = 'user;user_id;password;prioridad;id;descripcion
 "root";"2";;"baja";;
 "root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
-        $obj = DataTransferFactory::create(new ExcelCsvDataTransfer(explode(PHP_EOL, $csv)));
+        $obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = DataConverterFactory::asExcelCsv($obj);
+        $converted = $obj->exportAs(Format::EXCEL_CSV);
         $this->assertEquals($csv, $converted);
     }
-    
+
     public function testYaml()
     {
         $yaml = "event1:\n  name: My Event\n  date: 25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
-        $obj = DataTransferFactory::create($array);
+        $obj = new ArrayDataTransfer($array);
+        $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = DataConverterFactory::asYaml($obj);
+        $converted = $obj->exportAs(Format::YAML);
         $this->assertEquals(str_replace("\r\n", "\n", $yaml), $converted);
     }
 
     public function testIni()
     {
-        $yaml = "[event1]".PHP_EOL."name=My Event".PHP_EOL."date=25.05.2001";
+        $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
-        $obj = DataTransferFactory::create($array);
+        $obj = new ArrayDataTransfer($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = DataConverterFactory::asIni($obj);
-        $this->assertEquals($yaml, $converted);
+        $converted = $obj->exportAs(Format::INI);
+        $this->assertEquals($ini, $converted);
     }
 }

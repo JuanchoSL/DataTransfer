@@ -10,5 +10,5 @@ interface DataConverterInterface
 {
     public static function convert(DataTransferInterface $data);
     public function setData(DataTransferInterface $data): void;
-    public function getData();
+    public function getData(): mixed;
 }
