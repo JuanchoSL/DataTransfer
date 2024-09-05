@@ -13,10 +13,14 @@ use PHPUnit\Framework\TestCase;
 class SaverDataTest extends TestCase
 {
 
-
+    public function setUp(): void
+    {
+        defined('TMPDIR') or define('TMPDIR', sys_get_temp_dir());
+    }
+    
     public function testToJson()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::JSON->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
@@ -28,10 +32,10 @@ class SaverDataTest extends TestCase
         $this->assertJsonStringEqualsJsonString(json_encode($arr), $json);
         unlink($filename);
     }
-    
+
     public function testToArray()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::ARRAY ->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
@@ -43,10 +47,10 @@ class SaverDataTest extends TestCase
         $this->assertEquals($arr, $json);
         unlink($filename);
     }
-    
+
     public function testToObject()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::OBJECT->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
@@ -58,14 +62,14 @@ class SaverDataTest extends TestCase
         $this->assertEquals(json_decode(json_encode($arr), false), $json);
         unlink($filename);
     }
-    
+
     public function testToYml()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::YML->value;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
-        $str = $obj->exportAs(Format::YAML );
+        $str = $obj->exportAs(Format::YAML);
         $json = $obj->saveAs($filename, Format::YML);
         $this->assertTrue($json);
         $this->assertEquals($str, file_get_contents($filename));
@@ -73,7 +77,7 @@ class SaverDataTest extends TestCase
     }
     public function testToXml2()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::XML->value;
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $obj = new XmlDataTransfer(simplexml_load_string($xml));
@@ -84,7 +88,7 @@ class SaverDataTest extends TestCase
     }
     public function testToXml3()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::XML->value;
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
         $xml_obj = simplexml_load_string($xml);
@@ -97,10 +101,10 @@ class SaverDataTest extends TestCase
         $this->assertEquals($xml_obj, $convert);
         unlink($filename);
     }
-    
+
     public function testToCsv()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::CSV->value;
         $csv = 'user,user_id,password,prioridad,id,descripcion
 "root","2",,"baja",,
@@ -113,26 +117,26 @@ class SaverDataTest extends TestCase
         $this->assertEquals($csv, file_get_contents($filename));
         unlink($filename);
     }
-    
+
     public function testToExcelCsv()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::EXCEL_CSV->value;
         $csv = 'user;user_id;password;prioridad;id;descripcion
 "root";"2";;"baja";;
 "root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
-$obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
-$this->assertInstanceOf(DataTransferInterface::class, $obj);
-$this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-$converted = $obj->saveAs($filename, Format::EXCEL_CSV);
-$this->assertTrue($converted);
-$this->assertEquals($csv, file_get_contents($filename));
-unlink($filename);
-}
+        $obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = $obj->saveAs($filename, Format::EXCEL_CSV);
+        $this->assertTrue($converted);
+        $this->assertEquals($csv, file_get_contents($filename));
+        unlink($filename);
+    }
 
     public function testYaml()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::YAML->value;
         $yaml = "event1:\n  name: My Event\n  date: 25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
@@ -145,10 +149,10 @@ unlink($filename);
         $this->assertEquals(str_replace("\r\n", "\n", $yaml), file_get_contents($filename));
         unlink($filename);
     }
-    
+
     public function testIni()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp';
+        $dir = TMPDIR . DIRECTORY_SEPARATOR . 'tmp';
         $filename = $dir . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::INI->value;
         $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
