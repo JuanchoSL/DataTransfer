@@ -37,7 +37,7 @@ abstract class BaseDataTransfer extends DataContainer
 
     public function saveAs(string $full_filepath, Format $format): bool
     {
-        $dir_path = pathinfo(dirname($full_filepath), PATHINFO_DIRNAME);
+        $dir_path = pathinfo($full_filepath, PATHINFO_DIRNAME);
         if (!file_exists($dir_path)) {
             if (!mkdir($dir_path, 0666, true)) {
                 throw new NotModifiedException("The directory '{$dir_path}' can not be created");
