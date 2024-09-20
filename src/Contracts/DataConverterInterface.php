@@ -6,9 +6,9 @@ namespace JuanchoSL\DataTransfer\Contracts;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
-interface DataConverterInterface
+interface DataConverterInterface extends \Stringable
 {
-    public static function convert(DataTransferInterface $data);
+    public static function convert(DataTransferInterface $data): mixed;
     public function setData(DataTransferInterface $data): void;
     public function getData(): mixed;
 }

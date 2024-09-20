@@ -41,4 +41,9 @@ class IniConverter extends ArrayConverter
         }
         return $str;
     }
+    
+    public function __tostring(): string
+    {
+        return $this->getData();
+    }
 }

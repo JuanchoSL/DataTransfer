@@ -20,12 +20,17 @@ class YamlDataTransfer extends ArrayDataTransfer
                 $yaml = file_get_contents($yaml);
             }
         }
+        if (!empty($yaml)) {
+            $ndocs = 0;
+            $yaml = yaml_parse($yaml, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
+        }
         if (empty($yaml)) {
             throw new UnprocessableEntityException("No contents has been received");
         }
-        $ndocs = 0;
-        $yml = yaml_parse($yaml, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
-        parent::__construct($yml);
+        if (!is_array($yaml)) {
+            $yaml = (array) $yaml;
+        }
+        parent::__construct($yaml);
     }
 
     protected function cb_yaml_date(string $value): \DateTimeInterface

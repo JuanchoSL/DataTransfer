@@ -19,6 +19,13 @@ class CsvConverter extends ArrayConverter
         return $this->collection2csv($data);
     }
 
+    /**
+     * Summary of array2csv
+     * @param iterable $array
+     * @param array<int|string, mixed> $title
+     * @param array<int|string, mixed> $data
+     * @return void
+     */
     protected function array2csv(iterable $array, array &$title, array &$data): void
     {
         foreach ($array as $key => $value) {
@@ -34,7 +41,7 @@ class CsvConverter extends ArrayConverter
         }
     }
 
-    protected function collection2csv(iterable $array)
+    protected function collection2csv(iterable $array): string
     {
         $results = [];
         $title = [];
@@ -57,5 +64,11 @@ class CsvConverter extends ArrayConverter
             $texts[] = substr($text, 0, -1);
         }
         return implode($this->separator, $title) . PHP_EOL . implode(PHP_EOL, $texts);
+    }
+
+    public function __tostring(): string
+    {
+        return $this->getData();
+        return chr(239) . chr(187) . chr(191) . $this->getData();
     }
 }

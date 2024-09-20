@@ -17,6 +17,11 @@ use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
 
 class DataConverterFactory
 {
+    /**
+     * Summary of asArray
+     * @param \JuanchoSL\DataTransfer\Contracts\DataTransferInterface $dto
+     * @return array<int|string, mixed>
+     */
     public static function asArray(DataTransferInterface $dto): array
     {
         return ArrayConverter::convert($dto);

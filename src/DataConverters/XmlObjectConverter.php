@@ -3,26 +3,32 @@
 declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
+use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
+use JuanchoSL\Exceptions\UnprocessableEntityException;
 
 class XmlObjectConverter extends AbstractConverter
 {
 
     public function getData(): mixed
     {
-        $key = 'root';
+        //$key = 'root';
         if ($this->data->count() == 1 && !empty($this->data->key()) && !is_numeric($this->data->key())) {
             $key = $this->data->key();
         }
-        return $this->array2XML($this->data, $key);
+        $key ??= 'root';
+        return $this->array2XML($this->data, (string) $key);
     }
 
-    protected function array2XML(iterable $data, string $rootNodeName = 'root', \SimpleXMLElement $xml = NULL): \SimpleXMLElement
+    protected function array2XML(DataTransferInterface $data, string $rootNodeName = 'root', \SimpleXMLElement $xml = NULL): \SimpleXMLElement
     {
         if ($xml == null) {
             $xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
+            if ($xml === false) {
+                throw new UnprocessableEntityException("Come error creating root node {$rootNodeName}");
+            }
         }
         foreach ($data as $key => $value) {
-            if (is_iterable($value)) {
+            if ($value instanceof DataTransferInterface) {
                 if ($key == 'attributes') {
                     foreach ($value as $attr_key => $attr_value) {
                         $xml->addAttribute($attr_key, $attr_value);
@@ -65,5 +71,10 @@ class XmlObjectConverter extends AbstractConverter
             }
         }
         return $xml;
+    }
+
+    public function __tostring(): string
+    {
+        return $this->getData()->asXML();
     }
 }

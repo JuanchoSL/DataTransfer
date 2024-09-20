@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
+use JuanchoSL\DataTransfer\Contracts\DataConverterInterface;
 use JuanchoSL\DataTransfer\DataContainer;
 use JuanchoSL\DataTransfer\Enums\Format;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
@@ -17,7 +18,7 @@ abstract class BaseDataTransfer extends DataContainer
         return parent::append($this->dataConverter($value));
     }
 
-    public function set(string|int $key, mixed $value): self
+    public function set(string|int $key, mixed $value): static
     {
         parent::set($key, $this->dataConverter($value));
         return $this;
@@ -28,8 +29,17 @@ abstract class BaseDataTransfer extends DataContainer
         return DataTransferFactory::create($value);
     }
 
-    public function exportAs(Format $format)
+    public function translateAs(Format $format): DataConverterInterface
     {
+        $class = Format::write($format);
+        $object = new $class($this);
+        return $object;
+    }
+
+    public function exportAs(Format $format): mixed
+    {
+        return $this->translateAs($format)->getData();
+
         $class = Format::write($format);
         $object = new $class($this);
         return $object->getData();
@@ -43,12 +53,15 @@ abstract class BaseDataTransfer extends DataContainer
                 throw new NotModifiedException("The directory '{$dir_path}' can not be created");
             }
         }
+        $data = $this->translateAs($format);
+        /*
         $data = $this->exportAs($format);
         if ($data instanceof \SimpleXMLElement) {
             $data = $data->asXML();
         } elseif (is_array($data) || is_object($data)) {
             $data = serialize($data);
         }
-        return file_put_contents($full_filepath, $data) !== false;
+            */
+        return file_put_contents($full_filepath, (string) $data) !== false;
     }
 }

@@ -18,11 +18,11 @@ class XmlDataTransfer extends ArrayDataTransfer
             if (empty($xml)) {
                 throw new UnprocessableEntityException("No contents has been received");
             }
-            $xml = simplexml_load_string($xml);
+            $xml = simplexml_load_string($xml) or throw new UnprocessableEntityException("No object can be created from origin");
         }
         $parser = function (\SimpleXMLElement $xml, array $collection = []) use (&$parser) {
             $nodes = $xml->children();
-            $attributes = $xml->attributes();
+            $attributes = $xml->attributes() ?? [];
             if (0 !== count($attributes)) {
                 foreach ($attributes as $attrName => $attrValue) {
                     $collection['attributes'][$attrName] = strval($attrValue);
@@ -33,21 +33,21 @@ class XmlDataTransfer extends ArrayDataTransfer
                 return $collection;
             }
             foreach ($nodes as $nodeName => $nodeValue) {
-                if (count($nodeValue->xpath('../' . $nodeName)) < 2) {
+                if (count($nodeValue->xpath('../' . $nodeName) ?? []) < 2) {
                     $collection[$nodeName] = $parser($nodeValue);
                     continue;
                 }
-                if (true) {
-                    $values = $parser($nodeValue);
-                    if (empty($values) || !array_key_exists('value', $values)) {
-                        if (!empty(trim((string) $nodeValue))) {
-                            $values['value'] = trim((string) $nodeValue);
-                        }
+                //if (true) {
+                $values = $parser($nodeValue);
+                if (empty($values) || !array_key_exists('value', $values)) {
+                    if (!empty(trim((string) $nodeValue))) {
+                        $values['value'] = trim((string) $nodeValue);
                     }
-                    $collection[$nodeName][] = $values;
-                } else {
-                    $collection[$nodeName][] = $parser($nodeValue);
                 }
+                $collection[$nodeName][] = $values;
+                //} else {
+                //$collection[$nodeName][] = $parser($nodeValue);
+                //}
             }
             return $collection;
         };

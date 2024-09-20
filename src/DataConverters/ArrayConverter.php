@@ -9,6 +9,11 @@ class ArrayConverter extends JsonConverter
 
     public function getData(): mixed
     {
-        return json_decode(parent::getData(), true);
+        return json_decode((string) parent::getData(), true);
+    }
+
+    public function __tostring(): string
+    {
+        return serialize($this->getData());
     }
 }

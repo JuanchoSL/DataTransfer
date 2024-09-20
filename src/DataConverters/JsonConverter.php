@@ -11,4 +11,9 @@ class JsonConverter extends AbstractConverter
     {
         return json_encode($this->data);
     }
+    
+    public function __tostring(): string
+    {
+        return $this->getData();
+    }
 }

@@ -16,4 +16,9 @@ class YamlConverter extends ArrayConverter
         }
         return trim(yaml_emit(parent::getData(), YAML_UTF8_ENCODING), "-\r\n.");
     }
+
+    public function __tostring(): string
+    {
+        return $this->getData();
+    }
 }

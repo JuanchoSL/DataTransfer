@@ -24,7 +24,7 @@ abstract class AbstractConverter implements DataConverterInterface
         $this->data = $data;
     }
 
-    public static function convert(DataTransferInterface $data)
+    public static function convert(DataTransferInterface $data): mixed
     {
         $class = get_called_class();
         $object = new $class($data);

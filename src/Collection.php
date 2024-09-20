@@ -20,7 +20,7 @@ class Collection extends BaseCollectionable implements DataTransferInterface
         return $this->data[$index] ?? null;
     }
 
-    public function set(string|int $key, mixed $value): self
+    public function set(string|int $key, mixed $value): static
     {
         @$this->data[$key] = $value;
         return $this;

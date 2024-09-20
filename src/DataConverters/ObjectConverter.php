@@ -10,4 +10,9 @@ class ObjectConverter extends JsonConverter
     {
         return json_decode(parent::getData(), false);
     }
+    
+    public function __tostring(): string
+    {
+        return serialize($this->getData());
+    }
 }

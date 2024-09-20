@@ -12,7 +12,12 @@ use JuanchoSL\Exceptions\UnsupportedMediaTypeException;
 
 class DataTransferFactory
 {
-    public static function byTrasversable(object|array $contents): DataTransferInterface|string|int|float|bool|null
+    /**
+     * Summary of byTrasversable
+     * @param object|array<int|string, mixed> $contents
+     * @return \JuanchoSL\DataTransfer\Contracts\DataTransferInterface
+     */
+    public static function byTrasversable(object|array $contents): DataTransferInterface
     {
         if ($contents instanceof DataTransferInterface) {
             return $contents;
@@ -50,6 +55,10 @@ class DataTransferFactory
             $class = Format::read($format);
             return new $class($contents);
         } elseif (is_scalar($contents)) {
+            if (!mb_check_encoding($contents, 'UTF-8')) {
+                $original = mb_detect_encoding($contents, 'UTF-8', true);
+                $contents = mb_convert_encoding($contents, 'UTF-8', $original);
+            }
             return $contents;
         }
 
@@ -58,14 +67,14 @@ class DataTransferFactory
     }
     public static function byFile(string $filepath, Format $format = null): DataTransferInterface|string|int|float|bool|null
     {
-        if (!file_exists($filepath)) {
-            throw new DestinationUnreachableException("The filepath: {$filepath} does not exists");
-        }
         if (empty($format)) {
             $extension = pathinfo($filepath, PATHINFO_EXTENSION);
             if (!empty($extension)) {
                 $format = Format::tryFrom($extension);
             }
+        }
+        if (!file_exists($filepath)) {
+            throw new DestinationUnreachableException("The filepath: {$filepath} does not exists");
         }
         $contents = file_get_contents($filepath);
         return static::byString($contents, $format);

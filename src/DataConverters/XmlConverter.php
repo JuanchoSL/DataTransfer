@@ -11,4 +11,9 @@ class XmlConverter extends XmlObjectConverter
     {
         return parent::getData()->asXML();
     }
+
+    public function __tostring(): string
+    {
+        return $this->getData();
+    }
 }
