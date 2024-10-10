@@ -9,6 +9,7 @@ use JuanchoSL\DataTransfer\Enums\Format;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\Exceptions\DestinationUnreachableException;
 use JuanchoSL\Exceptions\UnsupportedMediaTypeException;
+use JuanchoSL\Validators\Types\Strings\StringValidation;
 
 class DataTransferFactory
 {
@@ -32,7 +33,7 @@ class DataTransferFactory
     public static function byString(string $contents, Format $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (!empty($contents) && empty($format)) {
-            if (static::isSerialized($contents)) {
+            if (StringValidation::isSerialized($contents)) {
                 $data = @unserialize($contents);
             }
             if (!empty($data)) {
