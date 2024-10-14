@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
-use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
+use JuanchoSL\DataTransfer\Contracts\DataConverterInterface;
+use JuanchoSL\DataTransfer\DataContainer;
+use JuanchoSL\DataTransfer\Enums\Format;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
+use JuanchoSL\Exceptions\NotModifiedException;
 
-/**
- * @implements \Iterator<int|string, mixed>
- */
-abstract class BaseDataTransfer extends BaseCollectionable implements DataTransferInterface
+abstract class BaseDataTransfer extends DataContainer
 {
 
     public function append(mixed $value): int
@@ -18,60 +18,10 @@ abstract class BaseDataTransfer extends BaseCollectionable implements DataTransf
         return parent::append($this->dataConverter($value));
     }
 
-    public function __get(string $key): mixed
+    public function set(string|int $key, mixed $value): static
     {
-        return $this->get($key);
-    }
-
-    public function __set(string $key, mixed $value): void
-    {
-        $this->set($key, $value);
-    }
-
-    public function __isset(string $key): bool
-    {
-        return $this->has($key);
-    }
-
-    public function __unset(string $key): void
-    {
-        $this->remove($key);
-    }
-
-    public function __clone()
-    {
-        foreach ($this->data as $key => $val) {
-            if (is_object($val) || is_array($val)) {
-                $val = unserialize(serialize($val));
-            }
-            $this->set($key, $val);
-        }
-    }
-
-    public function get(string|int $index, mixed $default = null): mixed
-    {
-        if (!$this->has($index)) {
-            if (!is_null($default)) {
-                $this->set($index, $default);
-            }
-        }
-        return $this->data[$index] ?? null;
-    }
-
-    public function set(string|int $key, mixed $value): self
-    {
-        @$this->data[$key] = $this->dataConverter($value);
+        parent::set($key, $this->dataConverter($value));
         return $this;
-    }
-
-    public function has(string|int $index): bool
-    {
-        return isset($this->data[$index]);
-    }
-
-    public function remove(string|int $key): void
-    {
-        unset($this->data[$key]);
     }
 
     protected function dataConverter(mixed $value): mixed
@@ -79,4 +29,39 @@ abstract class BaseDataTransfer extends BaseCollectionable implements DataTransf
         return DataTransferFactory::create($value);
     }
 
+    public function translateAs(Format $format): DataConverterInterface
+    {
+        $class = Format::write($format);
+        $object = new $class($this);
+        return $object;
+    }
+
+    public function exportAs(Format $format): mixed
+    {
+        return $this->translateAs($format)->getData();
+
+        $class = Format::write($format);
+        $object = new $class($this);
+        return $object->getData();
+    }
+
+    public function saveAs(string $full_filepath, Format $format): bool
+    {
+        $dir_path = pathinfo($full_filepath, PATHINFO_DIRNAME);
+        if (!file_exists($dir_path)) {
+            if (!mkdir($dir_path, 0666, true)) {
+                throw new NotModifiedException("The directory '{$dir_path}' can not be created");
+            }
+        }
+        $data = $this->translateAs($format);
+        /*
+        $data = $this->exportAs($format);
+        if ($data instanceof \SimpleXMLElement) {
+            $data = $data->asXML();
+        } elseif (is_array($data) || is_object($data)) {
+            $data = serialize($data);
+        }
+            */
+        return file_put_contents($full_filepath, (string) $data) !== false;
+    }
 }

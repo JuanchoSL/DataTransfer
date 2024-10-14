@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
-
 use JuanchoSL\DataTransfer\Contracts\DataConverterInterface;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 
@@ -25,7 +24,7 @@ abstract class AbstractConverter implements DataConverterInterface
         $this->data = $data;
     }
 
-    public static function convert(DataTransferInterface $data)
+    public static function convert(DataTransferInterface $data): mixed
     {
         $class = get_called_class();
         $object = new $class($data);

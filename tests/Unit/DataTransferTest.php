@@ -5,9 +5,12 @@ namespace JuanchoSL\DataTransfer\Tests\Unit;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\XmlObjectDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
 use PHPUnit\Framework\TestCase;
 
 class DataTransferTest extends TestCase
@@ -97,6 +100,7 @@ class DataTransferTest extends TestCase
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
     }
+
     public function testFromArrayWithArrayIndexed()
     {
         $data = [
@@ -110,6 +114,19 @@ class DataTransferTest extends TestCase
             $this->assertEquals("value_{$key}", $value, 'Values are equals');
         }
     }
+
+    public function testFromArrayWithArrayIndexedSerialized()
+    {
+        $data = 'a:1:{s:5:"index";a:2:{i:0;s:7:"value_0";i:1;s:7:"value_1";}}';
+        $obj = new ArrayDataTransfer($data);
+        $this->assertCount(1, $obj);
+        $this->assertTrue($obj->has('index'), 'Key is setted');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
+        foreach ($obj->get('index') as $key => $value) {
+            $this->assertEquals("value_{$key}", $value, 'Values are equals');
+        }
+    }
+
     public function testFromArrayWithArrayAssociative()
     {
         $data = [
@@ -123,6 +140,19 @@ class DataTransferTest extends TestCase
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
     }
+
+    public function testFromArrayWithArrayAssociativeSerialized()
+    {
+        $data = 'a:1:{s:5:"index";a:1:{s:8:"subindex";s:5:"value";}}';
+        $obj = new ArrayDataTransfer($data);
+        $this->assertCount(1, $obj);
+        $this->assertTrue($obj->has('index'), 'Key is setted');
+        $this->assertInstanceOf(DataTransferInterface::class, $obj->get('index'), 'Value is instance');
+        $this->assertTrue($obj->get('index')->has('subindex'), 'SubKey is setted');
+        $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
+        $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
+    }
+
     public function testFromObjectWithPlain()
     {
         $data = new \stdClass;
@@ -196,7 +226,7 @@ class DataTransferTest extends TestCase
                 <reading clientID="583ef6329df6b" period="2016-02">36537</reading>
             </readings>
         </root>';
-        $obj = new XmlObjectDataTransfer(simplexml_load_string($data));
+        $obj = new XmlDataTransfer(simplexml_load_string($data));
         $this->assertCount(1, $obj);
         $this->assertTrue($obj->has('root'), 'Key is setted');
         $this->assertTrue($obj->root->has('list'), 'Key is setted');
@@ -235,6 +265,87 @@ class DataTransferTest extends TestCase
             $this->assertTrue($entity->has("user"));
             $this->assertEquals('root', $entity->get("user"));
             $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromExcelCsvString()
+    {
+        $csv = 'user;user_id;password;prioridad;id;descripcion
+        "root";"2";;"baja";;
+"root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
+        $obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromExcelCsvArray()
+    {
+        $csv = 'user;user_id;password;prioridad;id;descripcion
+        "root";"2";;"baja";;
+"root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
+        $obj = new ExcelCsvDataTransfer($csv);
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+
+    public function testYaml()
+    {
+        $yaml = <<<YAML
+        event1:
+            name: My Event
+            date: !date 25.05.2001
+YAML;
+
+        $obj = new YamlDataTransfer($yaml);
+        $this->assertCount(1, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $this->assertTrue($obj->has("event1"));
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("name"));
+            $this->assertTrue($entity->has("date"));
+            $this->assertEquals('My Event', $entity->get("name"));
+            $this->assertEquals('25.05.2001', $entity->date);
+        }
+    }
+
+    public function testIni()
+    {
+        $ini = "name=My Event\ndate=25.05.2001";
+
+        $obj = new IniDataTransfer($ini);
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertTrue($obj->has("name"));
+        $this->assertEquals('My Event', $obj->get("name"));
+        $this->assertTrue($obj->has("date"));
+        $this->assertEquals('25.05.2001', $obj->date);
+    }
+
+    public function testIniSections()
+    {
+        $ini = "[event1]\nname=My Event\ndate=25.05.2001";
+
+        $obj = new IniDataTransfer($ini);
+        $this->assertCount(1, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $this->assertTrue($obj->has("event1"));
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("name"));
+            $this->assertTrue($entity->has("date"));
+            $this->assertEquals('My Event', $entity->get("name"));
+            $this->assertEquals('25.05.2001', $entity->date);
         }
     }
 }

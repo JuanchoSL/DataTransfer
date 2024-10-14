@@ -2,7 +2,7 @@
 
 namespace JuanchoSL\DataTransfer\Contracts;
 
-interface DataTransferInterface extends CollectionTransferInterface, \JsonSerializable
+interface DataTransferInterface extends CollectionTransferInterface
 {
     /**
      * Remove the selected key
@@ -14,9 +14,9 @@ interface DataTransferInterface extends CollectionTransferInterface, \JsonSerial
      * Add a new element to the DTO
      * @param string|int $index The key
      * @param mixed $value The value to add
-     * @return self The object
+     * @return static The object
      */
-    public function set(string|int $index, mixed $value): self;
+    public function set(string|int $index, mixed $value): static;
 
     /**
      * Retrieve the selected key or the default value if not exists

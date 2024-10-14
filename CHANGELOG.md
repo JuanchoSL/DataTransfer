@@ -1,6 +1,35 @@
 # Change Log DataTransfer
 
 
+## [1.0.7] - 2024-10-14
+
+### Added
+
+- Yaml reader compatibility
+- Yaml converter compatibility
+- INI reader compatibility
+- INI converter compatibility
+- CSV for/from Excel with semicolon separator compatibility
+- requirements into composer for JSON extension
+- suggestion into composer for YAML extension
+- ArrayIterator implementation
+- DataContainer in order to group data without modification with Object attribute access
+- Collection class in order to create iterable grouped data
+- All Converers are now Stringable, in order to cast to string for simplify text creation
+
+### Changed
+
+- JsonDataTransfer accept a filepath as string too in order to read his contents as json
+- ObjectDataTransfer accept a string too in order to read as a filepath or as a serialized object
+- ArrayDataTransfer accept a string too in order to read as a filepath or as a serialized array
+- XmlObjectDataTransfer is renamed to XmlDataTransfer and accept a filepath as string and a xml string too
+
+### Fixed
+
+- Use inheritance in order to reduce memory consumption
+- Added CDATA for child nodes on XMLConverters
+- use validators
+
 ## [1.0.6] - 2024-06-20
 
 ### Added
