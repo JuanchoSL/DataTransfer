@@ -35,7 +35,7 @@ The **$element** parameter can be:
 - primitive value
 
 #### Magic CREATE method
-Today is not possible detect a INI, YAML or CSV string, can use filepath with extension but nos this string types
+Today is not possible detect a INI, YAML or CSV string, can use filepath with the rigth extension, but not this string types
 ```php
 $dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::create($element);
 ```
