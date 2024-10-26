@@ -11,7 +11,6 @@ use JuanchoSL\DataTransfer\DataConverters\ExcelXlsxConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
 use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
-use JuanchoSL\DataTransfer\DataConverters\WddxConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
@@ -34,7 +33,6 @@ enum Format: string
     case INI = 'ini';
     case JSON = 'json';
     case OBJECT = 'object';
-    case WDDX = 'wddx';
     case XML = 'xml';
     case XML_OBJECT = 'xml_object';
     case YAML = 'yaml';
@@ -68,7 +66,6 @@ enum Format: string
             static::INI => IniConverter::class,
             static::JSON => JsonConverter::class,
             static::OBJECT => ObjectConverter::class,
-            static::WDDX => WddxConverter::class,
             static::XML => XmlConverter::class,
             static::XML_OBJECT => XmlObjectConverter::class,
             static::YAML, static::YML => YamlConverter::class,
