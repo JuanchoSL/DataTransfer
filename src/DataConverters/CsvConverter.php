@@ -32,7 +32,7 @@ class CsvConverter extends ArrayConverter
             if (is_array($value)) {
                 $this->array2csv($value, $title, $data);
             } else {
-                $title[$key] = $key;
+                $title[$key] = strpos($key, ' ') !== false ? '"' . $key . '"' : $key;
                 if (!empty($value)) {
                     $value = '"' . $value . '"';
                 }
@@ -69,6 +69,5 @@ class CsvConverter extends ArrayConverter
     public function __tostring(): string
     {
         return $this->getData();
-        return chr(239) . chr(187) . chr(191) . $this->getData();
     }
 }

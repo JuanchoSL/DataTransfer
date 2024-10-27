@@ -23,13 +23,13 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
                 $excel_reader = $excel_reader->openFile(pathinfo($excel, PATHINFO_BASENAME));
                 $sheetList = $excel_reader->sheetList();
                 if (empty($sheetList)) {
-                    $csv = $excel_reader->openSheet()->getSheetData();
-                    $excel_data = $this->fillData($csv);
+                    $xls = $excel_reader->openSheet()->getSheetData();
+                    $excel_data = $this->fillData($xls);
                 } else {
                     foreach ($sheetList as $sheetName) {
-                        $csv = $excel_reader->openSheet($sheetName)->getSheetData();
-                        if (count($csv) > 1) {
-                            $excel_data[$sheetName] = $this->fillData($csv);
+                        $xls = $excel_reader->openSheet($sheetName)->getSheetData();
+                        if (count($xls) > 1) {
+                            $excel_data[$sheetName] = $this->fillData($xls);
                         }
                     }
                 }
@@ -41,12 +41,12 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
         parent::__construct((array) $excel_data);
     }
 
-    protected function fillData($csv)
+    protected function fillData($xls)
     {
         $return = [];
-        $headers = current($csv);
-        $csv = array_slice($csv, 1);
-        foreach ($csv as $line) {
+        $headers = current($xls);
+        $xls = array_slice($xls, 1);
+        foreach ($xls as $line) {
             $return[] = array_combine($headers, $line);
         }
         return $return;
