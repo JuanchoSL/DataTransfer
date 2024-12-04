@@ -19,7 +19,7 @@ class XmlObjectConverter extends AbstractConverter
         return $this->array2XML($this->data, (string) $key);
     }
 
-    protected function array2XML(DataTransferInterface $data, string $rootNodeName = 'root', \SimpleXMLElement $xml = NULL): \SimpleXMLElement
+    protected function array2XML(DataTransferInterface $data, string $rootNodeName = 'root', ?\SimpleXMLElement $xml = NULL): \SimpleXMLElement
     {
         if ($xml == null) {
             $xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");

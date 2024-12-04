@@ -12,7 +12,7 @@ abstract class AbstractConverter implements DataConverterInterface
 
     protected DataTransferInterface $data;
 
-    public function __construct(DataTransferInterface $data = null)
+    public function __construct(?DataTransferInterface $data = null)
     {
         if (!is_null($data)) {
             $this->setData($data);
