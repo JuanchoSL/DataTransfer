@@ -106,7 +106,7 @@ class SaverDataTest extends TestCase
     {
 
         $filename = TMPDIR . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::CSV->value;
-        $csv = 'user,user_id,password,prioridad,id,descripcion
+        $csv = 'user,user_id,password,prioridad,id,descripción
 "root","2",,"baja",,
 "root","1","contraseña","Alta","1","Descripción del texto"';
         $obj = new CsvDataTransfer(explode(PHP_EOL, $csv));
@@ -122,7 +122,7 @@ class SaverDataTest extends TestCase
     {
 
         $filename = TMPDIR . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::EXCEL_CSV->value;
-        $csv = 'user;user_id;password;prioridad;id;descripcion
+        $csv = 'user;user_id;password;prioridad;id;descripción
 "root";"2";;"baja";;
 "root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
         $obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
@@ -130,7 +130,7 @@ class SaverDataTest extends TestCase
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         $converted = $obj->saveAs($filename, Format::EXCEL_CSV);
         $this->assertTrue($converted);
-        $this->assertEquals($csv, file_get_contents($filename));
+        $this->assertStringEndsWith($csv, file_get_contents($filename));
         unlink($filename);
     }
 

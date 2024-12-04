@@ -30,7 +30,7 @@ class DataTransferFactory
         $class = Format::read($format);
         return new $class($contents);
     }
-    public static function byString(string $contents, Format $format = null): DataTransferInterface|string|int|float|bool|null
+    public static function byString(string $contents, ?Format $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (!empty($contents) && empty($format)) {
             if (StringValidation::isSerialized($contents)) {
@@ -66,7 +66,7 @@ class DataTransferFactory
         throw new UnsupportedMediaTypeException("The format of the data can not be detected");
 
     }
-    public static function byFile(string $filepath, Format $format = null): DataTransferInterface|string|int|float|bool|null
+    public static function byFile(string $filepath, ?Format $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (empty($format)) {
             $extension = pathinfo($filepath, PATHINFO_EXTENSION);

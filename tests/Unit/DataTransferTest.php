@@ -6,6 +6,7 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\ExcelXlsxDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
@@ -346,6 +347,20 @@ YAML;
             $this->assertTrue($entity->has("date"));
             $this->assertEquals('My Event', $entity->get("name"));
             $this->assertEquals('25.05.2001', $entity->date);
+        }
+    }
+
+    public function testExcelXlsx()
+    {
+        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'bin', 'prueba.xlsx']);
+        $obj = new ExcelXlsxDataTransfer($path);
+        $this->assertCount(1, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $this->assertTrue($obj->has("sheet_0"));
+        foreach ($obj->get("sheet_0") as $entity) {
+            $this->assertTrue($entity->has("EMPRESA"));
+            $this->assertTrue($entity->has("CP"));
         }
     }
 }
