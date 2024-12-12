@@ -28,7 +28,7 @@ class Collection extends BaseCollectionable implements DataTransferInterface
 
     public function has(string|int $index): bool
     {
-        return isset($this->data[$index]);
+        return array_key_exists($index, $this->data);
     }
 
     public function remove(string|int $key): void
