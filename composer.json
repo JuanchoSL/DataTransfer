@@ -33,7 +33,7 @@
         "php": "^8.1",
         "ext-mbstring": "*",
         "ext-json": "*",
-        "juanchosl/validators": "dev-master",
+        "juanchosl/validators": "1.0.*",
         "juanchosl/exceptions": "1.0.*"
     },
     "suggest": {
