@@ -1,7 +1,7 @@
 # Change Log DataTransfer
 
 
-## [1.0.8] - 2024-12-04
+## [1.0.8] - 2024-12-13
 
 ### Added
 - Excel XLSX reader compatibility using XLSWRITER php extension
@@ -13,6 +13,7 @@
 
 ### Fixed
 - CSV converters enclousure headers between " when a space is detected in the text
+- Null values from data container return false on has check
 
 
 ## [1.0.7] - 2024-10-14
