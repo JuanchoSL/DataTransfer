@@ -109,9 +109,11 @@ class DataTransferFactory
     }
     public static function isSerialized(string $value): bool
     {
-        if ($value != 'b:0;') {
-            $value = @unserialize($value);
+        if (in_array(mb_substr($value, -1), ['}', ';'])) {
+            return ($value == 'b:0;') ? true : @unserialize($value) !== false;
         }
-        return ($value !== false);
+        return false;
+        return !empty(preg_match('/^([C|O|a|i|s]+):\d+(:("\w+":\d+:)?([\\\s\w\d:"{};*.]+))?/', $value));
+
     }
 }
