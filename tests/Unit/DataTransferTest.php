@@ -352,7 +352,7 @@ YAML;
 
     public function testExcelXlsx()
     {
-        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'bin', 'prueba.xlsx']);
+        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'data', 'prueba.xlsx']);
         $obj = new ExcelXlsxDataTransfer($path);
         $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
