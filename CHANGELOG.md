@@ -1,20 +1,31 @@
 # Change Log DataTransfer
 
+## [1.0.9] - 2025-06-05
+
+### Added
+
+### Changed
+
+### Fixed
+
+- XML converters have a trouble when a value is a number
 
 ## [1.0.8] - 2024-12-13
 
 ### Added
+
 - Excel XLSX reader compatibility using XLSWRITER php extension
 - Excel XLSX converter compatibility using XLSWRITER php extension
- -PHP 8.4 test compatibility
+- PHP 8.4 test compatibility
 
 ### Changed
+
 - ExcelCsvConverter use BOM when cast to string
 
 ### Fixed
+
 - CSV converters enclousure headers between " when a space is detected in the text
 - Null values from data container return false on has check
-
 
 ## [1.0.7] - 2024-10-14
 
@@ -62,7 +73,6 @@
 
 - Fix for non collection passed to CsvConverter
 
-
 ## [1.0.5] - 2024-06-14
 
 ### Added
@@ -71,12 +81,12 @@
 - CSV contents file compatibility using CsvDataTransfer
 - xml string and SimpleXMLElement from DataTransferFactory
 - Data converters, in order to transform DTO to:
-    - JSON string
-    - Array
-    - Object
-    - XML string
-    - XML Entity object
-    - CSV lines array
+  - JSON string
+  - Array
+  - Object
+  - XML string
+  - XML Entity object
+  - CSV lines array
 - append method in order to push data to indexed DTO
 
 ### Changed
@@ -85,7 +95,6 @@
 - when get, if not exist, return converted default value or null
 
 ### Fixed
-
 
 ## [1.0.4] - 2024-01-18
 
@@ -103,7 +112,6 @@
 - Quality code
 - null values
 
-
 ## [1.0.3] - 2023-10-01
 
 ### Added
@@ -118,8 +126,6 @@
 
 - Fix objects iterator
 
-
-
 ## [1.0.2] - 2023-07-19
 
 ### Added
@@ -129,7 +135,6 @@
 ### Changed
 
 ### Fixed
-
 
 ## [1.0.1] - 2023-06-20
 
@@ -142,8 +147,6 @@
 - Convert values to DataTransfer entities in a recursive mode when is setted
 
 ### Fixed
-
-
 
 ## [1.0.0] - 2023-06-16
 
