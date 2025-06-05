@@ -16,7 +16,7 @@
 
 - Excel XLSX reader compatibility using XLSWRITER php extension
 - Excel XLSX converter compatibility using XLSWRITER php extension
-  -PHP 8.4 test compatibility
+- PHP 8.4 test compatibility
 
 ### Changed
 
