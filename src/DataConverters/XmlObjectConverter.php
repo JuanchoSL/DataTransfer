@@ -55,6 +55,7 @@ class XmlObjectConverter extends AbstractConverter
                 //$value = htmlspecialchars($value);
                 if ($key != 'value') {
                     $node = $xml->addChild($key);
+                    $value = (string) $value;
                     if (strpos($value, '&lt;') !== false || strpos($value, '&amp;') !== false) {
                         $value = html_entity_decode($value);
                     }
