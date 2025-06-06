@@ -89,6 +89,54 @@ class DataTransferFactory
         return static::byString($contents, $format);
     }
 
+    public static function byMimeType(string $contents, string|iterable $content_types): DataTransferInterface
+    {
+        $content_types = is_iterable($content_types) ? $content_types : [$content_types];
+        foreach ($content_types as $index => $content_type) {
+            if (($length = strpos($content_type, ';')) !== false) {
+                $content_type = substr($content_type, 0, $length);
+            }
+            switch ($content_type) {
+                case 'application/json':
+                    $data = Format::JSON;
+                    break;
+
+                case 'application/xml':
+                case 'text/xml':
+                    $data = Format::XML;
+                    break;
+
+                case 'application/yaml':
+                    $data = Format::YAML;
+                    break;
+
+                case 'text/csv':
+                    $data = Format::CSV;
+                    break;
+
+                case 'application/csv':
+                    $data = Format::EXCEL_CSV;
+                    break;
+
+                case 'application/vnd.ms-excel':
+                case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    $data = Format::EXCEL_XLSX;
+                    break;
+
+                default:
+                    break;
+            }
+            if (!empty($data)) {
+                break;
+            }
+        }
+        if (empty($data)) {
+            throw new UnsupportedMediaTypeException("Any media-type are supported from ['" . implode(',', $content_types) . "']");
+        }
+        $content_types = $content_type;
+        return (is_file($contents) && file_exists($contents)) ? static::byFile($contents, $data) : static::byString($contents, $data);
+    }
+
     public static function create(mixed $value = null): DataTransferInterface|string|int|float|bool|null
     {
         if (is_string($value)) {
@@ -118,7 +166,7 @@ class DataTransferFactory
     public static function isYamlString(string $value): bool
     {
         $ndocs = 0;
-        $yaml = yaml_parse($value, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
+        $yaml = @yaml_parse($value, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
         return !empty($yaml) && is_array($yaml);
     }
     public static function isIniString(string $value): bool

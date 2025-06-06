@@ -11,11 +11,11 @@ class CsvConverter extends ArrayConverter
 
     public function getData(): mixed
     {
-        //$data = ArrayConverter::convert($this->data);
         $data = parent::getData();
-        if (!is_numeric(key($data))) {
-            $data = [$data];
+        while ((!is_numeric($key = key($data)))) {
+            $data = current($data);
         }
+
         return $this->collection2csv($data);
     }
 
