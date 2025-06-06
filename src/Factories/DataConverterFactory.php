@@ -99,7 +99,8 @@ class DataConverterFactory
                     break;
 
                 case 'application/vnd.ms-excel':
-                    $data = ExcelXlsxConverter::convert($dto);
+                case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    $data = new ExcelXlsxConverter($dto);
                     break;
 
                 default:
