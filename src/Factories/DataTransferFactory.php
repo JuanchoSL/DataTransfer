@@ -50,6 +50,14 @@ class DataTransferFactory
                 $format = Format::JSON;
             } elseif (static::isXmlString($contents)) {
                 $format = Format::XML;
+            } elseif (static::isCsvString($contents)) {
+                $format = Format::CSV;
+            } elseif (static::isExcelCsvString($contents)) {
+                $format = Format::EXCEL_CSV;
+            } elseif (static::isIniString($contents)) {
+                $format = Format::INI;
+            } elseif (static::isYamlString($contents)) {
+                $format = Format::YAML;
             }
         }
         if (!empty($format)) {
@@ -107,13 +115,45 @@ class DataTransferFactory
     {
         return (substr($value, 0, 1) == '<' && substr($value, -1) == '>' && substr($value, 0, 9) !== '<![CDATA[');
     }
+    public static function isYamlString(string $value): bool
+    {
+        $ndocs = 0;
+        $yaml = yaml_parse($value, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
+        return !empty($yaml) && is_array($yaml);
+    }
+    public static function isIniString(string $value): bool
+    {
+        $data = @parse_ini_string($value);
+        $datas = @parse_ini_string($value, true);
+        return (!empty($data) && is_array($data)) || (!empty($datas) && is_array($datas));
+    }
+    public static function isCsvString(string $value): bool
+    {
+        $data = explode(PHP_EOL, $value);
+        $current = current($data);
+        $num = substr_count($current, ',');
+        if (empty($num)) {
+            return false;
+        }
+        $data = @str_getcsv($current, ',', '"', "\\");
+        return is_array($data) && !empty($data) && (count($data) > $num);// && !empty(current($data));
+    }
+    public static function isExcelCsvString(string $value): bool
+    {
+        $data = explode(PHP_EOL, $value);
+        $current = current($data);
+        $num = substr_count($current, ';');
+        if (empty($num)) {
+            return false;
+        }
+        $data = @str_getcsv($current, ';', '"', "\\");
+        return is_array($data) && !empty($data) && (count($data) > $num);// && !empty(current($data));
+    }
     public static function isSerialized(string $value): bool
     {
-        if (in_array(mb_substr($value, -1), ['}', ';'])) {
-            return ($value == 'b:0;') ? true : @unserialize($value) !== false;
+        if ($value != 'b:0;') {
+            $value = @unserialize($value);
         }
-        return false;
-        return !empty(preg_match('/^([C|O|a|i|s]+):\d+(:("\w+":\d+:)?([\\\s\w\d:"{};*.]+))?/', $value));
-
+        return ($value !== false);
     }
 }
