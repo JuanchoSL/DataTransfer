@@ -12,6 +12,7 @@ use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
+use JuanchoSL\Exceptions\PreconditionRequiredException;
 use PHPUnit\Framework\TestCase;
 
 class DataTransferTest extends TestCase
@@ -352,6 +353,9 @@ YAML;
 
     public function testExcelXlsx()
     {
+        if (!extension_loaded('xlswriter')) {
+            $this->expectException(PreconditionRequiredException::class);
+        }
         $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'data', 'prueba.xlsx']);
         $obj = new ExcelXlsxDataTransfer($path);
         $this->assertCount(1, $obj);
