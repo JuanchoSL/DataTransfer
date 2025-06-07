@@ -8,12 +8,14 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
 use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
+use JuanchoSL\DataTransfer\DataConverters\ExcelXlsxConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
 use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
+use JuanchoSL\Exceptions\UnsupportedMediaTypeException;
 
 class DataConverterFactory
 {
@@ -65,5 +67,53 @@ class DataConverterFactory
     public static function asObject(DataTransferInterface $dto): \stdClass
     {
         return ObjectConverter::convert($dto);
+    }
+
+    public static function asMimeType(DataTransferInterface $dto, string|iterable &$content_types): string
+    {
+        $content_types = is_iterable($content_types) ? $content_types : [$content_types];
+        foreach ($content_types as $index => $content_type) {
+            if (($length = strpos($content_type, ';')) !== false) {
+                $content_type = substr($content_type, 0, $length);
+            }
+            switch ($content_type) {
+                case 'application/json':
+                    $data = static::asJson($dto);
+                    break;
+
+                case 'application/xml':
+                case 'text/xml':
+                    $data = static::asXml($dto);
+                    break;
+
+                case 'application/yaml':
+                    $data = static::asYaml($dto);
+                    break;
+
+                case 'text/csv':
+                    $data = static::asCsv($dto);
+                    break;
+
+                case 'application/csv':
+                    $data = static::asExcelCsv($dto);
+                    break;
+
+                case 'application/vnd.ms-excel':
+                case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    $data = new ExcelXlsxConverter($dto);
+                    break;
+
+                default:
+                    break;
+            }
+            if (!empty($data)) {
+                break;
+            }
+        }
+        if (empty($data)) {
+            throw new UnsupportedMediaTypeException("Any media-type are supported from ['" . implode(',', $content_types) . "']");
+        }
+        $content_types = $content_type;
+        return (string) $data;
     }
 }

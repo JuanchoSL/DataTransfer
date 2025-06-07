@@ -12,14 +12,16 @@ class XmlObjectConverter extends AbstractConverter
     public function getData(): mixed
     {
         //$key = 'root';
-        if ($this->data->count() == 1 && !empty($this->data->key()) && !is_numeric($this->data->key())) {
-            $key = $this->data->key();
+        $data =json_decode(json_encode($this->data), true);
+        //if ($this->data->count() == 1 && !empty($this->data->key()) && !is_numeric($this->data->key())) {
+        if (count($data) == 1 && !empty(key($data)) && !is_numeric(key($data))) {
+            $key = key($data);
         }
         $key ??= 'root';
-        return $this->array2XML($this->data, (string) $key);
+        return $this->array2XML($data, (string) $key);
     }
 
-    protected function array2XML(DataTransferInterface $data, string $rootNodeName = 'root', ?\SimpleXMLElement $xml = NULL): \SimpleXMLElement
+    protected function array2XML(iterable $data, string $rootNodeName = 'root', ?\SimpleXMLElement $xml = NULL): \SimpleXMLElement
     {
         if ($xml == null) {
             $xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
@@ -28,7 +30,7 @@ class XmlObjectConverter extends AbstractConverter
             }
         }
         foreach ($data as $key => $value) {
-            if ($value instanceof DataTransferInterface) {
+            if (is_iterable($value)) {
                 if ($key == 'attributes') {
                     foreach ($value as $attr_key => $attr_value) {
                         $xml->addAttribute($attr_key, $attr_value);
@@ -40,7 +42,7 @@ class XmlObjectConverter extends AbstractConverter
                             $node = $xml->addChild($name);
                         } else {
                             $name = $key;
-                            if ($value->count() == 1 || ($value->valid() && !is_numeric($value->key()))) {
+                            if (count($value) == 1 || (!is_numeric(key($value)))) {
                                 $node = $xml->addChild($name);
                             } else {
                                 $node = $xml;

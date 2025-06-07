@@ -13,11 +13,16 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
 
     public function __construct(string $excel)
     {
-        if(!extension_loaded('xlswriter')){
+        if (!extension_loaded('xlswriter')) {
             throw new PreconditionRequiredException("The extension XLSWRITER is not available");
         }
         $excel_data = [];
         if (is_string($excel)) {
+            if (!is_file($excel)) {
+                $excel_file = tempnam(sys_get_temp_dir(), __CLASS__);
+                file_put_contents($excel_file, $excel);
+                $excel = $excel_file;
+            }
             if (is_file($excel) && file_exists($excel)) {
                 $excel_reader = new Excel(['path' => pathinfo($excel, PATHINFO_DIRNAME)]);
                 $excel_reader = $excel_reader->openFile(pathinfo($excel, PATHINFO_BASENAME));
