@@ -1,5 +1,32 @@
 # Change Log DataTransfer
 
+## [1.0.10] - 2025-06-07
+
+### Added
+
+- DataConverter using standard mimetype in order to convert a DataTrasfer object toa plain converted string, the available mimetypes to convert are:
+  - application/json -> to json string
+  - application/xml -> to
+  - text/xml
+  - application/csv -> to excel csv, with ; as separator and BOM
+  - text/csv -> to standard csv with , as separator
+  - application/vnd.ms-excel -> to xslx using XLSWRITER extension
+  - application/yaml -> to YAML format
+- extract and check contents in order to know if is a csv or excel csv data
+- extract and check contents in order to know if is a yaml data
+- extract and check contents in order to know if is an ini data
+
+### Changed
+
+- examples into readme
+- csv converter changed in order to filter subnodes when parse from xml data
+- excel converter parsing data, perform a previous csv conversion in order to solve issues from xml data
+
+### Fixed
+
+- some readme examples
+- excel tests for non loaded extension environments
+
 ## [1.0.9] - 2025-06-05
 
 ### Added

@@ -4,7 +4,6 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/JuanchoSL/DataTransfer",
-    "minimum-stability": "stable",
     "keywords": [
         "data transfer objects",
         "dto",
@@ -34,7 +33,10 @@
         "ext-mbstring": "*",
         "ext-json": "*",
         "juanchosl/validators": "1.0.*",
-        "juanchosl/exceptions": "1.0.*"
+        "juanchosl/exceptions": "1.0.*",
+        "juanchosl/httpheaders": "1.0.*",
+        "psr/http-server-handler": "1.0.*",
+        "composer-runtime-api": "^2.2"
     },
     "suggest": {
         "ext-yaml": "*",
