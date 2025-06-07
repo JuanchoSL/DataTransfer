@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a748fe7cae16097f129d8f9c1d9086a",
+    "content-hash": "20a52b60cdfd608829233dbabea8e925",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -111,6 +111,59 @@
             "time": "2025-05-23T19:59:31+00:00"
         },
         {
+            "name": "juanchosl/httpheaders",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JuanchoSL/HttpHeaders.git",
+                "reference": "e599267c674a6295617ebf6c400fe69972a6343a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JuanchoSL/HttpHeaders/zipball/e599267c674a6295617ebf6c400fe69972a6343a",
+                "reference": "e599267c674a6295617ebf6c400fe69972a6343a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "1.10.*",
+                "phpunit/phpunit": "9.6.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JuanchoSL\\HttpHeaders\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Juan Sánchez Lecegui",
+                    "email": "JuanchoSL@hotmail.com",
+                    "homepage": "https://github.com/JuanchoSL/"
+                }
+            ],
+            "description": "Little methods collection in order to create http headers",
+            "homepage": "https://github.com/JuanchoSL/HttpHeaders",
+            "keywords": [
+                "content types",
+                "file extensions",
+                "headers",
+                "http",
+                "mime types"
+            ],
+            "support": {
+                "source": "https://github.com/JuanchoSL/HttpHeaders/tree/1.0.1"
+            },
+            "time": "2025-06-06T23:49:10+00:00"
+        },
+        {
             "name": "juanchosl/validators",
             "version": "1.0.5",
             "source": {
@@ -159,6 +212,115 @@
                 "source": "https://github.com/JuanchoSL/Validators/tree/1.0.5"
             },
             "time": "2025-05-26T06:38:41+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/2.0"
+            },
+            "time": "2023-04-04T09:54:51+00:00"
+        },
+        {
+            "name": "psr/http-server-handler",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-server-handler.git",
+                "reference": "84c4fb66179be4caaf8e97bd239203245302e7d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-server-handler/zipball/84c4fb66179be4caaf8e97bd239203245302e7d4",
+                "reference": "84c4fb66179be4caaf8e97bd239203245302e7d4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0",
+                "psr/http-message": "^1.0 || ^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP server-side request handler",
+            "keywords": [
+                "handler",
+                "http",
+                "http-interop",
+                "psr",
+                "psr-15",
+                "psr-7",
+                "request",
+                "response",
+                "server"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-server-handler/tree/1.0.2"
+            },
+            "time": "2023-04-10T20:06:20+00:00"
         }
     ],
     "packages-dev": [
@@ -1978,7 +2140,8 @@
     "platform": {
         "php": "^8.1",
         "ext-mbstring": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "composer-runtime-api": "^2.2"
     },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"

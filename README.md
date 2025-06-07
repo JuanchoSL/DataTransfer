@@ -35,14 +35,6 @@ The **$element** parameter can be:
 - YAML string or filepath with yml or yaml extension (require **yaml** php extension)
 - primitive value
 
-#### Magic CREATE method
-
-Today is not possible detect an INI or YAML string, can use filepath with the rigth extension, but not this string types
-
-```php
-$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::create($element);
-```
-
 #### Using a filepath
 
 Open and convert the contents included into file, alternatively you can specify the Format if the extension is not knowed
