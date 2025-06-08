@@ -6,12 +6,12 @@ class JsonConverter extends AbstractConverter
 {
 
     /**
-     * Retrieve the data as an json string
+     * Retrieve the data as an json string with pretty print
      * @return bool|string
      */
     public function getData(): mixed
     {
-        return json_encode($this->data);
+        return json_encode($this->data, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -20,6 +20,6 @@ class JsonConverter extends AbstractConverter
      */
     public function __tostring(): string
     {
-        return $this->getData();
+        return json_encode($this->data);
     }
 }
