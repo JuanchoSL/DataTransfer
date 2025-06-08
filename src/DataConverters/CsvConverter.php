@@ -34,7 +34,7 @@ class CsvConverter extends ArrayConverter
             if (is_array($value)) {
                 $this->array2csv($value, $title, $data);
             } else {
-                $title[$key] = strpos($key, ' ') !== false ? '"' . $key . '"' : $key;
+                $title[$key] = strpos($key, ' ') !== false || strpos($key, $this->separator) !== false ? '"' . $key . '"' : $key;
                 if (!empty($value)) {
                     $value = '"' . $value . '"';
                 }
