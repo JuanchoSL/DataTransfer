@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
@@ -19,11 +17,22 @@ abstract class AbstractConverter implements DataConverterInterface
         }
     }
 
+    /**
+     * 
+     * Set the data into the converter
+     * @param \JuanchoSL\DataTransfer\Contracts\DataTransferInterface $data
+     * @return void
+     */
     public function setData(DataTransferInterface $data): void
     {
         $this->data = $data;
     }
 
+    /**
+     * Set the data and convert it
+     * @param \JuanchoSL\DataTransfer\Contracts\DataTransferInterface $data
+     * @return mixed
+     */
     public static function convert(DataTransferInterface $data): mixed
     {
         $class = get_called_class();

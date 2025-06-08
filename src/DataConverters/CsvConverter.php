@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
@@ -9,6 +7,10 @@ class CsvConverter extends ArrayConverter
 
     protected string $separator = ',';
 
+    /**
+     * Parse and returns the csv string composition using , as separator
+     * @return string
+     */
     public function getData(): mixed
     {
         $data = parent::getData();
@@ -66,6 +68,10 @@ class CsvConverter extends ArrayConverter
         return implode($this->separator, $title) . PHP_EOL . implode(PHP_EOL, $texts);
     }
 
+    /**
+     * Returns the csv string composition using , as separator
+     * @return string
+     */
     public function __tostring(): string
     {
         return $this->getData();

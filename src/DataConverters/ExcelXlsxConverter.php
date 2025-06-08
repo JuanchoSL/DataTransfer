@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
@@ -10,6 +8,12 @@ use Vtiful\Kernel\Excel;
 
 class ExcelXlsxConverter extends ArrayConverter
 {
+
+    /**
+     * Parse and returns the Excel object
+     * @throws \JuanchoSL\Exceptions\PreconditionRequiredException
+     * @return mixed
+     */
     public function getData(): mixed
     {
         if (!extension_loaded('xlswriter')) {
@@ -37,6 +41,10 @@ class ExcelXlsxConverter extends ArrayConverter
         return $filePath;
     }
 
+    /**
+     * REturns the Excel parsed contents
+     * @return bool|string
+     */
     public function __tostring(): string
     {
         return file_get_contents($this->getData()->output());

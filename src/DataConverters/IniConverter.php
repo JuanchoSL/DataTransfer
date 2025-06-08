@@ -1,12 +1,14 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
 class IniConverter extends ArrayConverter
 {
 
+    /**
+     * Parse and returns the ini string composition
+     * @return string
+     */
     public function getData(): mixed
     {
         $data = parent::getData();
@@ -41,7 +43,11 @@ class IniConverter extends ArrayConverter
         }
         return $str;
     }
-    
+
+    /**
+     * Returns the ini string composition
+     * @return string
+     */
     public function __tostring(): string
     {
         return $this->getData();
