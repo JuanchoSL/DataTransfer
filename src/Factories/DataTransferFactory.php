@@ -59,7 +59,7 @@ class DataTransferFactory
                 $format = Format::EXCEL_CSV;
             } elseif (static::isIniString($contents)) {
                 $format = Format::INI;
-            } elseif (static::isYamlString($contents)) {
+            } elseif (static::isYamlString($contents) && function_exists('yaml_parse')) {
                 $format = Format::YAML;
             }
         }
@@ -182,6 +182,9 @@ class DataTransferFactory
     }
     public static function isYamlString(string $value): bool
     {
+        if(!function_exists('yaml_parse')){
+            return false;
+        }
         $ndocs = 0;
         $yaml = @yaml_parse($value, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
         return !empty($yaml) && is_array($yaml);
