@@ -14,7 +14,7 @@ use JuanchoSL\Validators\Types\Strings\StringValidation;
 class DataTransferFactory
 {
     /**
-     * Summary of byTrasversable
+     * Imports an iterable|trasversable element and converts to DTO
      * @param object|array<int|string, mixed> $contents
      * @return \JuanchoSL\DataTransfer\Contracts\DataTransferInterface
      */
@@ -30,6 +30,14 @@ class DataTransferFactory
         $class = Format::read($format);
         return new $class($contents);
     }
+
+    /**
+     * Read and parse a string and try to detect his format in order to process with the correct parser
+     * @param string $contents
+     * @param mixed $format
+     * @throws \JuanchoSL\Exceptions\UnsupportedMediaTypeException
+     * @return \JuanchoSL\DataTransfer\Contracts\DataTransferInterface|string|int|float|bool|null
+     */
     public static function byString(string $contents, ?Format $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (!empty($contents) && empty($format)) {
@@ -41,11 +49,6 @@ class DataTransferFactory
                 if (is_array($contents) || is_object($contents)) {
                     return static::byTrasversable($contents);
                 }
-                /*if (is_array($contents)) {
-                    $format = Format::ARRAY;
-                } elseif (is_object($contents)) {
-                    $format = Format::OBJECT;
-                }*/
             } elseif (static::isJsonString($contents)) {
                 $format = Format::JSON;
             } elseif (static::isXmlString($contents)) {
@@ -56,7 +59,7 @@ class DataTransferFactory
                 $format = Format::EXCEL_CSV;
             } elseif (static::isIniString($contents)) {
                 $format = Format::INI;
-            } elseif (static::isYamlString($contents)) {
+            } elseif (static::isYamlString($contents) && function_exists('yaml_parse')) {
                 $format = Format::YAML;
             }
         }
@@ -72,8 +75,15 @@ class DataTransferFactory
         }
 
         throw new UnsupportedMediaTypeException("The format of the data can not be detected");
-
     }
+
+    /**
+     * Read and process a file, You can indicate a Format or try to use the file extension in order to parse his content
+     * @param string $filepath
+     * @param mixed $format
+     * @throws \JuanchoSL\Exceptions\DestinationUnreachableException
+     * @return bool|DataTransferInterface|float|int|string|null
+     */
     public static function byFile(string $filepath, ?Format $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (empty($format)) {
@@ -89,6 +99,13 @@ class DataTransferFactory
         return static::byString($contents, $format);
     }
 
+    /**
+     * Process data (file or string) as the indicated mime-type
+     * @param string $contents
+     * @param string|iterable $content_types
+     * @throws \JuanchoSL\Exceptions\UnsupportedMediaTypeException
+     * @return bool|DataTransferInterface|float|int|string|null
+     */
     public static function byMimeType(string $contents, string|iterable $content_types): DataTransferInterface
     {
         $content_types = is_iterable($content_types) ? $content_types : [$content_types];
@@ -165,6 +182,9 @@ class DataTransferFactory
     }
     public static function isYamlString(string $value): bool
     {
+        if(!function_exists('yaml_parse')){
+            return false;
+        }
         $ndocs = 0;
         $yaml = @yaml_parse($value, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
         return !empty($yaml) && is_array($yaml);

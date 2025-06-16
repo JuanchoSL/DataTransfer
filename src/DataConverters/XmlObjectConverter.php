@@ -1,18 +1,19 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\DataConverters;
-use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
+
 use JuanchoSL\Exceptions\UnprocessableEntityException;
 
 class XmlObjectConverter extends AbstractConverter
 {
 
+    /**
+     * Parse and returns the xml object
+     * @return \SimpleXMLElement
+     */
     public function getData(): mixed
     {
-        //$key = 'root';
-        $data =json_decode(json_encode($this->data), true);
+        $data = json_decode(json_encode($this->data), true);
         //if ($this->data->count() == 1 && !empty($this->data->key()) && !is_numeric($this->data->key())) {
         if (count($data) == 1 && !empty(key($data)) && !is_numeric(key($data))) {
             $key = key($data);
@@ -76,6 +77,10 @@ class XmlObjectConverter extends AbstractConverter
         return $xml;
     }
 
+    /**
+     * Returns the xml string composition
+     * @return string
+     */
     public function __tostring(): string
     {
         return $this->getData()->asXML();

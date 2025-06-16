@@ -45,10 +45,18 @@ $dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byFile($element, Fo
 
 #### Using a string
 
-Detect and convert the contents included into string (json encoded, serialized object or array, xml), alternatively you can specify the Format if the type is YAML, CSV or INI
+Try to detect and convert the contents included into string (json encoded, serialized object or array, xml, csv, yaml), alternatively you can specify the Format if the type is INI
 
 ```php
 $dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byString($element, Format $original_format= null);
+```
+
+#### Using a mime-type
+
+You can try passing an iterable number of strings as standard mimetypes ir order to process with the first compatible
+
+```php
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byMimeType($element, string|iterable $mime_type);
 ```
 
 #### Using a trasversable element
@@ -72,12 +80,13 @@ $dto = new JuanchoSL\DataTransfer\Repositories\{SOURCE_READER}($element)
 | Type     | Compatibility                                       | Reader                                        |
 | -------- | --------------------------------------------------- | --------------------------------------------- |
 | Array    | filepath \| array \| string from array serialized   | ArrayDataTransfer                             |
+| stdClass | filepath \| object \| string from object serialized | ObjectDataTransfer                            |
 | CSV      | filepath \| array of lines \| string                | CsvDataTransfer(,) or ExcelCsvDataTransfer(;) |
 | INI      | filepath \| string                                  | IniDataTransfer                               |
 | JSON     | filepath \| string                                  | JsonDataTransfer                              |
-| stdClass | filepath \| object \| string from object serialized | ObjectDataTransfer                            |
 | XML      | filepath \| string \| SimpleXmlElement              | XmlDataTransfer                               |
 | YAML     | filepath \| string                                  | YamlDataTransfer                              |
+| XLSX     | filepath \| string                                  | ExcelXlsxDataTransfer                         |
 
 > The **$element** parameter needs to be the required type for the selected repo
 
@@ -112,11 +121,20 @@ You can convert any DataTransferObject to a standar format, as:
 - yaml
 - csv
 - excel csv
+- xlsx
 
 ### Using the provided Factory
 
 ```php
 $json = JuanchoSL\DataTransfer\Factories\DataConverterFactory::asJson($dto);
+```
+
+### Using a mime-type
+
+You can try passing an iterable number of strings as standard mimetypes ir order to convert with the first compatible
+
+```php
+$json = JuanchoSL\DataTransfer\Factories\DataConverterFactory::asMimeType($dto, 'application/json');
 ```
 
 ### Using a specific converter
