@@ -1,13 +1,27 @@
 # Change Log DataTransfer
 
+## [1.0.11] - 2025-06-16
+
+### Added
+
+- More documentation on class functions
+
+### Changed
+
+- JSON converter returns string with pretty format when getData is called
+
+### Fixed
+
+- CSV converter apply enclosure where the character separator is present into string
+- check if library is loaded before test for YAML file and strings
+
 ## [1.0.10] - 2025-06-07
 
 ### Added
 
-- DataConverter using standard mimetype in order to convert a DataTrasfer object toa plain converted string, the available mimetypes to convert are:
+- DataConverter using standard mimetype in order to convert a DataTrasfer object to a plain converted string, the available mimetypes to convert are:
   - application/json -> to json string
-  - application/xml -> to
-  - text/xml
+  - application/xml | text/xml -> to xml string
   - application/csv -> to excel csv, with ; as separator and BOM
   - text/csv -> to standard csv with , as separator
   - application/vnd.ms-excel -> to xslx using XLSWRITER extension
