@@ -2,6 +2,7 @@
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
+use DOMDocument;
 use JuanchoSL\Exceptions\UnprocessableEntityException;
 
 class XmlObjectConverter extends AbstractConverter
@@ -39,7 +40,7 @@ class XmlObjectConverter extends AbstractConverter
                 } else {
                     if ($key != $rootNodeName) {
                         if (is_numeric($key)) {
-                            $name = $rootNodeName;
+                            $name = ($rootNodeName == 'root') ? 'node' : $rootNodeName;
                             $node = $xml->addChild($name);
                         } else {
                             $name = $key;
@@ -83,6 +84,13 @@ class XmlObjectConverter extends AbstractConverter
      */
     public function __tostring(): string
     {
-        return $this->getData()->asXML();
+        //return $this->getData()->asXML();
+        $dom = new DOMDocument('1.0');
+        // 3. Formatea la salida
+        $dom->formatOutput = true;
+        // 4. Carga el XML de SimpleXML en el documento DOM
+        $dom->loadXML($this->getData()->asXML());
+        // 5. Guarda el XML formateado (imprime o guarda en un archivo)
+        return $dom->saveXML();
     }
 }
