@@ -67,9 +67,11 @@ class DataTransferFactory
             $class = Format::read($format);
             return new $class($contents);
         } elseif (is_scalar($contents)) {
-            if (!mb_check_encoding($contents, 'UTF-8')) {
-                $original = mb_detect_encoding($contents, 'UTF-8', true);
-                $contents = mb_convert_encoding($contents, 'UTF-8', $original);
+            if (!empty($contents) && !mb_check_encoding($contents, 'UTF-8')) {
+                $original = mb_detect_encoding($contents, ['ASCII','ISO-8859-1'], true);
+                if (!empty($original)) {
+                    $contents = mb_convert_encoding($contents, 'UTF-8', $original);
+                }
             }
             return $contents;
         }
@@ -132,10 +134,10 @@ class DataTransferFactory
                     break;
 
                 case 'application/csv':
+                case 'application/vnd.ms-excel':
                     $data = Format::EXCEL_CSV;
                     break;
 
-                case 'application/vnd.ms-excel':
                 case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                     $data = Format::EXCEL_XLSX;
                     break;
@@ -182,7 +184,7 @@ class DataTransferFactory
     }
     public static function isYamlString(string $value): bool
     {
-        if(!function_exists('yaml_parse')){
+        if (!function_exists('yaml_parse')) {
             return false;
         }
         $ndocs = 0;
@@ -197,13 +199,20 @@ class DataTransferFactory
     }
     public static function isCsvString(string $value): bool
     {
-        $data = explode(PHP_EOL, $value);
-        $current = current($data);
+        $datas = explode(PHP_EOL, $value);
+        $current = current($datas);
         $num = substr_count($current, ',');
-        if (empty($num)) {
+        if (empty($num) || count($datas) <= 1) {
             return false;
         }
-        $data = @str_getcsv($current, ',', '"', "\\");
+        $nu = null;
+        foreach ($datas as $current) {
+            $data = @str_getcsv($current, ',', '"', "\\");
+            if (!is_null($nu) && count($data) != $nu) {
+                return false;
+            }
+            $nu = count($data);
+        }
         return is_array($data) && !empty($data) && (count($data) > $num);// && !empty(current($data));
     }
     public static function isExcelCsvString(string $value): bool
@@ -211,7 +220,7 @@ class DataTransferFactory
         $data = explode(PHP_EOL, $value);
         $current = current($data);
         $num = substr_count($current, ';');
-        if (empty($num)) {
+        if (empty($num) || count($data) <= 1) {
             return false;
         }
         $data = @str_getcsv($current, ';', '"', "\\");

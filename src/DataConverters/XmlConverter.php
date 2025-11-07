@@ -2,6 +2,8 @@
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
+use DOMDocument;
+
 class XmlConverter extends XmlObjectConverter
 {
 
@@ -20,6 +22,13 @@ class XmlConverter extends XmlObjectConverter
      */
     public function __tostring(): string
     {
-        return $this->getData();
+        //return $this->getData();
+        $dom = new DOMDocument('1.0');
+        // 3. Formatea la salida
+        $dom->formatOutput = true;
+        // 4. Carga el XML de SimpleXML en el documento DOM
+        $dom->loadXML($this->getData());
+        // 5. Guarda el XML formateado (imprime o guarda en un archivo)
+        return $dom->saveXML();
     }
 }
