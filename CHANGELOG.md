@@ -1,5 +1,19 @@
 # Change Log DataTransfer
 
+## [1.0.12] - 2025-11-07
+
+### Added
+
+- xml formatting when convert to string
+
+### Changed
+
+- mime type header 'application/vnd.ms-excel' is move to use the ExcelCsvFormat in oredr to add BOM to final string
+
+### Fixed
+
+- added some text encoding in order to convert data
+
 ## [1.0.11] - 2025-06-16
 
 ### Added
