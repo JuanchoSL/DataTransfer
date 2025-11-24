@@ -9,6 +9,7 @@ use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
 use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
+use JuanchoSL\DataTransfer\DataConverters\TabsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
@@ -135,5 +136,16 @@ class ConverterDataTest extends TestCase
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         $converted = IniConverter::convert($obj);
         $this->assertEquals($ini, $converted);
+    }
+
+    public function testTabbed()
+    {
+        $tab = "name\tdate\r\nMy Event\t25.05.2001\r\nSecond Event\t25.06.2001";
+        $array = [['name' => 'My Event', 'date' => '25.05.2001'],['name' => 'Second Event', 'date' => '25.06.2001']];
+        $obj = new ArrayDataTransfer($array);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = TabsvConverter::convert($obj);
+        $this->assertEquals($tab, $converted);
     }
 }

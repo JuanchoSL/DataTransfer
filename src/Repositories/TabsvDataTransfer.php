@@ -6,36 +6,36 @@ namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\Exceptions\UnprocessableEntityException;
 
-class CsvDataTransfer extends ArrayDataTransfer
+class TabsvDataTransfer extends ArrayDataTransfer
 {
-    protected string $separator = ',';
+    protected string $separator = "\t";
 
     /**
      * Summary of __construct
-     * @param array<int|string>|string $csv
+     * @param array<int|string>|string $tsv
      * @throws \JuanchoSL\Exceptions\UnprocessableEntityException
      */
-    public function __construct(array|string $csv)
+    public function __construct(array|string $tsv)
     {
-        if (is_string($csv)) {
-            if (is_file($csv) && file_exists($csv)) {
-                $csv = file($csv);
+        if (is_string($tsv)) {
+            if (is_file($tsv) && file_exists($tsv)) {
+                $tsv = file($tsv);
             } else {
-                $csv = explode(PHP_EOL, $csv);
+                $tsv = explode(PHP_EOL, $tsv);
             }
         }
-        if (!is_iterable($csv) or empty($csv)) {
+        if (!is_iterable($tsv) or empty($tsv)) {
             throw new UnprocessableEntityException("No contents has been received");
         }
-        if (($current = current($csv)) === false) {
+        if (($current = current($tsv)) === false) {
             throw new UnprocessableEntityException("No headers has been readed");
         }
         $result = [];
-        if (count($csv) > 1) {
-            $headers = str_getcsv((string) $current, $this->separator, "\"", "\\");
-            $csv = array_slice($csv, 1);
-            foreach ($csv as $line) {
-                $body = str_getcsv((string) $line, $this->separator, "\"", "\\");
+        if (count($tsv) > 1) {
+            $headers = explode( $this->separator, (string) $current);
+            $tsv = array_slice($tsv, 1);
+            foreach ($tsv as $line) {
+                $body = explode( $this->separator, (string) $line);
                 if (count($body) < 2) {
                     break;
                 }

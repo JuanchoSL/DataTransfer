@@ -11,6 +11,7 @@ use JuanchoSL\DataTransfer\DataConverters\ExcelXlsxConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
 use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
+use JuanchoSL\DataTransfer\DataConverters\TabsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
@@ -21,6 +22,7 @@ use JuanchoSL\DataTransfer\Repositories\ExcelXlsxDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\TabsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
 
@@ -31,6 +33,7 @@ enum Format: string
     case EXCEL_CSV = 'csvx';
     case EXCEL_XLSX = 'xlsx';
     case INI = 'ini';
+    case TAB = 'tsv';
     case JSON = 'json';
     case OBJECT = 'object';
     case XML = 'xml';
@@ -50,6 +53,7 @@ enum Format: string
             static::EXCEL_CSV => ExcelCsvDataTransfer::class,
             static::EXCEL_XLSX => ExcelXlsxDataTransfer::class,
             static::INI => IniDataTransfer::class,
+            static::TAB => TabsvDataTransfer::class,
             static::JSON => JsonDataTransfer::class,
             static::OBJECT => ObjectDataTransfer::class,
             static::XML, static::XML_OBJECT => XmlDataTransfer::class,
@@ -64,6 +68,7 @@ enum Format: string
             static::EXCEL_CSV => ExcelCsvConverter::class,
             static::EXCEL_XLSX => ExcelXlsxConverter::class,
             static::INI => IniConverter::class,
+            static::TAB => TabsvConverter::class,
             static::JSON => JsonConverter::class,
             static::OBJECT => ObjectConverter::class,
             static::XML => XmlConverter::class,
