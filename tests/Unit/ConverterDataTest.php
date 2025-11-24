@@ -140,8 +140,8 @@ class ConverterDataTest extends TestCase
 
     public function testTabbed()
     {
-        $tab = "name\tdate\r\nMy Event\t25.05.2001\r\nSecond Event\t25.06.2001";
-        $array = [['name' => 'My Event', 'date' => '25.05.2001'],['name' => 'Second Event', 'date' => '25.06.2001']];
+        $tab = "name\tdate" . PHP_EOL . "My Event\t25.05.2001" . PHP_EOL . "Second Event\t25.06.2001";
+        $array = [['name' => 'My Event', 'date' => '25.05.2001'], ['name' => 'Second Event', 'date' => '25.06.2001']];
         $obj = new ArrayDataTransfer($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
