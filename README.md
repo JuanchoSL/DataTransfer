@@ -32,6 +32,7 @@ The **$element** parameter can be:
 - XML string or filepath with xml extension
 - CSV string or filepath with csv extension
 - INI string or filepath with ini extension
+- TAB separated values string or filepath with tsv extension
 - YAML string or filepath with yml or yaml extension (require **yaml** php extension)
 - primitive value
 
@@ -83,6 +84,7 @@ $dto = new JuanchoSL\DataTransfer\Repositories\{SOURCE_READER}($element)
 | stdClass | filepath \| object \| string from object serialized | ObjectDataTransfer                            |
 | CSV      | filepath \| array of lines \| string                | CsvDataTransfer(,) or ExcelCsvDataTransfer(;) |
 | INI      | filepath \| string                                  | IniDataTransfer                               |
+| TAB      | filepath \| string                                  | TabsvDataTransfer                             |
 | JSON     | filepath \| string                                  | JsonDataTransfer                              |
 | XML      | filepath \| string \| SimpleXmlElement              | XmlDataTransfer                               |
 | YAML     | filepath \| string                                  | YamlDataTransfer                              |
@@ -120,6 +122,7 @@ You can convert any DataTransferObject to a standar format, as:
 - ini
 - yaml
 - csv
+- tsv (tab separated)
 - excel csv
 - xlsx
 
@@ -161,6 +164,7 @@ The available converters are:
 - XmlConverter
 - YamlConverter
 - IniConverter
+- TabsvConverter
 - ArrayConverter
 - ObjectConverter
 - XmlObjectConverter

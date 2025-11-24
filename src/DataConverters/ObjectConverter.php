@@ -6,7 +6,7 @@ class ObjectConverter extends JsonConverter
 {
 
     /**
-     * Retrieve the data as an stdClass
+     * Retrieve the data as a stdClass
      * @return mixed
      */
     public function getData(): mixed

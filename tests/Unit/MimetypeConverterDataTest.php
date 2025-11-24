@@ -114,7 +114,7 @@ public function testToXml4()
         $obj = new ExcelCsvDataTransfer(explode(PHP_EOL, $csv));
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $mime = 'application/csv';
+        $mime = 'application/vnd.ms-excel';
         $converted = DataConverterFactory::asMimeType($obj, $mime);
         $this->assertEquals($csv, $converted);
     }

@@ -61,6 +61,8 @@ class DataTransferFactory
                 $format = Format::INI;
             } elseif (static::isYamlString($contents) && function_exists('yaml_parse')) {
                 $format = Format::YAML;
+            } elseif (static::isTabbedString($contents)) {
+                $format = Format::TAB;
             }
         }
         if (!empty($format)) {
@@ -130,10 +132,14 @@ class DataTransferFactory
                     break;
 
                 case 'text/csv':
+                case 'application/csv':
                     $data = Format::CSV;
                     break;
 
-                case 'application/csv':
+                case 'text/tab-separated-values':
+                    $data = Format::TAB;
+                    break;
+
                 case 'application/vnd.ms-excel':
                     $data = Format::EXCEL_CSV;
                     break;
@@ -177,6 +183,10 @@ class DataTransferFactory
     public static function isJsonString(string $value): bool
     {
         return (substr($value, 0, 1) == '{' && substr($value, -1) == '}') || (substr($value, 0, 1) == '[' && substr($value, -1) == ']');
+    }
+    public static function isTabbedString(string $value): bool
+    {
+        return str_contains($value, "\t");
     }
     public static function isXmlString(string $value): bool
     {
