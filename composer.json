@@ -15,6 +15,8 @@
         "csv",
         "xml",
         "xlsx",
+        "tsv",
+        "tab separated values",
         "SimpleXMLElement",
         "entity",
         "data converter",
@@ -24,8 +26,9 @@
     "authors": [
         {
             "name": "Juan Sánchez Lecegui",
-            "email": "JuanchoSL@hotmail.com",
-            "homepage": "https://github.com/JuanchoSL/"
+            "email": "Juan.Sanchez@tecnicosweb.com",
+            "homepage": "https://www.linkedin.com/in/juansanchezlecegui/",
+            "role": "Developer"
         }
     ],
     "require": {

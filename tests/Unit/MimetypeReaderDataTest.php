@@ -5,12 +5,7 @@ namespace JuanchoSL\DataTransfer\Tests\Unit;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Factories\DataConverterFactory;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
-use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
-use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use PHPUnit\Framework\TestCase;
-use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 
 class MimetypeReaderDataTest extends TestCase
 {
@@ -50,13 +45,14 @@ class MimetypeReaderDataTest extends TestCase
         $csv = 'user,user_id,password,prioridad,id,descripcion
 "root","2",,"baja",,
 "root","1","contraseña","Alta","1","Descripción del texto"';
-        $mime = 'text/csv';
-        $obj = DataTransferFactory::byMimeType($csv, $mime);
-        $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $converted = DataConverterFactory::asMimeType($obj, $mime);
-
-        $this->assertEquals($csv, $converted);
+        $mimes = ['text/csv', 'application/csv'];
+        foreach($mimes as $mime){
+            $obj = DataTransferFactory::byMimeType($csv, $mime);
+            $this->assertInstanceOf(DataTransferInterface::class, $obj);
+            $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+            $converted = DataConverterFactory::asMimeType($obj, $mime);
+            $this->assertEquals($csv, $converted);
+        }
     }
 
     public function testExcelCsv()
@@ -64,7 +60,7 @@ class MimetypeReaderDataTest extends TestCase
         $csv = 'user;user_id;password;prioridad;id;descripcion
 "root";"2";;"baja";;
 "root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
-        $mime = 'application/csv';
+        $mime = 'application/vnd.ms-excel';
         $obj = DataTransferFactory::byMimeType($csv, $mime);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
@@ -79,11 +75,23 @@ class MimetypeReaderDataTest extends TestCase
         $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-
+        
         $converted = DataConverterFactory::asMimeType($obj, $mime_type);
-
+        
         $this->assertEquals(str_replace("\r\n", "\n", $yaml), $converted);
-
+        
     }
-
+    
+    public function testTabsv()
+    {
+        $tsv = "user\tuser_id\tpassword\tprioridad\tid\tdescripcion
+root\t2\tbaja\t\t\t      
+root\t1\tcontraseña\tAlta\t1\tDescripción del texto";
+        $mime = 'text/tab-separated-values';
+        $obj = DataTransferFactory::byMimeType($tsv, $mime);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = DataConverterFactory::asMimeType($obj, $mime);
+        $this->assertEquals($tsv, $converted);
+    }
 }

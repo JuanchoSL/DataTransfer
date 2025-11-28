@@ -12,6 +12,7 @@ use JuanchoSL\DataTransfer\DataConverters\ExcelXlsxConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
 use JuanchoSL\DataTransfer\DataConverters\ObjectConverter;
+use JuanchoSL\DataTransfer\DataConverters\TabsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
@@ -42,6 +43,11 @@ class DataConverterFactory
     public static function asCsv(DataTransferInterface $dto): string
     {
         return CsvConverter::convert($dto);
+    }
+
+    public static function asTabs(DataTransferInterface $dto): string
+    {
+        return TabsvConverter::convert($dto);
     }
 
     public static function asExcelCsv(DataTransferInterface $dto): string
@@ -91,14 +97,18 @@ class DataConverterFactory
                     break;
 
                 case 'text/csv':
+                case 'application/csv':
                     $data = static::asCsv($dto);
                     break;
 
-                case 'application/csv':
-                    $data = static::asExcelCsv($dto);
+                case 'text/tab-separated-values':
+                    $data = static::asTabs($dto);
                     break;
 
                 case 'application/vnd.ms-excel':
+                    $data = static::asExcelCsv($dto);
+                    break;
+
                 case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                     $data = new ExcelXlsxConverter($dto);
                     break;
