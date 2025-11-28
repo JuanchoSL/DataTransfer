@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Repositories;
 
@@ -21,7 +19,8 @@ class CsvDataTransfer extends ArrayDataTransfer
             if (is_file($csv) && file_exists($csv)) {
                 $csv = file($csv);
             } else {
-                $csv = explode(PHP_EOL, $csv);
+                $csv = str_replace(["\r\n", "\r"], "\n", $csv);
+                $csv = explode("\n", $csv);
             }
         }
         if (!is_iterable($csv) or empty($csv)) {
@@ -32,14 +31,14 @@ class CsvDataTransfer extends ArrayDataTransfer
         }
         $result = [];
         if (count($csv) > 1) {
-            $headers = str_getcsv((string) $current, $this->separator, "\"", "\\");
+            $headers = array_filter(str_getcsv((string) $current, $this->separator, "\"", "\\"));
             $csv = array_slice($csv, 1);
             foreach ($csv as $line) {
                 $body = str_getcsv((string) $line, $this->separator, "\"", "\\");
                 if (count($body) < 2) {
                     break;
                 }
-                $result[] = array_combine($headers, $body);
+                $result[] = array_combine($headers, array_slice($body, 0, count($headers)));
             }
         }
         parent::__construct($result);
