@@ -51,6 +51,8 @@ class DataTransferFactory
                 }
             } elseif (static::isJsonString($contents)) {
                 $format = Format::JSON;
+            } elseif (static::isExcelXmlString($contents)) {
+                $format = Format::EXCEL_XML;
             } elseif (static::isXmlString($contents)) {
                 $format = Format::XML;
             } elseif (static::isCsvString($contents)) {
@@ -70,7 +72,7 @@ class DataTransferFactory
             return new $class($contents);
         } elseif (is_scalar($contents)) {
             if (!empty($contents) && !mb_check_encoding($contents, 'UTF-8')) {
-                $original = mb_detect_encoding($contents, ['ASCII','ISO-8859-1'], true);
+                $original = mb_detect_encoding($contents, ['ASCII', 'ISO-8859-1'], true);
                 if (!empty($original)) {
                     $contents = mb_convert_encoding($contents, 'UTF-8', $original);
                 }
@@ -91,8 +93,16 @@ class DataTransferFactory
     public static function byFile(string $filepath, ?Format $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (empty($format)) {
+            //mime_content_type($filepath);
             $extension = pathinfo($filepath, PATHINFO_EXTENSION);
             if (!empty($extension)) {
+                switch (strtolower($extension)) {
+                    case 'csv':
+                        return static::byMimeType($filepath, ['application/csv']);
+                        
+                    case 'xml':
+                        return static::byMimeType($filepath, ['application/xml']);
+                }
                 $format = Format::tryFrom($extension);
             }
         }
@@ -124,16 +134,16 @@ class DataTransferFactory
 
                 case 'application/xml':
                 case 'text/xml':
-                    $data = Format::XML;
+                    $data = (static::isExcelXmlString(static::iFIsFileGivemeData($contents))) ? Format::EXCEL_XML : Format::XML;
                     break;
 
                 case 'application/yaml':
                     $data = Format::YAML;
                     break;
 
-                case 'text/csv':
                 case 'application/csv':
-                    $data = Format::CSV;
+                case 'text/csv':
+                    $data = (static::isExcelCsvString(current(static::iFIsFileGivemeData($contents, 1)))) ? Format::EXCEL_CSV : Format::CSV;
                     break;
 
                 case 'text/tab-separated-values':
@@ -141,7 +151,20 @@ class DataTransferFactory
                     break;
 
                 case 'application/vnd.ms-excel':
-                    $data = Format::EXCEL_CSV;
+                    $str = static::iFIsFileGivemeData($contents);
+                    if (static::isExcelXmlString($str)) {
+                        $data = Format::EXCEL_XML;
+                    } elseif (static::isExcelCsvString($str)) {
+                        $data = Format::EXCEL_CSV;
+                    } elseif (static::isCsvString($str)) {
+                        $data = Format::CSV;
+                    } else {
+                        $data = Format::EXCEL_XLSX;
+                    }
+                    break;
+
+                case 'application/vnd.oasis.opendocument.spreadsheet':
+                    $data = Format::ODS;
                     break;
 
                 case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
@@ -184,14 +207,17 @@ class DataTransferFactory
     {
         return (substr($value, 0, 1) == '{' && substr($value, -1) == '}') || (substr($value, 0, 1) == '[' && substr($value, -1) == ']');
     }
+
     public static function isTabbedString(string $value): bool
     {
         return str_contains($value, "\t");
     }
+
     public static function isXmlString(string $value): bool
     {
         return (substr($value, 0, 1) == '<' && substr($value, -1) == '>' && substr($value, 0, 9) !== '<![CDATA[');
     }
+
     public static function isYamlString(string $value): bool
     {
         if (!function_exists('yaml_parse')) {
@@ -201,12 +227,14 @@ class DataTransferFactory
         $yaml = @yaml_parse($value, 0, $ndocs/*, array('!date' => 'cb_yaml_date')*/);
         return !empty($yaml) && is_array($yaml);
     }
+
     public static function isIniString(string $value): bool
     {
         $data = @parse_ini_string($value);
         $datas = @parse_ini_string($value, true);
         return (!empty($data) && is_array($data)) || (!empty($datas) && is_array($datas));
     }
+
     public static function isCsvString(string $value): bool
     {
         $datas = explode(PHP_EOL, $value);
@@ -225,6 +253,12 @@ class DataTransferFactory
         }
         return is_array($data) && !empty($data) && (count($data) > $num);// && !empty(current($data));
     }
+
+    public static function isExcelXmlString(string $value): bool
+    {
+        return str_contains($value, 'mso-application progid="Excel.Sheet"');
+    }
+
     public static function isExcelCsvString(string $value): bool
     {
         $data = explode(PHP_EOL, $value);
@@ -236,11 +270,27 @@ class DataTransferFactory
         $data = @str_getcsv($current, ';', '"', "\\");
         return is_array($data) && !empty($data) && (count($data) > $num);// && !empty(current($data));
     }
+
     public static function isSerialized(string $value): bool
     {
         if ($value != 'b:0;') {
             $value = @unserialize($value);
         }
         return ($value !== false);
+    }
+
+    protected static function iFIsFileGivemeData(string $file, int $num_lines_or_all_string = 0): array|string
+    {
+        if (is_file($file) && file_exists($file) && empty($num_lines_or_all_string)) {
+            return file_get_contents($file);
+        } elseif (empty($num_lines_or_all_string)) {
+            return $file;
+        } elseif (is_file($file) && file_exists($file)) {
+            return array_slice(file($file), 0, $num_lines_or_all_string);
+        } else {
+            $path = tempnam(sys_get_temp_dir(), 'dto');
+            file_put_contents($path, $file);
+            return array_slice(file($path), 0, $num_lines_or_all_string);
+        }
     }
 }
