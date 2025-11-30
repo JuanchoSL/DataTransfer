@@ -31,7 +31,7 @@ class ExcelXmlDataTransfer extends ArrayDataTransfer
                     foreach ($childs->Table->Row as $cs) {
                         $ref = [];
                         foreach ($cs->Cell as $c) {
-                            $ref[] = $c->Data[0];
+                            $ref[] = (string) $c->Data;
                         }
                         if (empty($headers)) {
                             $headers = $ref;
