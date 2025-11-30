@@ -99,7 +99,7 @@ class DataTransferFactory
                 switch (strtolower($extension)) {
                     case 'csv':
                         return static::byMimeType($filepath, ['application/csv']);
-                        
+
                     case 'xml':
                         return static::byMimeType($filepath, ['application/xml']);
                 }
@@ -171,8 +171,9 @@ class DataTransferFactory
                     $data = Format::EXCEL_XLSX;
                     break;
 
+                case 'application/octet-stream':
                 default:
-                    break;
+                    return $data = static::byString(static::iFIsFileGivemeData($contents));
             }
             if (!empty($data)) {
                 break;
@@ -237,20 +238,14 @@ class DataTransferFactory
 
     public static function isCsvString(string $value): bool
     {
-        $datas = explode(PHP_EOL, $value);
+        $value = str_replace(["\r\n", "\n"], "\r", $value);
+        $datas = explode("\r", $value);
         $current = current($datas);
         $num = substr_count($current, ',');
         if (empty($num) || count($datas) <= 1) {
             return false;
         }
-        $nu = null;
-        foreach ($datas as $current) {
-            $data = @str_getcsv($current, ',', '"', "\\");
-            if (!is_null($nu) && count($data) != $nu) {
-                return false;
-            }
-            $nu = count($data);
-        }
+        $data = @str_getcsv($current, ',', '"', "\\");
         return is_array($data) && !empty($data) && (count($data) > $num);// && !empty(current($data));
     }
 
@@ -261,7 +256,8 @@ class DataTransferFactory
 
     public static function isExcelCsvString(string $value): bool
     {
-        $data = explode(PHP_EOL, $value);
+        $value = str_replace(["\r\n", "\n"], "\r", $value);
+        $data = explode("\r", $value);
         $current = current($data);
         $num = substr_count($current, ';');
         if (empty($num) || count($data) <= 1) {

@@ -19,8 +19,8 @@ class CsvDataTransfer extends ArrayDataTransfer
             if (is_file($csv) && file_exists($csv)) {
                 $csv = file($csv);
             } else {
-                $csv = str_replace(["\r\n", "\r"], "\n", $csv);
-                $csv = explode("\n", $csv);
+                $csv = str_replace(["\r\n", "\n"], "\r", $csv);
+                $csv = explode("\r", $csv);
             }
         }
         if (!is_iterable($csv) or empty($csv)) {

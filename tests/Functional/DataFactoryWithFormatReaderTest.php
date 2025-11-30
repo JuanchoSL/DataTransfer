@@ -8,7 +8,7 @@ use JuanchoSL\DataTransfer\Enums\Format;
 use PHPUnit\Framework\TestCase;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 
-class DataFileReaderTest extends TestCase
+class DataFactoryWithFormatReaderTest extends TestCase
 {
 
     protected function getFileSingleProvider(): array
