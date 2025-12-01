@@ -221,7 +221,7 @@ class DataTransferFactory
 
     public static function isYamlString(string $value): bool
     {
-        if (!function_exists('yaml_parse')) {
+        if (!function_exists('yaml_parse') || strlen($value) <= 10) {
             return false;
         }
         $ndocs = 0;

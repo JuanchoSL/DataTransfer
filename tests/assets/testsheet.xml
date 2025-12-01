@@ -16,8 +16,8 @@
   <AllowPNG/>
  </OfficeDocumentSettings>
  <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
-  <WindowHeight>12330</WindowHeight>
-  <WindowWidth>28800</WindowWidth>
+  <WindowHeight>3390</WindowHeight>
+  <WindowWidth>13275</WindowWidth>
   <WindowTopX>0</WindowTopX>
   <WindowTopY>0</WindowTopY>
   <ProtectStructure>False</ProtectStructure>
@@ -39,7 +39,7 @@
  <Worksheet ss:Name="Hoja1">
   <Table ss:ExpandedColumnCount="6" ss:ExpandedRowCount="9" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="60" ss:DefaultRowHeight="15">
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">Name</Data></Cell>
     <Cell><Data ss:Type="String">Surname</Data></Cell>
     <Cell><Data ss:Type="String">date</Data></Cell>
@@ -47,68 +47,68 @@
     <Cell><Data ss:Type="String">email</Data></Cell>
     <Cell><Data ss:Type="String">text</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name1</Data></Cell>
     <Cell><Data ss:Type="String">surname1</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-11-28T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555444</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name2</Data></Cell>
     <Cell><Data ss:Type="String">surname2</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-11-29T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555445</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name3</Data></Cell>
     <Cell><Data ss:Type="String">surname3</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-11-30T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555446</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name4</Data></Cell>
     <Cell><Data ss:Type="String">surname4</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-12-01T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555447</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name5</Data></Cell>
     <Cell><Data ss:Type="String">surname5</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-12-02T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555448</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name6</Data></Cell>
     <Cell><Data ss:Type="String">surname6</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-12-03T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555449</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name7</Data></Cell>
     <Cell><Data ss:Type="String">surname7</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-12-04T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555450</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="String">name8</Data></Cell>
     <Cell><Data ss:Type="String">surname8</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2025-12-05T00:00:00.000</Data></Cell>
     <Cell><Data ss:Type="Number">666555451</Data></Cell>
-    <Cell><Data ss:Type="String">emailmycorp.com</Data></Cell>
+    <Cell><Data ss:Type="String">email@mycorp.com</Data></Cell>
     <Cell><Data ss:Type="String">a text with some spaces</Data></Cell>
    </Row>
   </Table>
@@ -118,6 +118,7 @@
     <Footer x:Margin="0.3"/>
     <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
    </PageSetup>
+   <Unsynced/>
    <Selected/>
    <Panes>
     <Pane>
