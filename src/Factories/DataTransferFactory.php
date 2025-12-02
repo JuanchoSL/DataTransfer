@@ -211,17 +211,17 @@ class DataTransferFactory
 
     public static function isTabbedString(string $value): bool
     {
-        return str_contains($value, "\t");
+        return (!empty($value) && str_contains($value, "\t"));
     }
 
     public static function isXmlString(string $value): bool
     {
-        return (substr($value, 0, 1) == '<' && substr($value, -1) == '>' && substr($value, 0, 9) !== '<![CDATA[');
+        return (!empty($value) && substr($value, 0, 1) == '<' && substr($value, -1) == '>' && substr($value, 0, 9) !== '<![CDATA[');
     }
 
     public static function isYamlString(string $value): bool
     {
-        if (!function_exists('yaml_parse') || strlen($value) <= 10) {
+        if (!function_exists('yaml_parse') || empty($value) || strlen($value) < 10) {
             return false;
         }
         $ndocs = 0;
@@ -231,6 +231,9 @@ class DataTransferFactory
 
     public static function isIniString(string $value): bool
     {
+        if (empty($value)) {
+            return false;
+        }
         $data = @parse_ini_string($value);
         $datas = @parse_ini_string($value, true);
         return (!empty($data) && is_array($data)) || (!empty($datas) && is_array($datas));
@@ -238,6 +241,9 @@ class DataTransferFactory
 
     public static function isCsvString(string $value): bool
     {
+        if (empty($value)) {
+            return false;
+        }
         $value = str_replace(["\r\n", "\n"], "\r", $value);
         $datas = explode("\r", $value);
         $current = current($datas);
@@ -251,11 +257,14 @@ class DataTransferFactory
 
     public static function isExcelXmlString(string $value): bool
     {
-        return str_contains($value, 'mso-application progid="Excel.Sheet"');
+        return (!empty($value) && str_contains($value, 'mso-application progid="Excel.Sheet"'));
     }
 
     public static function isExcelCsvString(string $value): bool
     {
+        if (empty($value)) {
+            return false;
+        }
         $value = str_replace(["\r\n", "\n"], "\r", $value);
         $data = explode("\r", $value);
         $current = current($data);
@@ -269,6 +278,9 @@ class DataTransferFactory
 
     public static function isSerialized(string $value): bool
     {
+        if (empty($value)) {
+            return false;
+        }
         if ($value != 'b:0;') {
             $value = @unserialize($value);
         }
