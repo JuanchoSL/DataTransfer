@@ -42,6 +42,7 @@ class ExcelXmlDataTransfer extends ArrayDataTransfer
                         }
                         $xml_data[$page][] = array_combine($headers, array_slice($ref, 0, count($headers)));
                     }
+                    unset($headers);
                 }
             }
         }
