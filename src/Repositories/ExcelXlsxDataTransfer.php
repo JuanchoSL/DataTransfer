@@ -12,8 +12,8 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
 
     public function __construct(string $excel)
     {
-        if (!extension_loaded('xlswriter')) {
-            //throw new PreconditionRequiredException("The extension XLSWRITER is not available");
+        if (!extension_loaded('xlswriter') && !extension_loaded('ziparchive') && !extension_loaded('xml')) {
+            throw new PreconditionRequiredException("Any required extension [XLSWRITER or ZIPARCHIVE and XML] are available");
         }
         $excel_data = [];
         if (is_string($excel)) {
@@ -75,7 +75,7 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
     {
         $input = new ZipArchive();
         $e = $input->open($file_path);
-        if ($e !== true) {
+        if (!in_array($e, [ZipArchive::ER_OK, true])) {
             throw new \Exception($input->getStatusString(), $e);
         }
         $values = simplexml_load_string($this->getFileData($input, 'xl/workbook.xml'));
