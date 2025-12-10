@@ -13,7 +13,7 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
     public function __construct(string $excel)
     {
         if (!extension_loaded('xlswriter')) {
-            throw new PreconditionRequiredException("The extension XLSWRITER is not available");
+            //throw new PreconditionRequiredException("The extension XLSWRITER is not available");
         }
         $excel_data = [];
         if (is_string($excel)) {
@@ -100,7 +100,7 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
                     $ref = [];
                     foreach ($cs as $c) {
                         $i = intval((string) $c->v);
-                        if (in_array($c['s'], [14, 16, 17, 18, 28, 32])) {
+                        if (empty($c['t']) && in_array($c['s'], [14, 16, 17, 18, 28, 32])) {
                             switch ($c['s']) {
                                 case 14:
                                 case 32:
