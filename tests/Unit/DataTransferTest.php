@@ -353,7 +353,7 @@ YAML;
 
     public function testExcelXlsx()
     {
-        if (!extension_loaded('xlswriter')) {
+        if (!extension_loaded('xlswriter') && !extension_loaded('ziparchive') && !extension_loaded('xml')) {
             $this->expectException(PreconditionRequiredException::class);
         }
         $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'data', 'prueba.xlsx']);
