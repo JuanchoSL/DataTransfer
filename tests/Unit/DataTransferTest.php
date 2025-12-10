@@ -353,6 +353,9 @@ YAML;
 
     public function testExcelXlsx()
     {
+        if (!extension_loaded('xlswriter')) {
+            $this->markTestSkipped();
+        }
         if (!extension_loaded('xlswriter') && !extension_loaded('ziparchive') && !extension_loaded('xml')) {
             $this->expectException(PreconditionRequiredException::class);
         }
