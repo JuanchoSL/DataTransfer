@@ -12,7 +12,7 @@ class ExcelXlsxDataTransfer extends ArrayDataTransfer
 
     public function __construct(string $excel)
     {
-        if (!extension_loaded('xlswriter') && !extension_loaded('ziparchive') && !extension_loaded('xml')) {
+        if (!extension_loaded('xlswriter') && (!extension_loaded('ziparchive') && !extension_loaded('xml'))) {
             throw new PreconditionRequiredException("Any required extension [XLSWRITER or ZIPARCHIVE and XML] are available");
         }
         $excel_data = [];
