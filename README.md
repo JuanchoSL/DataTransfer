@@ -29,6 +29,8 @@ The **$element** parameter can be:
 - json encoded object or array
 - json filepath with _json_ extension containing a json encoded object or array
 - SimpleXMLElement object
+- Excel filepath with xlsx extension
+- ODS string or filepath with ods extension
 - XML string or filepath with xml extension
 - CSV string or filepath with csv extension
 - INI string or filepath with ini extension
@@ -41,7 +43,7 @@ The **$element** parameter can be:
 Open and convert the contents included into file, alternatively you can specify the Format if the extension is not knowed
 
 ```php
-$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byFile($element, Format $original_format= null);
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byFile($element, Format $original_format = null);
 ```
 
 #### Using a string
@@ -49,7 +51,7 @@ $dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byFile($element, Fo
 Try to detect and convert the contents included into string (json encoded, serialized object or array, xml, csv, yaml), alternatively you can specify the Format if the type is INI
 
 ```php
-$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byString($element, Format $original_format= null);
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byString($element, Format $original_format = null);
 ```
 
 #### Using a mime-type
@@ -57,7 +59,7 @@ $dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byString($element, 
 You can try passing an iterable number of strings as standard mimetypes ir order to process with the first compatible
 
 ```php
-$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byMimeType($element, string|iterable $mime_type);
+$dto = JuanchoSL\DataTransfer\Factories\DataTransferFactory::byMimeType($element, string|iterable $mime_types);
 ```
 
 #### Using a trasversable element
@@ -89,6 +91,7 @@ $dto = new JuanchoSL\DataTransfer\Repositories\{SOURCE_READER}($element)
 | XML      | filepath \| string \| SimpleXmlElement              | XmlDataTransfer                               |
 | YAML     | filepath \| string                                  | YamlDataTransfer                              |
 | XLSX     | filepath \| string                                  | ExcelXlsxDataTransfer                         |
+| ODS      | filepath \| string                                  | OdsDataTransfer                               |
 
 > The **$element** parameter needs to be the required type for the selected repo
 

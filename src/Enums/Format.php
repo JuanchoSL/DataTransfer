@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JuanchoSL\DataTransfer\Enums;
 
@@ -19,9 +17,11 @@ use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelXlsxDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\ExcelXmlDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\OdsDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\TabsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
@@ -32,6 +32,8 @@ enum Format: string
     case CSV = 'csv';
     case EXCEL_CSV = 'csvx';
     case EXCEL_XLSX = 'xlsx';
+    case EXCEL_XML = 'xmlx';
+    case ODS = 'ods';
     case INI = 'ini';
     case TAB = 'tsv';
     case JSON = 'json';
@@ -52,6 +54,8 @@ enum Format: string
             static::CSV => CsvDataTransfer::class,
             static::EXCEL_CSV => ExcelCsvDataTransfer::class,
             static::EXCEL_XLSX => ExcelXlsxDataTransfer::class,
+            static::EXCEL_XML => ExcelXmlDataTransfer::class,
+            static::ODS => OdsDataTransfer::class,
             static::INI => IniDataTransfer::class,
             static::TAB => TabsvDataTransfer::class,
             static::JSON => JsonDataTransfer::class,
