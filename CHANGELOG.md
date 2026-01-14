@@ -1,4 +1,39 @@
-# Change Log DataTransfer
+# Change Log - DataTransfer
+
+## [1.0.14] - 2026-01-14
+
+### Added
+
+- New DataSheet XML Reader compatibility
+- New DataSheet ODS Reader compatibility
+- New ZipArchive use for Xlsx reader if XlsWriter module is not present or it fails
+- More verifications into DataTransferFactory in order to have a better detection of rigthly reader
+- More test from new assets folder for use real files to parse
+
+### Changed
+
+- application/vnd.ms-excel mime-type for Excel's CSV
+- text csv used from applicateion/csv and text/csv mime-types
+- changed **current** function use with SimpleXmlElement objects in order to avoid deprecated message to string explicit cast
+
+### Fixed
+
+- Check for file contents when is a text|application/csv mime-type in order to detect if is a standard or excel compatible CSV
+- Check CSV end line char, in order to explode for UNIX, MAC or WIN line-feed or carry-return
+- Filter headers in order to avoid extra separator at end line on CSV an TSV files
+- try to evaluate as YAML only for strings longer than 10 characters in order to prevent \- from begin as a blank field
+- check for non empty string before test conversion for text content types
+
+## [1.0.13] - 2025-11-29
+
+### Added
+
+- Check real and full compatibility from 8.1 to 8.5 php version
+- New Tab separated values compatibility
+
+### Changed
+
+### Fixed
 
 ## [1.0.12] - 2025-11-07
 
