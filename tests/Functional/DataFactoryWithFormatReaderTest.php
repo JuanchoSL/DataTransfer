@@ -11,7 +11,7 @@ use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 class DataFactoryWithFormatReaderTest extends TestCase
 {
 
-    protected function getFileSingleProvider(): array
+    public static function getFileSingleProvider(): array
     {
         $dir = getcwd() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'assets';
         return [
@@ -30,7 +30,7 @@ class DataFactoryWithFormatReaderTest extends TestCase
         ];
     }
 
-    protected function getFileMultipageProvider(): array
+    public static function getFileMultipageProvider(): array
     {
         $dir = getcwd() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'assets';
         return [

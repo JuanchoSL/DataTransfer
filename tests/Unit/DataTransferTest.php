@@ -359,15 +359,16 @@ YAML;
         if (!extension_loaded('xlswriter') && !extension_loaded('ziparchive') && !extension_loaded('xml')) {
             $this->expectException(PreconditionRequiredException::class);
         }
-        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'data', 'prueba.xlsx']);
+        //$path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'data', 'prueba.xlsx']);
+        $path = implode(DIRECTORY_SEPARATOR, [dirname(__DIR__, 2), 'tests', 'assets', 'prueba.xlsx']);
         $obj = new ExcelXlsxDataTransfer($path);
         $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        $this->assertTrue($obj->has("sheet_0"));
-        foreach ($obj->get("sheet_0") as $entity) {
-            $this->assertTrue($entity->has("EMPRESA"));
-            $this->assertTrue($entity->has("CP"));
+        $this->assertTrue($obj->has("Hoja1"));
+        foreach ($obj->get("Hoja1") as $entity) {
+            $this->assertTrue($entity->has("number"));
+            $this->assertTrue($entity->has("email"));
         }
     }
 }
