@@ -2,18 +2,36 @@ name: PHP Composer and Tests
 
 on:
   push:
-    branches: ["develop"]
+    branches: ["dev"]
   pull_request:
-    branches: ["develop"]
+    branches: ["dev"]
 
 permissions:
   contents: read
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: PHP ${{ matrix.php-versions }} on ${{ matrix.os }} w/ ${{ matrix.dependencies }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+          - "8.4"
+          - "8.5"
+        os: [ubuntu-latest, windows-latest]
+        dependencies: ["install", "update"]
 
     steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@main
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: json,mbstring,xml,xlswriter,yaml,zip
+
       - uses: actions/checkout@main
 
       - name: Validate composer.json and composer.lock
@@ -29,12 +47,10 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-progress
+        run: composer ${{ matrix.dependencies }} --prefer-dist --no-progress --ignore-platform-reqs
 
       # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
       # Docs: https://getcomposer.org/doc/articles/scripts.md
 
       - name: Run test suite
-        env:
-          TMPDIR: ${{ runner.temp }}
         run: composer tests
