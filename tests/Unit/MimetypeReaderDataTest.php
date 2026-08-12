@@ -34,7 +34,7 @@ class MimetypeReaderDataTest extends TestCase
         $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        
+
         $converted = DataConverterFactory::asMimeType($obj, $mime_type);
 
         $this->assertXmlStringEqualsXmlString($xml, $converted);
@@ -43,10 +43,10 @@ class MimetypeReaderDataTest extends TestCase
     public function testCsv()
     {
         $csv = 'user,user_id,password,prioridad,id,descripcion
-"root","2",,"baja",,
-"root","1","contraseña","Alta","1","Descripción del texto"';
+root,2,,baja,,
+root,1,contraseña,Alta,1,"Descripción del texto"';
         $mimes = ['text/csv', 'application/csv'];
-        foreach($mimes as $mime){
+        foreach ($mimes as $mime) {
             $obj = DataTransferFactory::byMimeType($csv, $mime);
             $this->assertInstanceOf(DataTransferInterface::class, $obj);
             $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
@@ -58,8 +58,8 @@ class MimetypeReaderDataTest extends TestCase
     public function testExcelCsv()
     {
         $csv = 'user;user_id;password;prioridad;id;descripcion
-"root";"2";;"baja";;
-"root";"1";"contraseña";"Alta";"1";"Descripción del texto"';
+root;2;;baja;;
+root;1;contraseña;Alta;1;"Descripción del texto"';
         $mime = 'application/vnd.ms-excel';
         $obj = DataTransferFactory::byMimeType($csv, $mime);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
@@ -75,18 +75,18 @@ class MimetypeReaderDataTest extends TestCase
         $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-        
+
         $converted = DataConverterFactory::asMimeType($obj, $mime_type);
-        
+
         $this->assertEquals(str_replace("\r\n", "\n", $yaml), $converted);
-        
+
     }
-    
+
     public function testTabsv()
     {
         $tsv = "user\tuser_id\tpassword\tprioridad\tid\tdescripcion
-root\t2\tbaja\t\t\t      
-root\t1\tcontraseña\tAlta\t1\tDescripción del texto";
+root\t2\t\tbaja\t\t
+root\t1\tcontraseña\tAlta\t1\t\"Descripción del texto\"";
         $mime = 'text/tab-separated-values';
         $obj = DataTransferFactory::byMimeType($tsv, $mime);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);

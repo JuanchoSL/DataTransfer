@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace JuanchoSL\DataTransfer\Factories;
 
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
-use JuanchoSL\DataTransfer\Enums\Format;
+use JuanchoSL\DataTransfer\Factories\Format;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\Exceptions\DestinationUnreachableException;
 use JuanchoSL\Exceptions\UnsupportedMediaTypeException;
@@ -16,7 +16,7 @@ class DataTransferFactory
     /**
      * Imports an iterable|trasversable element and converts to DTO
      * @param object|array<int|string, mixed> $contents
-     * @return \JuanchoSL\DataTransfer\Contracts\DataTransferInterface
+     * @return DataTransferInterface
      */
     public static function byTrasversable(object|array $contents): DataTransferInterface
     {
@@ -35,10 +35,10 @@ class DataTransferFactory
      * Read and parse a string and try to detect his format in order to process with the correct parser
      * @param string $contents
      * @param mixed $format
-     * @throws \JuanchoSL\Exceptions\UnsupportedMediaTypeException
-     * @return \JuanchoSL\DataTransfer\Contracts\DataTransferInterface|string|int|float|bool|null
+     * @throws UnsupportedMediaTypeException
+     * @return DataTransferInterface|string|int|float|bool|null
      */
-    public static function byString(string $contents, ?Format $format = null): DataTransferInterface|string|int|float|bool|null
+    public static function byString(string $contents, Format|string|null $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (!empty($contents) && empty($format)) {
             if (StringValidation::isSerialized($contents)) {
@@ -87,10 +87,10 @@ class DataTransferFactory
      * Read and process a file, You can indicate a Format or try to use the file extension in order to parse his content
      * @param string $filepath
      * @param mixed $format
-     * @throws \JuanchoSL\Exceptions\DestinationUnreachableException
+     * @throws DestinationUnreachableException
      * @return bool|DataTransferInterface|float|int|string|null
      */
-    public static function byFile(string $filepath, ?Format $format = null): DataTransferInterface|string|int|float|bool|null
+    public static function byFile(string $filepath, Format|string|null $format = null): DataTransferInterface|string|int|float|bool|null
     {
         if (empty($format)) {
             //mime_content_type($filepath);
@@ -117,7 +117,7 @@ class DataTransferFactory
      * Process data (file or string) as the indicated mime-type
      * @param string $contents
      * @param string|iterable $content_types
-     * @throws \JuanchoSL\Exceptions\UnsupportedMediaTypeException
+     * @throws UnsupportedMediaTypeException
      * @return bool|DataTransferInterface|float|int|string|null
      */
     public static function byMimeType(string $contents, string|iterable $content_types): DataTransferInterface

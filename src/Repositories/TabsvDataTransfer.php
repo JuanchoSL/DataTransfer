@@ -4,16 +4,16 @@ namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\Exceptions\UnprocessableEntityException;
 
-class TabsvDataTransfer extends ArrayDataTransfer
+class TabsvDataTransfer extends CsvDataTransfer
 {
     protected string $separator = "\t";
 
     /**
      * Summary of __construct
      * @param array<int|string>|string $tsv
-     * @throws \JuanchoSL\Exceptions\UnprocessableEntityException
+     * @throws UnprocessableEntityException
      */
-    public function __construct(array|string $tsv)
+    /*public function __construct(array|string $tsv)
     {
         if (is_string($tsv)) {
             if (is_file($tsv) && file_exists($tsv)) {
@@ -45,5 +45,5 @@ class TabsvDataTransfer extends ArrayDataTransfer
         }
         parent::__construct($result);
     }
-
+*/
 }

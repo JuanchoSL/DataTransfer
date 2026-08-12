@@ -32,13 +32,14 @@ class CsvDataTransfer extends ArrayDataTransfer
         $result = [];
         if (count($csv) > 1) {
             $headers = array_filter(str_getcsv((string) $current, $this->separator, "\"", "\\"));
+            $headers_num = count($headers);
             $csv = array_slice($csv, 1);
             foreach ($csv as $line) {
                 $body = str_getcsv((string) $line, $this->separator, "\"", "\\");
-                if (count($body) < 2) {
+                if (count($body) < $headers_num) {
                     break;
                 }
-                $result[] = array_combine($headers, array_slice($body, 0, count($headers)));
+                $result[] = array_combine($headers, array_slice($body, 0, $headers_num));
             }
         }
         parent::__construct($result);

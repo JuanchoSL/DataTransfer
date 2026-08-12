@@ -10,6 +10,7 @@ use JuanchoSL\DataTransfer\Repositories\ExcelXlsxDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\JsonDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ObjectDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\TabsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
 use JuanchoSL\Exceptions\PreconditionRequiredException;
@@ -260,6 +261,36 @@ class DataTransferTest extends TestCase
                 "root","2",,"baja",,
                 "root","1","contraseña","Alta","1","Descripción del texto"';
         $obj = new CsvDataTransfer($csv);
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromTsvString()
+    {
+        $csv = "user\tuser_id\tpassword\tprioridad\tid\tdescripcion
+root\t2\t\tbaja\t\t
+root\t1\tcontraseña\tAlta\t1\t\"Descripción del texto\"";
+        $obj = new TabsvDataTransfer(explode(PHP_EOL, $csv));
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+    public function testFromTsvArray()
+    {
+        $csv = "user\tuser_id\tpassword\tprioridad\tid\tdescripcion
+root\t2\t\tbaja\t\t
+root\t1\tcontraseña\tAlta\t1\t\"Descripción del texto\"";
+        $obj = new TabsvDataTransfer($csv);
         $this->assertCount(2, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
