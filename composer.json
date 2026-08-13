@@ -34,7 +34,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.0",
         "ext-xml": "*",
         "ext-zip": "*",
         "ext-mbstring": "*",
@@ -46,11 +46,14 @@
         "composer-runtime-api": "^2.2"
     },
     "suggest": {
+        "ext-zip": "*",
         "ext-yaml": "*",
-        "ext-xlswriter": "*"
+        "ext-xlswriter": "*",
+        "ext-json": "*",
+        "ext-xml": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "10.5.*",
+        "phpunit/phpunit": "9.6.*",
         "phpstan/phpstan": "1.12.*"
     },
     "autoload": {

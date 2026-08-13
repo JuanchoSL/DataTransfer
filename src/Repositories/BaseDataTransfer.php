@@ -6,7 +6,7 @@ namespace JuanchoSL\DataTransfer\Repositories;
 
 use JuanchoSL\DataTransfer\Contracts\DataConverterInterface;
 use JuanchoSL\DataTransfer\DataContainer;
-use JuanchoSL\DataTransfer\Enums\Format;
+use JuanchoSL\DataTransfer\Factories\Format;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 use JuanchoSL\Exceptions\NotModifiedException;
 
@@ -29,14 +29,14 @@ abstract class BaseDataTransfer extends DataContainer
         return DataTransferFactory::create($value);
     }
 
-    public function translateAs(Format $format): DataConverterInterface
+    public function translateAs(Format|string $format): DataConverterInterface
     {
         $class = Format::write($format);
         $object = new $class($this);
         return $object;
     }
 
-    public function exportAs(Format $format): mixed
+    public function exportAs(Format|string $format): mixed
     {
         return $this->translateAs($format)->getData();
 
@@ -45,7 +45,7 @@ abstract class BaseDataTransfer extends DataContainer
         return $object->getData();
     }
 
-    public function saveAs(string $full_filepath, Format $format): bool
+    public function saveAs(string $full_filepath, Format|string $format): bool
     {
         $dir_path = pathinfo($full_filepath, PATHINFO_DIRNAME);
         if (!file_exists($dir_path)) {

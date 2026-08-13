@@ -4,7 +4,6 @@ namespace JuanchoSL\DataTransfer\Tests\Functional;
 
 use ArrayAccess;
 use Countable;
-use JuanchoSL\DataTransfer\Enums\Format;
 use PHPUnit\Framework\TestCase;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 
