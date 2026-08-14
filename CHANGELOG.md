@@ -1,5 +1,20 @@
 # Change Log - DataTransfer
 
+## [1.0.15] - 2026-08-14
+
+### Added
+
+- New Format class into Factories, in order to avoid the Enums use, mantaining php 8.0 compatibility but emulating it
+
+### Changed
+
+- The exporter/saver methods, accept a new Format class os new string value as parameter instead Enums
+- CSV and TSV uses fputcsv in order to enclosure only when is needed
+
+### Fixed
+
+- Tests for TSV, ensuring it is working as needs
+
 ## [1.0.14] - 2026-01-14
 
 ### Added
@@ -43,7 +58,7 @@
 
 ### Changed
 
-- mime type header 'application/vnd.ms-excel' is move to use the ExcelCsvFormat in oredr to add BOM to final string
+- mime type header 'application/vnd.ms-excel' is moved to use the ExcelCsvFormat in order to add BOM to final string
 
 ### Fixed
 
