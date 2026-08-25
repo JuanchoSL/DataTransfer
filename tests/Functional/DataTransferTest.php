@@ -141,7 +141,7 @@ class DataTransferTest extends TestCase
         $this->assertEquals('value', $obj->get('index')->get('subindex'), 'Values are equals');
         $this->assertEquals('value', $obj->index->subindex, 'Values are equals');
     }
-    
+
     public function testFromObjectWithPlain()
     {
         $data = new \stdClass;
@@ -317,7 +317,7 @@ class DataTransferTest extends TestCase
             $this->assertEquals('root', $entity->user);
         }
     }
-    
+
     public function testYaml()
     {
         $yaml = <<<YAML
@@ -416,6 +416,79 @@ YAML;
             $this->assertTrue($entity->has("date"));
             $this->assertEquals('My Event', $entity->get("name"));
             $this->assertEquals('25.05.2001', $entity->date);
+        }
+    }
+
+    public function testDifAuto()
+    {
+        $ini = <<<"EOH"
+TABLE
+0,1
+"t2KQi"
+VECTORS
+0,6
+""
+TUPLES
+0,2
+""
+DATA
+0,0
+""
+-1,0
+BOT
+1,0
+"Name"
+1,0
+"Surname"
+1,0
+"date"
+1,0
+"number"
+1,0
+"email"
+1,0
+"text"
+-1,0
+BOT
+1,0
+"name1"
+1,0
+"surname1"
+1,0
+"28/11/2025"
+0,666555444
+V
+1,0
+"email@mycorp.com"
+1,0
+"a text with some spaces"
+-1,0
+BOT
+1,0
+"name2"
+1,0
+"surname2"
+1,0
+"28/11/2025"
+0,666555444
+V
+1,0
+"email@mycorp.com"
+1,0
+"a text with some spaces"
+-1,0
+EOD
+
+EOH;
+
+        $obj = DataTransferFactory::create($ini);
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("Name"));
+            $this->assertTrue($entity->has("date"));
+            $this->assertStringStartsWith('name', $entity->get("Name"));
         }
     }
 }

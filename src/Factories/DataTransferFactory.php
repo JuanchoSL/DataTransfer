@@ -65,6 +65,8 @@ class DataTransferFactory
                 $format = Format::YAML;
             } elseif (static::isTabbedString($contents)) {
                 $format = Format::TAB;
+            } elseif (static::isDifString($contents)) {
+                $format = Format::DIF;
             }
         }
         if (!empty($format)) {
@@ -171,6 +173,10 @@ class DataTransferFactory
                     $data = Format::EXCEL_XLSX;
                     break;
 
+                case 'application/x-dif':
+                    $data = Format::DIF;
+                    break;
+
                 case 'application/octet-stream':
                 default:
                     return $data = static::byString(static::iFIsFileGivemeData($contents));
@@ -258,6 +264,11 @@ class DataTransferFactory
     public static function isExcelXmlString(string $value): bool
     {
         return (!empty($value) && str_contains($value, 'mso-application progid="Excel.Sheet"'));
+    }
+
+    public static function isDifString(string $value): bool
+    {
+        return (!empty($value) && str_starts_with($value, 'TABLE'));
     }
 
     public static function isExcelCsvString(string $value): bool

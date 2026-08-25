@@ -7,6 +7,7 @@ namespace JuanchoSL\DataTransfer\Factories;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
 use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
+use JuanchoSL\DataTransfer\DataConverters\DifConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelXlsxConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
@@ -70,6 +71,11 @@ class DataConverterFactory
         return XmlObjectConverter::convert($dto);
     }
 
+    public static function asDif(DataTransferInterface $dto): string
+    {
+        return DifConverter::convert($dto);
+    }
+
     public static function asObject(DataTransferInterface $dto): \stdClass
     {
         return ObjectConverter::convert($dto);
@@ -111,6 +117,10 @@ class DataConverterFactory
 
                 case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                     $data = new ExcelXlsxConverter($dto);
+                    break;
+
+                case 'application/x-dif':
+                    $data = static::asDif($dto);
                     break;
 
                 default:

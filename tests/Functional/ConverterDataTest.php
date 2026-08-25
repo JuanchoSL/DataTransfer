@@ -6,6 +6,7 @@ use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Factories\DataConverterFactory;
 use JuanchoSL\DataTransfer\Factories\DataTransferFactory;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\TabsvDataTransfer;
 use PHPUnit\Framework\TestCase;
@@ -61,7 +62,7 @@ class ConverterDataTest extends TestCase
         $obj = DataTransferFactory::create(simplexml_load_string($xml));
         $this->assertXmlStringEqualsXmlString($xml, DataConverterFactory::asXml($obj));
     }
-    
+
     public function testToXml3()
     {
         $xml = '<readings><reading clientID="583ef6329df6b" period="2016-01">37232</reading><reading clientID="583ef6329df6b" period="2016-02">36537</reading></readings>';
@@ -119,7 +120,50 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
         $converted = DataConverterFactory::asExcelCsv($obj);
         $this->assertEquals($csv, $converted);
     }
-    
+
+    public function testToDif()
+    {
+        $dif = <<<EOH
+TABLE
+0,1
+"JuanchoSL DataTransfer"
+VECTORS
+0,2
+""
+TUPLES
+0,3
+""
+DATA
+0,0
+""
+-1,0
+BOT
+1,0
+"name"
+1,0
+"date"
+-1,0
+BOT
+1,0
+"My event"
+1,0
+"25.05.2001"
+-1,0
+BOT
+1,0
+"Second event"
+1,0
+"25.06.2001"
+-1,0
+EOD
+EOH;
+        $obj = DataTransferFactory::create(new DifDataTransfer($dif));
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = DataConverterFactory::asDif($obj);
+        $this->assertEquals($dif, $converted);
+    }
+
     public function testYaml()
     {
         $yaml = "event1:\n  name: My Event\n  date: 25.05.2001";
@@ -133,7 +177,7 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
 
     public function testIni()
     {
-        $yaml = "[event1]".PHP_EOL."name=My Event".PHP_EOL."date=25.05.2001";
+        $yaml = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
         $obj = DataTransferFactory::create($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);

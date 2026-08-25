@@ -5,6 +5,7 @@ namespace JuanchoSL\DataTransfer\Tests\Unit;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelXlsxDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
@@ -374,6 +375,54 @@ YAML;
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         $this->assertTrue($obj->has("event1"));
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("name"));
+            $this->assertTrue($entity->has("date"));
+            $this->assertEquals('My Event', $entity->get("name"));
+            $this->assertEquals('25.05.2001', $entity->date);
+        }
+    }
+    public function testDif()
+    {
+        $dif = <<<EOH
+TABLE
+0,1
+""
+VECTORS
+0,2
+""
+TUPLES
+0,3
+""
+DATA
+0,0
+""
+-1,0
+BOT
+1,0
+"name"
+1,0
+"date"
+-1,0
+BOT
+1,0
+"My Event"
+1,0
+"25.05.2001"
+-1,0
+BOT
+1,0
+"My Event"
+1,0
+"25.05.2001"
+-1,0
+EOD
+EOH;
+
+        $obj = new DifDataTransfer($dif);
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         foreach ($obj as $entity) {
             $this->assertTrue($entity->has("name"));
             $this->assertTrue($entity->has("date"));

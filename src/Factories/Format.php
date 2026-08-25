@@ -4,6 +4,7 @@ namespace JuanchoSL\DataTransfer\Factories;
 
 use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
 use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
+use JuanchoSL\DataTransfer\DataConverters\DifConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelXlsxConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
@@ -15,6 +16,7 @@ use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelXlsxDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelXmlDataTransfer;
@@ -46,6 +48,7 @@ class Format
     const XML_OBJECT = 'XML_OBJECT';
     const YAML = 'YAML';
     const YML = 'YML';
+    const DIF = 'DIF';
 
     protected $name;
     protected $value;
@@ -80,6 +83,7 @@ class Format
             static::OBJECT => ObjectDataTransfer::class,
             static::XML, static::XML_OBJECT => XmlDataTransfer::class,
             static::YAML, static::YML => YamlDataTransfer::class,
+            static::DIF => DifDataTransfer::class,
         };
     }
     public static function write(Format|string $type): string
@@ -95,6 +99,7 @@ class Format
             static::JSON => JsonConverter::class,
             static::OBJECT => ObjectConverter::class,
             static::XML => XmlConverter::class,
+            static::DIF => DifConverter::class,
             static::XML_OBJECT => XmlObjectConverter::class,
             static::YAML, static::YML => YamlConverter::class,
         };
@@ -126,6 +131,7 @@ class Format
             static::JSON => new static(strtoupper($type), 'json'),
             static::OBJECT => new static(strtoupper($type), 'object'),
             static::ODS => new static(strtoupper($type), 'ods'),
+            static::DIF => new static(strtoupper($type), 'dif'),
             static::XML => new static(strtoupper($type), 'xml'),
             static::XML_OBJECT => new static(strtoupper($type), 'xml_object'),
             static::YAML, static::YML => new static(strtoupper($type), 'yml'),
@@ -157,7 +163,8 @@ class Format
             static::XML,
             static::XML_OBJECT,
             static::YAML,
-            static::YML
+            static::YML,
+            static::DIF
         ] as $enum) {
             $results[] = $enum;
         }
