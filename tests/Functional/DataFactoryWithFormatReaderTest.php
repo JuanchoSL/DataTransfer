@@ -13,7 +13,7 @@ class DataFactoryWithFormatReaderTest extends TestCase
 
     public static function getFileSingleProvider(): array
     {
-        $dir = getcwd() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'assets';
+        $dir = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'assets';
         return [
             'mac' => [$dir . DIRECTORY_SEPARATOR . 'testfile-mac.csv', Format::EXCEL_CSV],
             'purewin' => [$dir . DIRECTORY_SEPARATOR . 'testfile-pure-win.csv', Format::CSV],
@@ -32,7 +32,7 @@ class DataFactoryWithFormatReaderTest extends TestCase
 
     public static function getFileMultipageProvider(): array
     {
-        $dir = getcwd() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'assets';
+        $dir = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'assets';
         return [
             'oxml' => [$dir . DIRECTORY_SEPARATOR . 'testfileopenxml.xlsx', Format::EXCEL_XLSX],
             'ods' => [$dir . DIRECTORY_SEPARATOR . 'testfile.ods', Format::ODS],
@@ -50,7 +50,6 @@ class DataFactoryWithFormatReaderTest extends TestCase
     public function testFromSinglePage($file_path, $format)
     {
         $obj = DataTransferFactory::byFile($file_path, $format);
-        //echo '<pre>' . print_r($obj, true);exit;
         $this->assertInstanceOf(ArrayAccess::class, $obj);
         $this->assertInstanceOf(Countable::class, $obj);
         $this->assertContainsOnlyInstancesOf(ArrayAccess::class, $obj);
@@ -65,7 +64,6 @@ class DataFactoryWithFormatReaderTest extends TestCase
     public function testFromMultiPage($file_path, $format)
     {
         $obj = DataTransferFactory::byFile($file_path, $format);
-        //echo '<pre>' . print_r($obj, true);exit;
         $this->assertInstanceOf(ArrayAccess::class, $obj);
         $this->assertInstanceOf(Countable::class, $obj);
         $this->assertContainsOnlyInstancesOf(ArrayAccess::class, $obj);
@@ -89,6 +87,7 @@ class DataFactoryWithFormatReaderTest extends TestCase
                 //$this->assertObjectHasProperty($field, $element);
                 $this->assertNotEmpty($element->{$field});
             }
+            $this->assertEqualsCanonicalizing('a text with some spaces', $element['text']);
         }
     }
 }

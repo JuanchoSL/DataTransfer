@@ -12,7 +12,7 @@ class DataFactorybyFileReaderTest extends TestCase
 
     public static function getFileSingleProvider(): array
     {
-        $dir = getcwd() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'assets';
+        $dir = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'assets';
         return [
             'mac' => [$dir . DIRECTORY_SEPARATOR . 'testfile-mac.csv'],
             'purewin' => [$dir . DIRECTORY_SEPARATOR . 'testfile-pure-win.csv'],
@@ -31,7 +31,7 @@ class DataFactorybyFileReaderTest extends TestCase
 
     public static function getFileMultipageProvider(): array
     {
-        $dir = getcwd() . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'assets';
+        $dir = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'assets';
         return [
             'oxml' => [$dir . DIRECTORY_SEPARATOR . 'testfileopenxml.xlsx'],
             'ods' => [$dir . DIRECTORY_SEPARATOR . 'testfile.ods'],
@@ -49,7 +49,6 @@ class DataFactorybyFileReaderTest extends TestCase
     public function testFromSinglePage($file_path)
     {
         $obj = DataTransferFactory::byFile($file_path);
-        //echo '<pre>' . print_r($obj, true);exit;
         $this->assertInstanceOf(ArrayAccess::class, $obj);
         $this->assertInstanceOf(Countable::class, $obj);
         $this->assertContainsOnlyInstancesOf(ArrayAccess::class, $obj);
@@ -64,7 +63,6 @@ class DataFactorybyFileReaderTest extends TestCase
     public function testFromMultiPage($file_path)
     {
         $obj = DataTransferFactory::byFile($file_path);
-        //echo '<pre>' . print_r($obj, true);exit;
         $this->assertInstanceOf(ArrayAccess::class, $obj);
         $this->assertInstanceOf(Countable::class, $obj);
         $this->assertContainsOnlyInstancesOf(ArrayAccess::class, $obj);
@@ -88,6 +86,7 @@ class DataFactorybyFileReaderTest extends TestCase
                 //$this->assertObjectHasProperty($field, $element);
                 $this->assertNotEmpty($element->{$field});
             }
+            $this->assertEqualsCanonicalizing('a text with some spaces', $element['text']);
         }
     }
 }
