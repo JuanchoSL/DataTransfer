@@ -1,5 +1,16 @@
 # Change Log - DataTransfer
 
+## [1.0.16] - 2026-08-26
+
+### Added
+
+- Dif reader compatibility
+- Dif converter compatibility
+
+### Changed
+
+### Fixed
+
 ## [1.0.15] - 2026-08-14
 
 ### Added
@@ -8,7 +19,7 @@
 
 ### Changed
 
-- The exporter/saver methods, accept a new Format class os new string value as parameter instead Enums
+- The exporter/saver methods, are accepting both the new Format class or (new) the format value string, as parameter, instead Enums
 - CSV and TSV uses fputcsv in order to enclosure only when is needed
 
 ### Fixed
