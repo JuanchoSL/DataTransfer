@@ -26,6 +26,8 @@ class DataFactorybyMimetypeTest extends TestCase
             'dosunix' => [$dir . DIRECTORY_SEPARATOR . 'testfile-dos-unix.csv', 'application/vnd.ms-excel'],
             'dosmac' => [$dir . DIRECTORY_SEPARATOR . 'testfile-dos-mac.csv', 'application/vnd.ms-excel'],
             'json' => [$dir . DIRECTORY_SEPARATOR . 'testfile.json', 'application/json'],
+            'dif' => [$dir . DIRECTORY_SEPARATOR . 'testfile.dif', 'application/x-dif'],
+            'difexcel' => [$dir . DIRECTORY_SEPARATOR . 'testfile-converted.dif', 'application/x-dif'],
         ];
     }
 

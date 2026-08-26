@@ -5,6 +5,7 @@ namespace JuanchoSL\DataTransfer\Tests\Unit;
 use JuanchoSL\DataTransfer\Contracts\DataTransferInterface;
 use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
 use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
+use JuanchoSL\DataTransfer\DataConverters\DifConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
 use JuanchoSL\DataTransfer\DataConverters\JsonConverter;
@@ -14,6 +15,7 @@ use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\TabsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
@@ -159,5 +161,49 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         $converted = TabsvConverter::convert($obj);
         $this->assertEquals($tab, $converted);
+    }
+
+    public function testDif()
+    {
+        $dif = <<<EOH
+TABLE
+0,1
+"JuanchoSL DataTransfer"
+VECTORS
+0,2
+""
+TUPLES
+0,3
+""
+DATA
+0,0
+""
+-1,0
+BOT
+1,0
+"name"
+1,0
+"date"
+-1,0
+BOT
+1,0
+"My Event"
+1,0
+"25.05.2001"
+-1,0
+BOT
+1,0
+"Second Event"
+1,0
+"25.06.2001"
+-1,0
+EOD
+EOH;
+        $array = [['name' => 'My Event', 'date' => '25.05.2001'], ['name' => 'Second Event', 'date' => '25.06.2001']];
+        $obj = new DifDataTransfer($array);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = DifConverter::convert($obj);
+        $this->assertEquals($dif, $converted);
     }
 }

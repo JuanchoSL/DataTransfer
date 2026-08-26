@@ -4,6 +4,7 @@ namespace JuanchoSL\DataTransfer\Enums;
 
 use JuanchoSL\DataTransfer\DataConverters\ArrayConverter;
 use JuanchoSL\DataTransfer\DataConverters\CsvConverter;
+use JuanchoSL\DataTransfer\DataConverters\DifConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelCsvConverter;
 use JuanchoSL\DataTransfer\DataConverters\ExcelXlsxConverter;
 use JuanchoSL\DataTransfer\DataConverters\IniConverter;
@@ -15,6 +16,7 @@ use JuanchoSL\DataTransfer\DataConverters\XmlObjectConverter;
 use JuanchoSL\DataTransfer\DataConverters\YamlConverter;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelXlsxDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelXmlDataTransfer;
@@ -42,6 +44,7 @@ enum Format: string
     case XML_OBJECT = 'xml_object';
     case YAML = 'yaml';
     case YML = 'yml';
+    case DIF = 'dif';
 
     public static function make(Format $type): string
     {
@@ -60,6 +63,7 @@ enum Format: string
             static::TAB => TabsvDataTransfer::class,
             static::JSON => JsonDataTransfer::class,
             static::OBJECT => ObjectDataTransfer::class,
+            static::DIF => DifDataTransfer::class,
             static::XML, static::XML_OBJECT => XmlDataTransfer::class,
             static::YAML, static::YML => YamlDataTransfer::class,
         };
@@ -76,6 +80,7 @@ enum Format: string
             static::JSON => JsonConverter::class,
             static::OBJECT => ObjectConverter::class,
             static::XML => XmlConverter::class,
+            static::DIF => DifConverter::class,
             static::XML_OBJECT => XmlObjectConverter::class,
             static::YAML, static::YML => YamlConverter::class,
         };

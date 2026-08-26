@@ -26,6 +26,8 @@ class DataFactorybyFileReaderTest extends TestCase
             'dosunix' => [$dir . DIRECTORY_SEPARATOR . 'testfile-dos-unix.csv'],
             'dosmac' => [$dir . DIRECTORY_SEPARATOR . 'testfile-dos-mac.csv'],
             'json' => [$dir . DIRECTORY_SEPARATOR . 'testfile.json'],
+            'dif' => [$dir . DIRECTORY_SEPARATOR . 'testfile.dif'],
+            'difexcel' => [$dir . DIRECTORY_SEPARATOR . 'testfile-converted.dif'],
         ];
     }
 

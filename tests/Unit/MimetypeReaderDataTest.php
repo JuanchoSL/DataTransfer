@@ -94,4 +94,48 @@ root\t1\tcontraseña\tAlta\t1\t\"Descripción del texto\"";
         $converted = DataConverterFactory::asMimeType($obj, $mime);
         $this->assertEquals($tsv, $converted);
     }
+
+    public function testDif()
+    {
+        $dif = <<<EOH
+TABLE
+0,1
+"JuanchoSL DataTransfer"
+VECTORS
+0,2
+""
+TUPLES
+0,3
+""
+DATA
+0,0
+""
+-1,0
+BOT
+1,0
+"name"
+1,0
+"date"
+-1,0
+BOT
+1,0
+"My Event"
+1,0
+"25.05.2001"
+-1,0
+BOT
+1,0
+"My Event"
+1,0
+"25.05.2001"
+-1,0
+EOD
+EOH;
+        $mime = 'application/x-dif';
+        $obj = DataTransferFactory::byMimeType($dif, $mime);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = DataConverterFactory::asMimeType($obj, $mime);
+        $this->assertEquals($dif, $converted);
+    }
 }

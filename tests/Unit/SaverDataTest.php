@@ -7,6 +7,7 @@ use JuanchoSL\DataTransfer\Enums\Format as FormatEnum;
 use JuanchoSL\DataTransfer\Factories\Format;
 use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use PHPUnit\Framework\TestCase;
@@ -194,6 +195,56 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
         $json = $obj->saveAs($filename, Format::INI);
         $this->assertTrue($json);
         $this->assertEquals($ini, file_get_contents($filename));
+        unlink($filename);
+    }
+
+    public function testToDif()
+    {
+        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+            $this->markTestSkipped();
+        }
+        $format = Format::tryFrom(FormatEnum::DIF->name);
+        $filename = TMPDIR . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . $format->value;
+        $dif = <<<EOH
+TABLE
+0,1
+"JuanchoSL DataTransfer"
+VECTORS
+0,2
+""
+TUPLES
+0,3
+""
+DATA
+0,0
+""
+-1,0
+BOT
+1,0
+"name"
+1,0
+"date"
+-1,0
+BOT
+1,0
+"My Event"
+1,0
+"25.05.2001"
+-1,0
+BOT
+1,0
+"My Event"
+1,0
+"25.05.2001"
+-1,0
+EOD
+EOH;
+        $obj = new DifDataTransfer(explode(PHP_EOL, $dif));
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = $obj->saveAs($filename, Format::DIF);
+        $this->assertTrue($converted);
+        $this->assertEquals($dif, file_get_contents($filename));
         unlink($filename);
     }
 }

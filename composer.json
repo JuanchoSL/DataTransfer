@@ -17,6 +17,8 @@
         "xlsx",
         "tsv",
         "ods",
+        "dif",
+        "Data Interchange Format",
         "tab separated values",
         "SimpleXMLElement",
         "data sheets",
@@ -39,6 +41,7 @@
         "ext-zip": "*",
         "ext-mbstring": "*",
         "ext-json": "*",
+        "ext-fileinfo": "*",
         "juanchosl/validators": "1.0.*",
         "juanchosl/exceptions": "1.0.*",
         "juanchosl/httpheaders": "1.0.*",
@@ -49,7 +52,6 @@
         "ext-zip": "*",
         "ext-yaml": "*",
         "ext-xlswriter": "*",
-        "ext-json": "*",
         "ext-xml": "*"
     },
     "require-dev": {
