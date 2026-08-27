@@ -19,8 +19,7 @@ class IniDataTransfer extends ArrayDataTransfer
         if (empty($ini)) {
             throw new UnprocessableEntityException("No contents has been received");
         }
-        $body = parse_ini_string($ini, substr($ini, 0, 1) == '[', INI_SCANNER_RAW);
-        parent::__construct((array) $body);
+        parent::__construct(parse_ini_string($ini, true, INI_SCANNER_NORMAL));
     }
 
 }

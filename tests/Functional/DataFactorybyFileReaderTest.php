@@ -28,6 +28,7 @@ class DataFactorybyFileReaderTest extends TestCase
             'json' => [$dir . DIRECTORY_SEPARATOR . 'testfile.json'],
             'dif' => [$dir . DIRECTORY_SEPARATOR . 'testfile.dif'],
             'difexcel' => [$dir . DIRECTORY_SEPARATOR . 'testfile-converted.dif'],
+            'ini' => [$dir . DIRECTORY_SEPARATOR . 'testfile-collection.ini'],
         ];
     }
 

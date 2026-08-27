@@ -382,6 +382,37 @@ YAML;
             $this->assertEquals('25.05.2001', $entity->date);
         }
     }
+
+    public function testIniMultiSections()
+    {
+        $ini = <<<EOH
+[0]        
+user=root
+user_id=2
+password=
+prioridad="baja"
+id=
+descripcion=
+
+[1]
+user=root
+user_id=1
+password="contraseña"
+prioridad="Alta"
+id=1
+descripcion="Descripción del texto"
+EOH;
+        $obj = new IniDataTransfer($ini);
+        $this->assertCount(2, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach ($obj as $entity) {
+            $this->assertTrue($entity->has("user"));
+            $this->assertEquals('root', $entity->get("user"));
+            $this->assertEquals('root', $entity->user);
+        }
+    }
+
     public function testDif()
     {
         $dif = <<<EOH

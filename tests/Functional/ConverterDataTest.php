@@ -177,7 +177,7 @@ EOH;
 
     public function testIni()
     {
-        $yaml = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
+        $yaml = "[event1]" . PHP_EOL . 'name="My Event"' . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
         $obj = DataTransferFactory::create($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);

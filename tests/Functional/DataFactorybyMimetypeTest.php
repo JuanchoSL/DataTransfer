@@ -28,6 +28,8 @@ class DataFactorybyMimetypeTest extends TestCase
             'json' => [$dir . DIRECTORY_SEPARATOR . 'testfile.json', 'application/json'],
             'dif' => [$dir . DIRECTORY_SEPARATOR . 'testfile.dif', 'application/x-dif'],
             'difexcel' => [$dir . DIRECTORY_SEPARATOR . 'testfile-converted.dif', 'application/x-dif'],
+            'ini' => [$dir . DIRECTORY_SEPARATOR . 'testfile-collection.ini', 'text/plain'],
+            'ini2' => [$dir . DIRECTORY_SEPARATOR . 'testfile-collection.ini', 'application/x-wine-extension-ini'],
         ];
     }
 

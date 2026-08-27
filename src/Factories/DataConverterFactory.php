@@ -123,6 +123,11 @@ class DataConverterFactory
                     $data = static::asDif($dto);
                     break;
 
+                case 'application/x-wine-extension-ini':
+                case 'text/plain':
+                    $data = static::asIni($dto);
+                    break;
+
                 default:
                     break;
             }

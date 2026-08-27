@@ -138,4 +138,63 @@ EOH;
         $converted = DataConverterFactory::asMimeType($obj, $mime);
         $this->assertEquals($dif, $converted);
     }
+
+
+    public function testIni()
+    {
+        $ini = "name=\"My Event\"\r\ndate=25.05.2001";
+
+        $mimes = ['text/plain', 'application/x-wine-extension-ini'];
+        foreach ($mimes as $mime) {
+            $obj = DataTransferFactory::byMimeType($ini, $mime);
+            $this->assertInstanceOf(DataTransferInterface::class, $obj);
+            //$this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+            $converted = DataConverterFactory::asMimeType($obj, $mime);
+            $this->assertEquals($ini, $converted);
+        }
+    }
+
+    public function testIniSections()
+    {
+        $ini = "[event1]\r\nname=\"My Event\"\r\ndate=25.05.2001";
+
+        $mimes = ['text/plain', 'application/x-wine-extension-ini'];
+        foreach ($mimes as $mime) {
+            $obj = DataTransferFactory::byMimeType($ini, $mime);
+            $this->assertInstanceOf(DataTransferInterface::class, $obj);
+            $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+            $converted = DataConverterFactory::asMimeType($obj, $mime);
+            $this->assertEquals($ini, $converted);
+        }
+    }
+
+    public function testIniMultiSections()
+    {
+        $ini = <<<EOH
+[0]
+user=root
+user_id=2
+password=
+prioridad=baja
+id=
+descripcion=
+
+[1]
+user=root
+user_id=1
+password="contraseña"
+prioridad=Alta
+id=1
+descripcion="Descripción del texto"
+EOH;
+        $mimes = ['text/plain', 'application/x-wine-extension-ini'];
+        foreach ($mimes as $mime) {
+            $obj = DataTransferFactory::byMimeType($ini, $mime);
+            $this->assertInstanceOf(DataTransferInterface::class, $obj);
+            $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+            $converted = DataConverterFactory::asMimeType($obj, $mime);
+            $this->assertEquals($ini, $converted);
+        }
+    }
+
 }

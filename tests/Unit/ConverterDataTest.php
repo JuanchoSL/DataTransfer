@@ -143,7 +143,7 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
 
     public function testIni()
     {
-        $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
+        $ini = "[event1]" . PHP_EOL . 'name="My Event"' . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
         $obj = new ArrayDataTransfer($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
