@@ -142,7 +142,10 @@ EOH;
 
     public function testIni()
     {
-        $ini = "name=\"My Event\"\r\ndate=25.05.2001";
+        $ini = <<<'EOH'
+name="My Event"
+date=25.05.2001
+EOH;
 
         $mimes = ['text/plain', 'application/x-wine-extension-ini'];
         foreach ($mimes as $mime) {
@@ -156,7 +159,11 @@ EOH;
 
     public function testIniSections()
     {
-        $ini = "[event1]\r\nname=\"My Event\"\r\ndate=25.05.2001";
+        $ini = <<<'EOH'
+[event1]
+name="My Event"
+date=25.05.2001
+EOH;
 
         $mimes = ['text/plain', 'application/x-wine-extension-ini'];
         foreach ($mimes as $mime) {
@@ -170,7 +177,7 @@ EOH;
 
     public function testIniMultiSections()
     {
-        $ini = <<<EOH
+        $ini = <<<'EOH'
 [0]
 user=root
 user_id=2
