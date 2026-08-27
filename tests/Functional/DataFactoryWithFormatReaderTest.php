@@ -29,6 +29,7 @@ class DataFactoryWithFormatReaderTest extends TestCase
             'json' => [$dir . DIRECTORY_SEPARATOR . 'testfile.json', Format::JSON],
             'dif' => [$dir . DIRECTORY_SEPARATOR . 'testfile.dif', Format::DIF],
             'difexcel' => [$dir . DIRECTORY_SEPARATOR . 'testfile-converted.dif', Format::DIF],
+            'ini' => [$dir . DIRECTORY_SEPARATOR . 'testfile-collection.ini', Format::INI],
         ];
     }
 

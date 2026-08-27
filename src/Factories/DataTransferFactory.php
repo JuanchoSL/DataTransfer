@@ -177,6 +177,11 @@ class DataTransferFactory
                     $data = Format::DIF;
                     break;
 
+                case 'application/x-wine-extension-ini':
+                case 'text/plain':
+                    $data = Format::INI;
+                    break;
+
                 case 'application/octet-stream':
                 default:
                     return $data = static::byString(static::iFIsFileGivemeData($contents));

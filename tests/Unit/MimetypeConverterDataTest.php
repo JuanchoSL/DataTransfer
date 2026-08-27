@@ -8,8 +8,10 @@ use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\TabsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\YamlDataTransfer;
 use PHPUnit\Framework\TestCase;
 use JuanchoSL\DataTransfer\DataConverters\XmlConverter;
 
@@ -133,33 +135,32 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
         $converted = DataConverterFactory::asMimeType($obj, $mime);
         $this->assertEquals($csv, $converted);
     }
+
     public function testYaml()
     {
         $yaml = "event1:\n  name: My Event\n  date: 25.05.2001";
-        $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
-        $obj = new ArrayDataTransfer($array);
+        $obj = new YamlDataTransfer($yaml);
         $this->assertCount(1, $obj);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         foreach (['application/yaml'] as $mime_type) {
             $converted = DataConverterFactory::asMimeType($obj, $mime_type);
-            //$converted = YamlConverter::convert($obj);
             $this->assertEquals(str_replace("\r\n", "\n", $yaml), $converted);
         }
     }
 
-    /*
-public function testIni()
-{
-    $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
-    $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
-    $obj = new ArrayDataTransfer($array);
-    $this->assertInstanceOf(DataTransferInterface::class, $obj);
-    $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
-    $converted = IniConverter::convert($obj);
-    $this->assertEquals($ini, $converted);
-}
-    */
+    public function testIni()
+    {
+        $ini = "[event1]" . PHP_EOL . 'name="My Event"' . PHP_EOL . "date=25.05.2001";
+        $obj = new IniDataTransfer($ini);
+        $this->assertCount(1, $obj);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        foreach (['text/plain'] as $mime_type) {
+            $converted = DataConverterFactory::asMimeType($obj, $mime_type);
+            $this->assertEquals($ini, $converted);
+        }
+    }
 
     public function testToDif()
     {
@@ -202,7 +203,6 @@ EOH;
         $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
         $mime = 'application/x-dif';
         $converted = DataConverterFactory::asMimeType($obj, $mime);
-
         $this->assertEquals($dif, $converted);
     }
 }

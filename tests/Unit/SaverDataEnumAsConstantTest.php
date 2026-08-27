@@ -37,11 +37,11 @@ class SaverDataEnumAsConstantTest extends TestCase
     public function testToArray()
     {
 
-        $filename = TMPDIR . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::ARRAY ;
+        $filename = TMPDIR . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::ARRAY;
         $arr = array("user" => "root", "user_id" => "1", "password" => "contraseña", "mensaje" => array("id" => "1", "descripcion" => "Descripción del texto", "prioridad" => "Alta"));
         $obj = new ArrayDataTransfer($arr);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
-        $json = $obj->saveAs($filename, Format::ARRAY );
+        $json = $obj->saveAs($filename, Format::ARRAY);
         $this->assertTrue($json);
         $json = unserialize(file_get_contents($filename));
         $this->assertIsArray($json);
@@ -168,9 +168,22 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
 
     public function testIni()
     {
-
         $filename = TMPDIR . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::INI;
-        $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
+        $ini = 'name="My Event"' . PHP_EOL . "date=25.05.2001";
+        $array = ['name' => 'My Event', 'date' => '25.05.2001'];
+        $obj = new ArrayDataTransfer($array);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $converted = $obj->exportAs(Format::INI);
+        $json = $obj->saveAs($filename, Format::INI);
+        $this->assertTrue($json);
+        $this->assertEquals($ini, file_get_contents($filename));
+        unlink($filename);
+    }
+
+    public function testIniSections()
+    {
+        $filename = TMPDIR . DIRECTORY_SEPARATOR . __FUNCTION__ . '.' . Format::INI;
+        $ini = "[event1]" . PHP_EOL . 'name="My Event"' . PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
         $obj = new ArrayDataTransfer($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);

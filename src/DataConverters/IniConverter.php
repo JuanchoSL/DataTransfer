@@ -2,6 +2,8 @@
 
 namespace JuanchoSL\DataTransfer\DataConverters;
 
+use JuanchoSL\Validators\Types\Strings\StringValidation;
+
 class IniConverter extends ArrayConverter
 {
 
@@ -13,7 +15,7 @@ class IniConverter extends ArrayConverter
     {
         $data = parent::getData();
         if (!is_numeric(key($data))) {
-            $data = [$data];
+            //$data = [$data];
         }
         $str = '';
         return trim($this->collection2ini($str, $data), "\r\n");
@@ -23,13 +25,18 @@ class IniConverter extends ArrayConverter
     {
         foreach ($array as $key => $value) {
             if (is_scalar($value)) {
-                if (!empty($title) && is_string($title)) {
-                    $str .= PHP_EOL . "[{$title}]" . PHP_EOL;
+                if (!empty($title) /*&& is_string($title)*/) {
+                    //$str .= PHP_EOL . "[{$title}]" . PHP_EOL;
                     unset($title);
+                }
+                if (StringValidation::isMultibyte($value) or StringValidation::isValueContainingAny($value, ' ', '=', '"')) {
+                    $value = '"' . $value . '"';
                 }
                 $str .= "{$key}={$value}" . PHP_EOL;
             } elseif (is_iterable($value)) {
-                if (!empty($title)) {
+                if (empty($title)) {
+                    $str .= PHP_EOL . "[{$key}]" . PHP_EOL;
+                } else {
                     if (is_numeric($key)) {
                         $str .= PHP_EOL . "[{$title}]" . PHP_EOL;
                         $key = '';

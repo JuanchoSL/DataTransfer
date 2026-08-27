@@ -8,6 +8,7 @@ use JuanchoSL\DataTransfer\Repositories\ArrayDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\CsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\DifDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\ExcelCsvDataTransfer;
+use JuanchoSL\DataTransfer\Repositories\IniDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\TabsvDataTransfer;
 use JuanchoSL\DataTransfer\Repositories\XmlDataTransfer;
 use PHPUnit\Framework\TestCase;
@@ -124,7 +125,7 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
 
     public function testIni()
     {
-        $ini = "[event1]" . PHP_EOL . "name=My Event" . PHP_EOL . "date=25.05.2001";
+        $ini = "[event1]" . PHP_EOL . 'name="My Event"'. PHP_EOL . "date=25.05.2001";
         $array = ["event1" => ['name' => 'My Event', 'date' => '25.05.2001']];
         $obj = new ArrayDataTransfer($array);
         $this->assertInstanceOf(DataTransferInterface::class, $obj);
@@ -132,6 +133,33 @@ root;1;contraseña;Alta;1;"Descripción del texto"';
         $converted = $obj->exportAs(Format::INI);
         $this->assertEquals($ini, $converted);
     }
+
+    public function testIniMultiSections()
+    {
+        $ini = <<<EOH
+[0]
+user=root
+user_id=2
+password=
+prioridad=baja
+id=
+descripcion=
+
+[1]
+user=root
+user_id=1
+password="contraseña"
+prioridad=Alta
+id=1
+descripcion="Descripción del texto"
+EOH;
+        $obj = new IniDataTransfer($ini);
+        $this->assertInstanceOf(DataTransferInterface::class, $obj);
+        $this->assertContainsOnlyInstancesOf(DataTransferInterface::class, $obj);
+        $converted = $obj->exportAs(Format::INI);
+        $this->assertEquals($ini, $converted);
+    }
+
 
     public function testToDif()
     {
