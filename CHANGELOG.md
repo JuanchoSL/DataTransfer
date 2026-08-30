@@ -1,5 +1,20 @@
 # Change Log - DataTransfer
 
+## [1.0.17] - 2026-08-30
+
+### Added
+
+- Support for reading multi level and collections from INI files
+- Support for write multi level and collections to INI files
+
+### Changed
+
+- Don't force collection for simple INI list of key=values (old mode)
+
+### Fixed
+
+- Missing tests for INI files
+
 ## [1.0.16] - 2026-08-26
 
 ### Added
